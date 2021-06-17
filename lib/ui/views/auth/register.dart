@@ -1,6 +1,12 @@
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:connectivity/connectivity.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:home_service/constants.dart';
+import 'package:home_service/ui/widgets/actions.dart';
+import 'package:home_service/ui/widgets/progress_dialog.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
@@ -10,9 +16,43 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  String defaultCountryCode = "+233";
+  String? defaultCountryCode = "+233";
 
   UserTypes? _userType = UserTypes.User;
+
+  final GlobalKey<State> _registerNumberKey = new GlobalKey<State>();
+
+  TextEditingController _phoneNumberController = TextEditingController();
+
+  verifyPhoneNumber(phoneNumber) async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+      ShowAction.showAlertDialog(
+          confirmNumber,
+          "$sendCodeTo$defaultCountryCode$phoneNumber",
+          context,
+          TextButton(
+            child: Text(
+              edit,
+              style: TextStyle(color: Colors.red),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+          TextButton(
+            child: Text(send, style: TextStyle(color: Colors.green)),
+            onPressed: () async {
+              Navigator.of(context).pushNamed('/verify',
+                  arguments: "$defaultCountryCode$phoneNumber");
+              Dialogs.showLoadingDialog(
+                  context, _registerNumberKey, sendingCode, Colors.white70);
+              await Future.delayed(const Duration(seconds: 3));
+            },
+          ));
+    } else {
+      ShowAction().showToast(unableToConnect, Colors.black);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +84,77 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: sixteenDp,
+                      height: thirtyDp,
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(left: thirtySixDp, bottom: fourDp),
+                      child: Text(selectAccountType),
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [selectType(user), selectType(artisan)],
+                      children: [selectType(iAmUser), selectType(iAmArtisan)],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: thirtySixDp, top: thirtySixDp, bottom: tenDp),
+                      child: Text(enterPhoneToRegister),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: thirtySixDp),
+                      child: TextFormField(
+                          maxLength: 9,
+                          keyboardType: TextInputType.phone,
+                          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                          decoration: InputDecoration(
+                            hintText: '54 xxx xxxx',
+                            fillColor: Color(0xFFF5F5F5),
+                            prefix: CountryCodePicker(
+                              onChanged: (code) {
+                                defaultCountryCode = code.dialCode;
+                              },
+                              initialSelection: 'GH',
+                              favorite: ['+233', 'GH'],
+                            ),
+                            suffix: Padding(
+                              padding: EdgeInsets.only(right: eightDp),
+                              child: Icon(
+                                Icons.call,
+                                color: Colors.green,
+                              ),
+                            ),
+                            filled: true,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 0, horizontal: fourDp),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xFFF5F5F5))),
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xFFF5F5F5))),
+                          )),
+                    ),
+                    SizedBox(
+                      height: sixtyDp,
+                    ),
+                    SizedBox(
+                      height: 48,
+                      width: MediaQuery.of(context).size.width,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: thirtySixDp),
+                        child: TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                primary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8))),
+                            onPressed: () => Navigator.of(context)
+                                .pushNamed('/verifyPage', arguments: ""),
+                            child: Text(
+                              'Verify',
+                              style: TextStyle(fontSize: 14),
+                            )),
+                      ),
                     ),
                   ],
                 ),
@@ -62,29 +168,31 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   Widget selectType(String type) {
     return Container(
-      margin: type == user
+      margin: type == iAmUser
           ? EdgeInsets.only(left: 32)
           : EdgeInsets.symmetric(horizontal: 0),
-      padding: EdgeInsets.symmetric(horizontal: sixteenDp),
+      padding: EdgeInsets.symmetric(horizontal: fourDp),
       decoration: BoxDecoration(
-          color: type == user ? Colors.green : Colors.white,
+          color: Colors.white,
           boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 0.9)],
-          borderRadius: type == user
+          borderRadius: type == iAmUser
               ? BorderRadius.only(
                   topLeft: Radius.circular(sixteenDp),
                   bottomLeft: Radius.circular(sixteenDp))
               : BorderRadius.only(
                   topRight: Radius.circular(sixteenDp),
                   bottomRight: Radius.circular(sixteenDp))),
-      width: 150,
-      height: 60,
+      width: type == iAmUser ? oneThirtyDp : oneFiftyDp,
+      height: fiftyDp,
       child: Row(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
               Radio<UserTypes>(
-                value: type == user ? UserTypes.User : UserTypes.Artisan,
+                activeColor: Colors.green,
+                hoverColor: Colors.blue,
+                value: type == iAmUser ? UserTypes.User : UserTypes.Artisan,
                 groupValue: _userType,
                 onChanged: (UserTypes? value) {
                   setState(() {
@@ -92,14 +200,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   });
                 },
               ),
-              Padding(
-                padding: EdgeInsets.all(fourDp),
-                child: Text(
-                  type,
-                  style: TextStyle(
-                      color: type == user ? Colors.white : Colors.blue,
-                      fontSize: fourteenDp),
-                ),
+              Text(
+                type,
+                style: TextStyle(
+                    color: type == iAmUser ? Colors.black : Colors.blue,
+                    fontSize: fourteenDp),
               )
             ],
           ),

@@ -28,10 +28,10 @@ class RouteGenerator {
       case '/inviteFriend':
         return MaterialPageRoute(builder: (_) => InviteFriend());*/
 
-      case '/register':
+      case '/registerPage':
         return MaterialPageRoute(builder: (_) => RegistrationPage());
 
-      case '/verify':
+      case '/verifyPage':
         return MaterialPageRoute(
             builder: (_) => VerificationPage(phoneNumber: args));
 

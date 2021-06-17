@@ -50,7 +50,7 @@ dependencies:
   email_validator: ^1.0.5
   shimmer: ^1.1.2
   sizer: ^1.1.8
-  country_code_picker: ^1.7.0
+  country_code_picker: ^2.0.1
 
 
   # The following adds the Cupertino Icons font to your application.
