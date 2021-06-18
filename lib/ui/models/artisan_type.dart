@@ -11,34 +11,46 @@ class ArtisanType {
 
 List getArtisanType = [
   ArtisanType(
-      name: carpenter, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
+      name: carpenter, image: "", bgColor: [Colors.blue, Colors.purpleAccent]),
   ArtisanType(
-      name: maison, image: "", bgColor: [Colors.green, Colors.greenAccent]),
+      name: maison,
+      image: "",
+      bgColor: [Colors.green, Colors.lightGreenAccent]),
   ArtisanType(
-      name: plumber, image: "", bgColor: [Colors.orange, Colors.orange]),
+      name: plumber, image: "", bgColor: [Colors.orange, Colors.deepOrange]),
+  ArtisanType(name: barber, image: "", bgColor: [Colors.pink, Colors.red]),
   ArtisanType(
-      name: barber, image: "", bgColor: [Colors.pink, Colors.pinkAccent]),
-  ArtisanType(name: electrician, image: "", bgColor: [Colors.red, Colors.red]),
+      name: electrician, image: "", bgColor: [Colors.red, Colors.orangeAccent]),
   ArtisanType(
-      name: laundry, image: "", bgColor: [Colors.purple, Colors.purpleAccent]),
+      name: laundry,
+      image: "",
+      bgColor: [Colors.purple, Colors.lightBlueAccent]),
   ArtisanType(
-      name: painter, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
+      name: painter,
+      image: "",
+      bgColor: [Colors.lightBlueAccent, Colors.deepPurple]),
   ArtisanType(
       name: hairdresser, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
   ArtisanType(
-      name: tailor, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
+      name: tailor, image: "", bgColor: [Colors.red, Colors.pinkAccent]),
   ArtisanType(
-      name: semstress, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
+      name: semstress, image: "", bgColor: [Colors.blue, Colors.indigo]),
   ArtisanType(
-      name: tiler, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
+      name: tiler,
+      image: "",
+      bgColor: [Colors.deepPurpleAccent, Colors.blueAccent]),
   ArtisanType(
-      name: cleaner, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
+      name: cleaner, image: "", bgColor: [Colors.indigo, Colors.indigoAccent]),
   ArtisanType(
-      name: interiorDeco, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
+      name: interiorDeco,
+      image: "",
+      bgColor: [Colors.blueAccent, Colors.blueAccent]),
   ArtisanType(
-      name: mechanic, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
+      name: mechanic, image: "", bgColor: [Colors.amber, Colors.yellowAccent]),
   ArtisanType(
       name: acRepair, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
   ArtisanType(
-      name: fridgeRepair, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
+      name: fridgeRepair,
+      image: "",
+      bgColor: [Colors.indigoAccent, Colors.lightBlue]),
 ];

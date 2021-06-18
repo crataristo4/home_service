@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/constants.dart';
-import 'package:home_service/ui/views/home/home.dart';
 
 class VerificationPage extends StatefulWidget {
   final phoneNumber;
@@ -17,6 +16,26 @@ class _VerificationPageState extends State<VerificationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          actions: [
+            SizedBox(
+              height: fortyEightDp,
+              child: Container(
+                margin: EdgeInsets.only(right: eightDp, top: eightDp),
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: Colors.indigoAccent,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(eightDp),
+                            side: BorderSide(width: 1, color: Colors.white))),
+                    onPressed: () {},
+                    child: Text(
+                      resend,
+                      style: TextStyle(fontSize: fourteenDp),
+                    )),
+              ),
+            )
+          ],
           elevation: 0,
           backgroundColor: Colors.white12,
           iconTheme: IconThemeData(color: Colors.black),
@@ -93,20 +112,6 @@ class _VerificationPageState extends State<VerificationPage> {
                       ),
                       SizedBox(height: eightDp),
                       //Resend code button
-                      SizedBox(
-                        height: fortyEightDp,
-                        child: TextButton(
-                            style: TextButton.styleFrom(
-                                primary: Theme.of(context).primaryColor,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(eightDp))),
-                            onPressed: () {},
-                            child: Text(
-                              resend,
-                              style: TextStyle(fontSize: fourteenDp),
-                            )),
-                      ),
                     ],
                   ),
                 ],

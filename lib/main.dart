@@ -22,7 +22,7 @@ class EntryPoint extends StatelessWidget {
       onGenerateRoute: RouteGenerator.generateRoute,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        primaryColor: Colors.blue,
+        primaryColor: Colors.indigoAccent,
       ),
     );
   }

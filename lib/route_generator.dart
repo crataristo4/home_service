@@ -37,7 +37,10 @@ class RouteGenerator {
             builder: (_) => VerificationPage(phoneNumber: args));
 
       case '/homePage':
-        return MaterialPageRoute(builder: (_) => Home());
+        return MaterialPageRoute(
+            builder: (_) => Home(
+                  initialIndex: 1,
+                ));
 
       default:
         return _errorRoute();

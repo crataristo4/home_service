@@ -103,6 +103,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       margin: EdgeInsets.symmetric(horizontal: thirtySixDp),
                       child: TextFormField(
                           maxLength: 9,
+                          autofocus: true,
                           keyboardType: TextInputType.phone,
                           maxLengthEnforcement: MaxLengthEnforcement.enforced,
                           decoration: InputDecoration(
