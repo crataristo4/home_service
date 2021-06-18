@@ -275,4 +275,8 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage> {
       ),
     );
   }
+
+  Widget buildGridCategory() {
+    return Container();
+  }
 }
