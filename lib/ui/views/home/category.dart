@@ -33,6 +33,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            //user profile image
                             Container(
                               margin: EdgeInsets.only(top: sixDp),
                               width: sixtyDp,
@@ -44,7 +45,8 @@ class _CategoryPageState extends State<CategoryPage> {
                                   // border: Border.all(width: 2,color: Colors.white54),
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: AssetImage("assets/images/a.png"),
+                                    image: AssetImage(
+                                        "assets/images/a.png"), //todo -load image from network
                                   )),
                             ),
 
@@ -114,11 +116,26 @@ class _CategoryPageState extends State<CategoryPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "Top Experts",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: sixteenDp),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Top Experts",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: sixteenDp),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: eightDp),
+                                      child: Text(
+                                        "View all",
+                                        style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: twelveDp),
+                                      ),
+                                    )
+                                  ],
                                 ),
                                 Row(
                                   children: [
@@ -165,52 +182,57 @@ class _CategoryPageState extends State<CategoryPage> {
             mainAxisSpacing: twelveDp,
           ),
           itemBuilder: (BuildContext context, int index) {
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(twelveDp),
-                gradient: LinearGradient(
-                  colors: [
-                    getArtisanType[index].bgColor[0],
-                    getArtisanType[index].bgColor[1]
-                  ],
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
+            return GestureDetector(
+              onTap: () => Navigator.of(context).pushNamed(
+                  "/viewArtisanByCategoryPage",
+                  arguments: getArtisanType[index].name),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(twelveDp),
+                  gradient: LinearGradient(
+                    colors: [
+                      getArtisanType[index].bgColor[0],
+                      getArtisanType[index].bgColor[1]
+                    ],
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                  ),
                 ),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: fourteenDp, left: fourDp),
-                        child: Text(
-                          getArtisanType[index].name,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: twelveDp),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(right: tenDp, top: tenDp),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(thirtyDp)),
-                        child: Padding(
-                          padding: EdgeInsets.all(eightDp),
-                          child: Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.grey,
-                            size: sixteenDp,
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: fourteenDp, left: fourDp),
+                          child: Text(
+                            getArtisanType[index].name,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: twelveDp),
                           ),
                         ),
-                      )
-                    ],
-                  )
-                ],
+                        Container(
+                          margin: EdgeInsets.only(right: tenDp, top: tenDp),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(thirtyDp)),
+                          child: Padding(
+                            padding: EdgeInsets.all(eightDp),
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.grey,
+                              size: sixteenDp,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             );
           }),

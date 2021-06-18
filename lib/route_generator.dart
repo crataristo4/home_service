@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/auth/verify.dart';
@@ -40,6 +41,12 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (_) => Home(
                   initialIndex: 1,
+                ));
+
+      case '/viewArtisanByCategoryPage':
+        return MaterialPageRoute(
+            builder: (_) => ViewArtisanByCategoryPage(
+                  categoryName: args,
                 ));
 
       default:

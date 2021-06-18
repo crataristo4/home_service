@@ -77,7 +77,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         topLeft: Radius.circular(thirtySixDp),
                         topRight: Radius.circular(thirtySixDp)),
                     border: Border.all(
-                        width: 1, color: Colors.grey.withOpacity(0.5))),
+                        width: 0.5, color: Colors.grey.withOpacity(0.5))),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
