@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/auth/verify.dart';
+import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
 
 class RouteGenerator {
@@ -34,6 +35,9 @@ class RouteGenerator {
       case '/verifyPage':
         return MaterialPageRoute(
             builder: (_) => VerificationPage(phoneNumber: args));
+
+      case '/homePage':
+        return MaterialPageRoute(builder: (_) => Home());
 
       default:
         return _errorRoute();
