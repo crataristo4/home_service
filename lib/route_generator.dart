@@ -7,6 +7,7 @@ import 'package:home_service/ui/views/auth/verify.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
 import 'package:home_service/ui/views/profile/artisan_profile/complete_artisan_profile.dart';
+import 'package:home_service/ui/views/profile/user_profile/complete_user_profile.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -46,6 +47,9 @@ class RouteGenerator {
 
       case CompleteArtisanProfile.routeName:
         return MaterialPageRoute(builder: (_) => CompleteArtisanProfile());
+
+      case CompleteUserProfile.routeName:
+        return MaterialPageRoute(builder: (_) => CompleteUserProfile());
 
       case Home.routeName:
         return MaterialPageRoute(builder: (_) => Home());

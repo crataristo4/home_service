@@ -203,7 +203,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 onChanged: (UserTypes? value) {
                   setState(() {
                     _userType = value;
-                    userInfo = type == iAmUser ? 'user' : "artisan";
+                    userInfo = type == iAmUser ? user : artisan;
                   });
                 },
               ),

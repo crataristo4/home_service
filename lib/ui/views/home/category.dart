@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/ui/models/artisan_type.dart';
+import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
 
 import '../../../constants.dart';
 
@@ -185,7 +186,7 @@ class _CategoryPageState extends State<CategoryPage> {
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () => Navigator.of(context).pushNamed(
-                  "/viewArtisanByCategoryPage",
+                  ViewArtisanByCategoryPage.routeName,
                   arguments: getArtisanType[index].name),
               child: Container(
                 decoration: BoxDecoration(

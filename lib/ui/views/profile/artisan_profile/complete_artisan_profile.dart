@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:home_service/ui/views/home/home.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../constants.dart';
@@ -264,15 +265,15 @@ class _CompleteArtisanProfileState extends State<CompleteArtisanProfile> {
                                         BorderRadius.circular(eightDp)),
                               ),
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white)),
+                                  Colors.indigo)),
                           icon: Icon(
                             Icons.camera_alt,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                           label: Text(
                             chooseImage,
                             style: TextStyle(
-                                fontSize: fourteenDp, color: Colors.black),
+                                fontSize: fourteenDp, color: Colors.white),
                           ),
                         ),
                       ),
@@ -315,7 +316,8 @@ class _CompleteArtisanProfileState extends State<CompleteArtisanProfile> {
                             primary: Colors.white,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8))),
-                        onPressed: () {},
+                        onPressed: () =>
+                            Navigator.of(context).pushNamed(Home.routeName),
                         child: Text(
                           finish,
                           style: TextStyle(fontSize: 14),

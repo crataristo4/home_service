@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/constants.dart';
+import 'package:home_service/ui/views/profile/artisan_profile/complete_artisan_profile.dart';
+import 'package:home_service/ui/views/profile/user_profile/complete_user_profile.dart';
 
 class VerificationPage extends StatefulWidget {
   final String phoneNumber;
@@ -28,7 +30,7 @@ class _VerificationPageState extends State<VerificationPage> {
                 child: TextButton(
                     style: TextButton.styleFrom(
                         primary: Colors.white,
-                        backgroundColor: Colors.indigoAccent,
+                        backgroundColor: Colors.indigo,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(eightDp),
                             side: BorderSide(width: 1, color: Colors.white))),
@@ -41,6 +43,24 @@ class _VerificationPageState extends State<VerificationPage> {
             )
           ],
           elevation: 0,
+          leading: InkWell(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              margin: EdgeInsets.all(tenDp),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.3, color: Colors.grey),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(thirtyDp)),
+              child: Padding(
+                padding: EdgeInsets.all(eightDp),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.grey,
+                  size: sixteenDp,
+                ),
+              ),
+            ),
+          ),
           backgroundColor: Colors.white12,
           iconTheme: IconThemeData(color: Colors.black),
           title: Text(
@@ -109,9 +129,10 @@ class _VerificationPageState extends State<VerificationPage> {
                                     borderRadius:
                                         BorderRadius.circular(eightDp))),
                             onPressed: () => widget.userType == user
-                                ? Navigator.of(context).pushNamed('/homePage')
-                                : Navigator.of(context)
-                                    .pushNamed('/completeArtisanProfile'),
+                                ? Navigator.of(context)
+                                    .pushNamed(CompleteUserProfile.routeName)
+                                : Navigator.of(context).pushNamed(
+                                    CompleteArtisanProfile.routeName),
                             child: Text(
                               verifyNumber,
                               style: TextStyle(fontSize: fourteenDp),
