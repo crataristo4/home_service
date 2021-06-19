@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:home_service/ui/views/help/help_page.dart';
 import 'package:home_service/ui/views/profile/edit_profile.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share/share.dart';
 
 import '../../../constants.dart';
 
@@ -20,9 +25,10 @@ class _OptionsPageState extends State<OptionsPage> {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+                topLeft: Radius.circular(twentyDp),
+                topRight: Radius.circular(twentyDp))),
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(twentyFourDp),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,6 +55,9 @@ class _OptionsPageState extends State<OptionsPage> {
                     editProfile, editProfileDes, Icons.edit, Colors.indigo),
                 buildOptionsList(
                     contactUs, contactUsDes, Icons.headset_mic, Colors.green),
+                buildOptionsList(
+                    share, shareDes, Icons.share_sharp, Colors.deepOrange),
+                buildOptionsList(report, reportDes, Icons.report, Colors.amber),
                 SizedBox(height: 30),
               ],
             ),
@@ -61,13 +70,30 @@ class _OptionsPageState extends State<OptionsPage> {
   Widget buildOptionsList(
       String title, String subtitle, IconData icons, Color iconColor) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         switch (title) {
           case editProfile:
             Navigator.of(context).pushNamed(EditProfile.routeName);
             break;
           case contactUs:
             Navigator.of(context).pushNamed(HelpPage.routeName);
+            break;
+          case share:
+            //write to app path
+            Future<void> writeToFile(ByteData data, String path) {
+              final buffer = data.buffer;
+              return new File(path).writeAsBytes(
+                  buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+            }
+
+            //read and write
+            final filename = 'a.png';
+            var bytes = await rootBundle.load("assets/images/a.png");
+            String dir = (await getApplicationDocumentsDirectory()).path;
+            writeToFile(bytes, '$dir/$filename');
+
+            Share.shareFiles([File('$dir/a.png').path],
+                subject: getApp, text: shareText);
             break;
         }
       },
