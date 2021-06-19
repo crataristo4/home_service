@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/ui/models/artisan_type.dart';
 
@@ -41,7 +42,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               decoration: BoxDecoration(
                                   color: Colors.grey[300],
                                   borderRadius:
-                                      BorderRadius.circular(sixteenDp),
+                                  BorderRadius.circular(sixteenDp),
                                   // border: Border.all(width: 2,color: Colors.white54),
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
@@ -51,11 +52,11 @@ class _CategoryPageState extends State<CategoryPage> {
                             ),
 
                             //Search for artisans
-                            Flexible(
+                            Expanded(
                               child: Container(
                                 margin: EdgeInsets.symmetric(
                                     horizontal: sixteenDp, vertical: eightDp),
-                                child: TextField(
+                                child: TextFormField(
                                     keyboardType: TextInputType.text,
                                     autofocus: false,
                                     decoration: InputDecoration(
@@ -77,7 +78,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                               borderRadius:
                                                   BorderRadius.circular(
                                                       eightDp),
-                                              // border: Border.all(width: 2,color: Colors.white54),
+                                              border: Border.all(
+                                                  width: 2,
+                                                  color: Colors.white54),
                                             ),
                                           ),
                                         ),
@@ -85,10 +88,10 @@ class _CategoryPageState extends State<CategoryPage> {
                                         fillColor: Colors.white70,
                                         filled: true,
                                         contentPadding: EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: tenDp),
+                                            vertical: tenDp, horizontal: tenDp),
                                         enabledBorder: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white70),
+                                          borderSide: BorderSide(
+                                              color: Color(0xFFF5F5F5)),
                                         ),
                                         border: OutlineInputBorder(
                                             borderSide: BorderSide(
@@ -109,7 +112,7 @@ class _CategoryPageState extends State<CategoryPage> {
                         ),
                         Container(
                           margin:
-                              EdgeInsets.only(bottom: 10, top: 10, right: 10),
+                          EdgeInsets.only(bottom: 10, top: 10, right: 10),
                           child: SizedBox(
                             height: 100,
                             width: MediaQuery.of(context).size.width,
@@ -118,7 +121,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Top Experts",
@@ -137,14 +140,10 @@ class _CategoryPageState extends State<CategoryPage> {
                                     )
                                   ],
                                 ),
-                                Row(
-                                  children: [
-                                    buildTopExpect(),
-                                    buildTopExpect(),
-                                    buildTopExpect(),
-                                    buildTopExpect(),
-                                  ],
-                                )
+                                Expanded(
+                                  child: buildTopExpect(),
+                                  flex: 1,
+                                ),
                               ],
                             ),
                           ),
@@ -240,46 +239,63 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   Widget buildTopExpect() {
-    return Container(
-      margin: EdgeInsets.only(top: tenDp, right: tenDp),
-      width: sixtyDp,
-      height: sixtyDp,
-      decoration: BoxDecoration(
-          border: Border.all(
-              color: Colors.grey, width: 0.2, style: BorderStyle.solid),
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(tenDp),
-          image: DecorationImage(
-              fit: BoxFit.contain, image: AssetImage("assets/images/aa.jpg"))),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Container(
-            width: fortyDp,
-            margin: EdgeInsets.only(bottom: 2),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(eightDp),
-                color: Colors.white),
-            child: Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 5, right: 2),
-                  child: Text(
-                    "4.5",
-                    style: TextStyle(fontSize: 10),
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: 30,
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (BuildContext context, index) {
+        return GestureDetector(
+          onTap: () {},
+          child: Stack(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: tenDp, right: tenDp),
+                width: sixtyDp,
+                height: sixtyDp,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Colors.grey,
+                        width: 0.2,
+                        style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(tenDp),
+                    image: DecorationImage(
+                        fit: BoxFit.contain,
+                        image: AssetImage("assets/images/aa.jpg"))),
+              ),
+              Positioned(
+                top: 55,
+                left: 25,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                        color: Colors.grey,
+                        width: 0.2,
+                        style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(tenDp),
+                  ),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 5, right: 2),
+                        child: Text(
+                          "4.5",
+                          style: TextStyle(fontSize: tenDp),
+                        ),
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                        size: tenDp,
+                      )
+                    ],
                   ),
                 ),
-                Icon(
-                  Icons.star,
-                  color: Colors.amber,
-                  size: 10,
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

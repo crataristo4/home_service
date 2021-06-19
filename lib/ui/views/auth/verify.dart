@@ -71,6 +71,7 @@ class _VerificationPageState extends State<VerificationPage> {
                               fontSize: fourteenDp,
                               fontWeight: FontWeight.bold)),
                       TextFormField(
+                          autofocus: true,
                           maxLength: 6,
                           keyboardType: TextInputType.number,
                           maxLengthEnforcement: MaxLengthEnforcement.enforced,
