@@ -33,89 +33,62 @@ class _CategoryPageState extends State<CategoryPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            //user profile image
-                            Container(
-                              margin: EdgeInsets.only(top: sixDp),
-                              width: sixtyDp,
-                              height: sixtyDp,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius:
-                                  BorderRadius.circular(sixteenDp),
-                                  // border: Border.all(width: 2,color: Colors.white54),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage(
-                                        "assets/images/a.png"), //todo -load image from network
-                                  )),
-                            ),
-
-                            //Search for artisans
-                            Expanded(
-                              child: Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: sixteenDp, vertical: eightDp),
-                                child: TextFormField(
-                                    keyboardType: TextInputType.text,
-                                    autofocus: false,
-                                    decoration: InputDecoration(
-                                        hintStyle:
-                                            TextStyle(fontSize: sixteenDp),
-                                        suffix: GestureDetector(
-                                          onTap: () {
-                                            debugPrint("Searching");
-                                          },
-                                          child: Container(
-                                            child: Icon(
-                                              Icons.search,
-                                              color: Colors.white,
-                                            ),
-                                            width: thirtySixDp,
-                                            height: thirtySixDp,
-                                            decoration: BoxDecoration(
-                                              color: Colors.blue,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      eightDp),
-                                              border: Border.all(
-                                                  width: 2,
-                                                  color: Colors.white54),
-                                            ),
-                                          ),
-                                        ),
-                                        hintText: searchService,
-                                        fillColor: Colors.white70,
-                                        filled: true,
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: tenDp, horizontal: tenDp),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(0xFFF5F5F5)),
-                                        ),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Color(0xFFF5F5F5))))),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: sixteenDp,
-                        ),
-                        Text(
-                          "Hi , Dixie Carter",
-                          style: TextStyle(fontSize: twentyDp),
+                        Padding(
+                          padding: EdgeInsets.only(top: tenDp),
+                          child: Text(
+                            "Hi , Dixie Carter",
+                            style: TextStyle(fontSize: twentyDp),
+                          ),
                         ),
                         SizedBox(
                           height: eightDp,
                         ),
                         Container(
+                          margin: EdgeInsets.only(right: eightDp, top: eightDp),
+                          child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                  hintStyle: TextStyle(fontSize: sixteenDp),
+                                  suffix: GestureDetector(
+                                    onTap: () {
+                                      debugPrint("Searching");
+                                    },
+                                    child: Container(
+                                      child: Icon(
+                                        Icons.search,
+                                        color: Colors.white,
+                                      ),
+                                      width: thirtySixDp,
+                                      height: thirtySixDp,
+                                      decoration: BoxDecoration(
+                                        color: Colors.indigo,
+                                        borderRadius:
+                                            BorderRadius.circular(eightDp),
+                                        border: Border.all(
+                                            width: 2, color: Colors.white54),
+                                      ),
+                                    ),
+                                  ),
+                                  hintText: searchService,
+                                  fillColor: Colors.white70,
+                                  filled: true,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: tenDp, horizontal: tenDp),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFF5F5F5)),
+                                  ),
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFFF5F5F5))))),
+                        ),
+                        SizedBox(
+                          height: sixteenDp,
+                        ),
+                        Container(
                           margin:
-                          EdgeInsets.only(bottom: 10, top: 10, right: 10),
+                              EdgeInsets.only(bottom: 10, top: 10, right: 10),
                           child: SizedBox(
                             height: 100,
                             width: MediaQuery.of(context).size.width,
