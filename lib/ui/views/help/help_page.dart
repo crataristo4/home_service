@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:home_service/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -85,7 +86,7 @@ class _HelpPageState extends State<HelpPage>
         child: Column(
           children: [
             Image.asset(
-              "assets/images/contactUs.jpg",
+              "assets/images/contactUs.png",
               height: 130,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.contain,
@@ -128,7 +129,7 @@ class _HelpPageState extends State<HelpPage>
                               color: Colors.amber,
                             )),
                       ),
-                      text: 'Call us',
+                      text: callUx,
                     ),
                   ),
                   Tab(
@@ -144,7 +145,7 @@ class _HelpPageState extends State<HelpPage>
                             color: Colors.green,
                           )),
                     ),
-                    text: 'Email us',
+                    text: emailUx,
                   ),
                   Tab(
                     icon: ClipOval(
@@ -159,7 +160,7 @@ class _HelpPageState extends State<HelpPage>
                             color: Colors.pinkAccent,
                           )),
                     ),
-                    text: 'Chat us',
+                    text: chatUx,
                   ),
                 ],
               ),
@@ -179,7 +180,54 @@ class _HelpPageState extends State<HelpPage>
   }
 
   Widget callUs() {
-    return Container();
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: sixtyDp),
+          child: SvgPicture.asset(
+            'assets/svg/call.svg',
+            placeholderBuilder: (BuildContext context) => Container(),
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.contain,
+            height: 200,
+          ),
+        ),
+        Center(
+          child: SizedBox(
+            height: fortyEightDp,
+            width: twoHundredDp,
+            child: GestureDetector(
+              onTap: () {
+                _makePhoneCall(telUrlEnoch);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(width: 0.3, color: Colors.grey),
+                    color: Colors.indigo.shade400,
+                    borderRadius: BorderRadius.circular(thirtyDp)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: eightDp),
+                      child: Text(
+                        call,
+                        style: TextStyle(
+                            fontSize: fourteenDp, color: Colors.white),
+                      ),
+                    ),
+                    Icon(
+                      Icons.call,
+                      color: Colors.white,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
   }
 
   Widget emailUs() {
