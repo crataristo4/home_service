@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BookingPage extends StatefulWidget {
+  static const routeName = '/bookingPage';
+
   const BookingPage({Key? key}) : super(key: key);
 
   @override

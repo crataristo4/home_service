@@ -6,9 +6,9 @@ import 'package:home_service/ui/views/home/bookings.dart';
 import 'package:home_service/ui/views/home/category.dart';
 
 class Home extends StatefulWidget {
-  final int initialIndex;
+  //final int initialIndex;
 
-  Home({required this.initialIndex});
+  static const routeName = '/homePage';
 
   @override
   _HomeState createState() => _HomeState();
@@ -20,7 +20,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
-    _tabController.index = widget.initialIndex;
+    _tabController.index = 1;
     super.initState();
   }
 

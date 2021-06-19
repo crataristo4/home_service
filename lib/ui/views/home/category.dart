@@ -5,6 +5,8 @@ import 'package:home_service/ui/models/artisan_type.dart';
 import '../../../constants.dart';
 
 class CategoryPage extends StatefulWidget {
+  static const routeName = '/categoryPage';
+
   const CategoryPage({Key? key}) : super(key: key);
 
   @override

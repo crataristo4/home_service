@@ -7,6 +7,7 @@ User? mUser;
 
 class AppState extends StatefulWidget {
   const AppState({Key? key}) : super(key: key);
+  static const routeName = '/appState';
 
   @override
   _AppStateState createState() => _AppStateState();
@@ -37,12 +38,7 @@ class _AppStateState extends State<AppState> {
       child: SafeArea(
           top: false,
           bottom: false,
-          child: Scaffold(
-              body: mUser != null
-                  ? Home(
-                      initialIndex: 1,
-                    )
-                  : RegistrationPage())),
+          child: Scaffold(body: mUser != null ? Home() : RegistrationPage())),
     );
   }
 }

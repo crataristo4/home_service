@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ArtworksPage extends StatefulWidget {
+  static const routeName = '/artworkPage';
+
   const ArtworksPage({Key? key}) : super(key: key);
 
   @override

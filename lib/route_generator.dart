@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:home_service/ui/models/userdata.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/auth/verify.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
+import 'package:home_service/ui/views/profile/artisan_profile/complete_artisan_profile.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;
 
     switch (settings.name) {
-      case '/':
+      case AppState.routeName:
         return MaterialPageRoute(builder: (_) => AppState());
-      case '/onboarding':
+      case OnboardingScreen.routeName:
         return MaterialPageRoute(builder: (_) => OnboardingScreen());
       /*    case '/editProfile':
         return MaterialPageRoute(
@@ -30,20 +32,25 @@ class RouteGenerator {
       case '/inviteFriend':
         return MaterialPageRoute(builder: (_) => InviteFriend());*/
 
-      case '/registerPage':
+      case RegistrationPage.routeName:
         return MaterialPageRoute(builder: (_) => RegistrationPage());
 
-      case '/verifyPage':
-        return MaterialPageRoute(
-            builder: (_) => VerificationPage(phoneNumber: args));
+      case VerificationPage.routeName:
+        final data = settings.arguments as UserData;
 
-      case '/homePage':
         return MaterialPageRoute(
-            builder: (_) => Home(
-                  initialIndex: 1,
+            builder: (_) => VerificationPage(
+                  phoneNumber: data.phoneNumber,
+                  userType: data.userType,
                 ));
 
-      case '/viewArtisanByCategoryPage':
+      case CompleteArtisanProfile.routeName:
+        return MaterialPageRoute(builder: (_) => CompleteArtisanProfile());
+
+      case Home.routeName:
+        return MaterialPageRoute(builder: (_) => Home());
+
+      case ViewArtisanByCategoryPage.routeName:
         return MaterialPageRoute(
             builder: (_) => ViewArtisanByCategoryPage(
                   categoryName: args,

@@ -20,12 +20,15 @@ const fridgeRepair = 'Fridge Repairer';
 //---------------------------------------------------------------------------------------------------------------
 const iAmUser = 'I\'m a User';
 const iAmArtisan = 'I\'m an Artisan';
+const user = 'user';
+const artisan = 'artisan';
 const discover = 'Discover';
 const search = 'Search';
 const book = 'Book';
 const customerCare = 'Customer care';
 const register = 'Register';
 const verifyNumber = 'Verify number';
+const completeProfile = "Complete profile";
 const enterCode = 'Enter code';
 const enterVerificationCode = 'Enter the verification code sent to your SMS';
 const scheduleAppointment = 'Schedule Appointments';

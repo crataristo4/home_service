@@ -3,9 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:home_service/constants.dart';
 
 class VerificationPage extends StatefulWidget {
-  final phoneNumber;
+  final String phoneNumber;
+  final String userType;
+  static const routeName = '/verifyPage';
 
-  VerificationPage({Key? key, this.phoneNumber}) : super(key: key);
+  VerificationPage(
+      {Key? key, required this.phoneNumber, required this.userType})
+      : super(key: key);
 
   @override
   _VerificationPageState createState() => _VerificationPageState();
@@ -104,8 +108,10 @@ class _VerificationPageState extends State<VerificationPage> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.circular(eightDp))),
-                            onPressed: () =>
-                                Navigator.of(context).pushNamed('/homePage'),
+                            onPressed: () => widget.userType == user
+                                ? Navigator.of(context).pushNamed('/homePage')
+                                : Navigator.of(context)
+                                    .pushNamed('/completeArtisanProfile'),
                             child: Text(
                               verifyNumber,
                               style: TextStyle(fontSize: fourteenDp),

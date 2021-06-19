@@ -6,6 +6,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../../../constants.dart';
 
 class ViewArtisanByCategoryPage extends StatefulWidget {
+  static const routeName = '/viewArtisanByCategory';
   final categoryName;
 
   const ViewArtisanByCategoryPage({Key? key, this.categoryName})

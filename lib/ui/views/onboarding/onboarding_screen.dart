@@ -7,6 +7,8 @@ import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/onboarding/slider_model.dart';
 
 class OnboardingScreen extends StatefulWidget {
+  static const routeName = '/onboarding';
+
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }

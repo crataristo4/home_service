@@ -4,11 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/constants.dart';
+import 'package:home_service/ui/models/userdata.dart';
+import 'package:home_service/ui/views/auth/verify.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
+  static const routeName = '/registerPage';
 
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
@@ -16,6 +19,7 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   String? defaultCountryCode = "+233";
+  String userInfo = user;
 
   UserTypes? _userType = UserTypes.User;
 
@@ -148,10 +152,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 primary: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8))),
-                            onPressed: () => Navigator.of(context)
-                                .pushNamed('/verifyPage', arguments: ""),
+                            onPressed: () => Navigator.of(context).pushNamed(
+                                VerificationPage.routeName,
+                                arguments: UserData(
+                                    phoneNumber: "", userType: userInfo)),
                             child: Text(
-                              'Verify',
+                              verifyNumber,
                               style: TextStyle(fontSize: 14),
                             )),
                       ),
@@ -197,6 +203,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 onChanged: (UserTypes? value) {
                   setState(() {
                     _userType = value;
+                    userInfo = type == iAmUser ? 'user' : "artisan";
                   });
                 },
               ),
