@@ -8,18 +8,16 @@ import 'package:home_service/ui/views/bottomsheet/options_page.dart';
 import 'package:home_service/ui/views/home/artwork.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
 import 'package:home_service/ui/views/home/category.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 CollectionReference usersDbRef = FirebaseFirestore.instance.collection("Users");
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 Users? users;
 Artisans? artisans;
+String? getUserType;
 
 class Home extends StatefulWidget {
-  final String userType;
-
-  Home({required this.userType});
-
   static const routeName = '/homePage';
 
   @override
@@ -33,7 +31,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     _tabController.index = 1;
+
     super.initState();
+    getType();
+  }
+
+  getType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    getUserType = prefs.getString("userType");
+    debugPrint("Shared pref user type : $getUserType");
   }
 
   @override
@@ -44,13 +50,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Shared pref user type : $getUserType");
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: //user profile image
-        GestureDetector(
+            GestureDetector(
           onTap: () => showModalBottomSheet(
               isDismissible: false,
               context: context,

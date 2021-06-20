@@ -46,8 +46,9 @@ class _VerificationPageState extends State<VerificationPage> {
         if (value.user != null) {
           //push to home and check for user details to complete account
           Navigator.of(context).pushNamedAndRemoveUntil(
-              Home.routeName, (route) => false,
-              arguments: widget.userType);
+            Home.routeName,
+            (route) => false,
+          );
         }
       }).catchError((error) {
         ShowAction().showToast(tryAgainSometime, Colors.red);
@@ -100,8 +101,9 @@ class _VerificationPageState extends State<VerificationPage> {
       if (value.user != null) {
         //push to home and check for user details to complete account
         Navigator.of(context).pushNamedAndRemoveUntil(
-            Home.routeName, (route) => false,
-            arguments: widget.userType);
+          Home.routeName,
+          (route) => false,
+        );
       }
     }).catchError((error) {
       print("Error occurred :" + error.toString());
@@ -201,10 +203,8 @@ class _VerificationPageState extends State<VerificationPage> {
                             maxLength: 6,
                             keyboardType: TextInputType.number,
                             onChanged: (code) {
-                              _formKey.currentState!.validate()
-                                  ? _onFormSubmitted()
-                                  : ShowAction() // else show error message
-                                      .showToast(invalidOTP, Colors.red);
+                              if (_formKey.currentState!.validate())
+                                _onFormSubmitted();
                             },
                             maxLengthEnforcement: MaxLengthEnforcement.enforced,
                             decoration: InputDecoration(

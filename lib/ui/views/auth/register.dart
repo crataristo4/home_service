@@ -10,6 +10,7 @@ import 'package:home_service/ui/views/auth/verify.dart';
 import 'package:home_service/ui/views/bloc/Bloc.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   String? defaultCountryCode = "+233";
-  String userInfo = user;
+  static String? userInfo;
   UserTypes? _userType = UserTypes.User;
 
   bool isValid = false;
@@ -242,10 +243,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 hoverColor: Colors.blue,
                 value: type == iAmUser ? UserTypes.User : UserTypes.Artisan,
                 groupValue: _userType,
-                onChanged: (UserTypes? value) {
+                onChanged: (UserTypes? value) async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  userInfo = type == iAmUser ? user : artisan;
+                  await prefs.setString("userType", userInfo!);
+                  debugPrint("User type : $userInfo");
                   setState(() {
                     _userType = value;
-                    userInfo = type == iAmUser ? user : artisan;
                   });
                 },
               ),
