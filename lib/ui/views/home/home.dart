@@ -1,13 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
+import 'package:home_service/ui/models/users.dart';
 import 'package:home_service/ui/views/bottomsheet/options_page.dart';
 import 'package:home_service/ui/views/home/artwork.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
 import 'package:home_service/ui/views/home/category.dart';
 
+CollectionReference usersDbRef = FirebaseFirestore.instance.collection("Users");
+final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
+Users? users;
+Artisans? artisans;
+
 class Home extends StatefulWidget {
-  //final int initialIndex;
+  final String userType;
+
+  Home({required this.userType});
 
   static const routeName = '/homePage';
 
@@ -39,7 +50,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: //user profile image
-            GestureDetector(
+        GestureDetector(
           onTap: () => showModalBottomSheet(
               isDismissible: false,
               context: context,

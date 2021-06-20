@@ -40,7 +40,12 @@ class _AppStateState extends State<AppState> {
         child: SafeArea(
             top: false,
             bottom: false,
-            child: Scaffold(body: mUser != null ? Home() : RegistrationPage())),
+            child: Scaffold(
+                body: mUser != null
+                    ? Home(
+                        userType: "",
+                      )
+                    : RegistrationPage())),
       ),
     );
   }

@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/constants.dart';
-import 'package:home_service/ui/views/profile/artisan_profile/complete_artisan_profile.dart';
-import 'package:home_service/ui/views/profile/user_profile/complete_user_profile.dart';
+import 'package:home_service/ui/views/home/home.dart';
+import 'package:home_service/ui/widgets/actions.dart';
 
 class VerificationPage extends StatefulWidget {
   final String phoneNumber;
@@ -18,8 +19,99 @@ class VerificationPage extends StatefulWidget {
 }
 
 class _VerificationPageState extends State<VerificationPage> {
+  final snackBarKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<State> _verifyKey = new GlobalKey<State>();
+  final _formKey = GlobalKey<FormState>();
+
+  //Control the input text field.
+  TextEditingController _controller = TextEditingController();
+
+  bool isCodeSent = false;
+  late String _verificationId;
+
+  void initState() {
+    super.initState();
+    _onVerifyCode();
+  }
+
+  void _onVerifyCode() async {
+    setState(() {
+      isCodeSent = true;
+    });
+
+    //automatic verification
+    final PhoneVerificationCompleted verificationCompleted =
+        (AuthCredential phoneAuthCredential) {
+      firebaseAuth.signInWithCredential(phoneAuthCredential).then((value) {
+        if (value.user != null) {
+          //push to home and check for user details to complete account
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              Home.routeName, (route) => false,
+              arguments: widget.userType);
+        }
+      }).catchError((error) {
+        ShowAction().showToast(tryAgainSometime, Colors.red);
+      });
+    };
+
+    //phone verification failed
+    final PhoneVerificationFailed verificationFailed = (authException) {
+      ShowAction().showToast(authException.message, Colors.red);
+      debugPrint("Error ${authException.message}");
+      Navigator.pop(context);
+      setState(() {
+        isCodeSent = false;
+      });
+    };
+
+    final PhoneCodeSent codeSent =
+        (String verificationId, [int? forceResendingToken]) async {
+      _verificationId = verificationId;
+      await Future.delayed(const Duration(seconds: 3));
+
+      setState(() {
+        _verificationId = verificationId;
+      });
+      Navigator.pop(context);
+    };
+    final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
+        (String verificationId) {
+      _verificationId = verificationId;
+      setState(() {
+        _verificationId = verificationId;
+      });
+    };
+
+    await firebaseAuth.verifyPhoneNumber(
+        phoneNumber: "${widget.phoneNumber}",
+        timeout: Duration(seconds: 60),
+        verificationCompleted: verificationCompleted,
+        verificationFailed: verificationFailed,
+        codeSent: codeSent,
+        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
+  }
+
+  ///from user tapping button
+  void _onFormSubmitted() async {
+    AuthCredential _authCredential = PhoneAuthProvider.credential(
+        verificationId: _verificationId, smsCode: _controller.text);
+
+    firebaseAuth.signInWithCredential(_authCredential).then((value) {
+      if (value.user != null) {
+        //push to home and check for user details to complete account
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            Home.routeName, (route) => false,
+            arguments: widget.userType);
+      }
+    }).catchError((error) {
+      print("Error occurred :" + error.toString());
+      /*ShowAction().showToast("Something went wrong", Colors.red);*/
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    debugPrint("User type: ${widget.userType}");
     return Scaffold(
       appBar: AppBar(
           actions: [
@@ -94,24 +186,41 @@ class _VerificationPageState extends State<VerificationPage> {
                           style: TextStyle(
                               fontSize: fourteenDp,
                               fontWeight: FontWeight.bold)),
-                      TextFormField(
-                          autofocus: true,
-                          maxLength: 6,
-                          keyboardType: TextInputType.number,
-                          maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                          decoration: InputDecoration(
-                            hintText: "X X X X X X",
-                            fillColor: Color(0xFFF5F5F5),
-                            filled: true,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 0, horizontal: tenDp),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFF5F5F5))),
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFF5F5F5))),
-                          )),
+                      Form(
+                        key: _formKey,
+                        child: TextFormField(
+                            autofocus: true,
+                            controller: _controller,
+                            validator: (value) {
+                              if (value!.length < 6) {
+                                return "Please enter code sent";
+                              }
+
+                              return null;
+                            },
+                            maxLength: 6,
+                            keyboardType: TextInputType.number,
+                            onChanged: (code) {
+                              _formKey.currentState!.validate()
+                                  ? _onFormSubmitted()
+                                  : ShowAction() // else show error message
+                                      .showToast(invalidOTP, Colors.red);
+                            },
+                            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                            decoration: InputDecoration(
+                              hintText: "X X X X X X",
+                              fillColor: Color(0xFFF5F5F5),
+                              filled: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: tenDp),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFF5F5F5))),
+                              border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFF5F5F5))),
+                            )),
+                      ),
                     ],
                   ),
                   //Buttons
@@ -128,11 +237,11 @@ class _VerificationPageState extends State<VerificationPage> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.circular(eightDp))),
-                            onPressed: () => widget.userType == user
-                                ? Navigator.of(context)
-                                    .pushNamed(CompleteUserProfile.routeName)
-                                : Navigator.of(context).pushNamed(
-                                    CompleteArtisanProfile.routeName),
+                            onPressed: () => _formKey.currentState!
+                                    .validate() // first check if the code length is six
+                                ? _onFormSubmitted() // then perform action
+                                : ShowAction() // else show error message
+                                    .showToast(invalidOTP, Colors.red),
                             child: Text(
                               verifyNumber,
                               style: TextStyle(fontSize: fourteenDp),

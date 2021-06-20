@@ -57,7 +57,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => EditProfile());
 
       case Home.routeName:
-        return MaterialPageRoute(builder: (_) => Home());
+        return MaterialPageRoute(
+            builder: (_) => Home(
+                  userType: args as String,
+                ));
 
       case HelpPage.routeName:
         return MaterialPageRoute(builder: (_) => HelpPage());
