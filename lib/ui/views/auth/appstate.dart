@@ -7,7 +7,7 @@ User? mUser;
 
 class AppState extends StatefulWidget {
   const AppState({Key? key}) : super(key: key);
-  static const routeName = '/appState';
+  static const routeName = '/';
 
   @override
   _AppStateState createState() => _AppStateState();
@@ -34,11 +34,14 @@ class _AppStateState extends State<AppState> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SafeArea(
-          top: false,
-          bottom: false,
-          child: Scaffold(body: mUser != null ? Home() : RegistrationPage())),
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Container(
+        child: SafeArea(
+            top: false,
+            bottom: false,
+            child: Scaffold(body: mUser != null ? Home() : RegistrationPage())),
+      ),
     );
   }
 }

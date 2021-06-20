@@ -56,8 +56,14 @@ const eightYrs = '8 yrs Experience';
 const nineYrs = '9 yrs Experience';
 const tenPlusYrs = '10+ yrs Experience';
 const discover = 'Discover';
+const discoverDes = 'Get to know a wide range of artisans near and around you';
 const search = 'Search';
+const scheduleDes =
+    'Book and schedule appointments with artisans to help them get your works done';
 const book = 'Book';
+const artwork = 'Artwork';
+const artworkDesc =
+    'Have a view of the artistic talents ,designs , works  and creativity of the artisans';
 const photoLibrary = 'Photo Library';
 const camera = 'Camera';
 const chooseImage = 'Choose Image';
