@@ -11,8 +11,14 @@
   "assets/images/c.webp": [
     "assets/images/c.webp"
   ],
+  "assets/images/contactUs.png": [
+    "assets/images/contactUs.png"
+  ],
   "assets/images/d.png": [
     "assets/images/d.png"
+  ],
+  "assets/svg/call.svg": [
+    "assets/svg/call.svg"
   ],
   "packages/country_code_picker/flags/ad.png": [
     "packages/country_code_picker/flags/ad.png"

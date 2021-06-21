@@ -656,6 +656,7 @@ drawable corner
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable launch_background
+drawable launch_image
 drawable notification_action_background
 drawable notification_bg
 drawable notification_bg_low
@@ -964,7 +965,6 @@ string common_signin_button_text
 string common_signin_button_text_long
 string default_web_client_id
 string fcm_fallback_notification_channel_label
-string firebase_database_url
 string gcm_defaultSenderId
 string google_api_key
 string google_app_id

@@ -13,8 +13,8 @@
 -keep class com.google.firebase.iid.FirebaseInstanceIdReceiver { <init>(); }
 -keep class com.google.firebase.messaging.FirebaseMessagingService { <init>(); }
 -keep class com.google.firebase.provider.FirebaseInitProvider { <init>(); }
--keep class com.sidlatau.flutteremailsender.FlutterEmailSenderFileProvider { <init>(); }
 -keep class com.home.service.app.MainActivity { <init>(); }
+-keep class com.sidlatau.flutteremailsender.FlutterEmailSenderFileProvider { <init>(); }
 -keep class io.flutter.plugins.imagepicker.ImagePickerFileProvider { <init>(); }
 -keep class io.flutter.plugins.share.ShareFileProvider { <init>(); }
 -keep class io.flutter.plugins.urllauncher.WebViewActivity { <init>(); }
