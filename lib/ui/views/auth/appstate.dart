@@ -26,6 +26,10 @@ class _AppStateState extends State<AppState> {
   getCurrentUser() {
     User? user = mAuth.currentUser;
     if (user != null) {
+      //check if user has profile details
+      String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+      print("Current id: $currentUserId");
+
       setState(() {
         mUser = user;
       });

@@ -39,7 +39,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   getType() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     getUserType = prefs.getString("userType");
-    debugPrint("Shared pref user type : $getUserType");
+    debugPrint("Shared pref user type-1 : $getUserType");
   }
 
   @override
@@ -50,7 +50,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("Shared pref user type : $getUserType");
 
     return Scaffold(
       backgroundColor: Colors.white,

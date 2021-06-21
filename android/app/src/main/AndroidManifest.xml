@@ -1,9 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.users.qwikhomeservices">
+    package="com.home.service.app">
 
+    <!--android:icon="@mipmap/launcher_icon"-->
     <application
-        android:icon="@mipmap/ic_launcher"
-        android:label="home_service">
+        android:icon="@mipmap/launcher_icon"
+        android:label="Home Service">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

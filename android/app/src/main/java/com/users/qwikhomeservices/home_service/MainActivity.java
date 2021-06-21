@@ -1,4 +1,4 @@
-package com.users.qwikhomeservices;
+package com.home.service.app;
 
 import io.flutter.embedding.android.FlutterActivity;
 

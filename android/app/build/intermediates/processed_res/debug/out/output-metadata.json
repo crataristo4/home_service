@@ -4,7 +4,7 @@
     "type": "PROCESSED_RES",
     "kind": "Directory"
   },
-  "applicationId": "com.users.qwikhomeservices",
+  "applicationId": "com.home.service.app",
   "variantName": "debug",
   "elements": [
     {

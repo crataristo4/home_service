@@ -2,7 +2,7 @@ const appTitle = 'Home service';
 const getApp = 'Home servicing app';
 const shareText = 'Looking for a home servicing app where you can find \n'
     'lots of artisans and handy men?\n'
-    'Then Download => https://play.google.com/store/apps/details?id=com.users.qwikhomeservices';
+    'Then Download => https://play.google.com/store/apps/details?id=com.home.service.app';
 //artisans
 const carpenter = 'Carpenter';
 const maison = 'Maison';
