@@ -248,7 +248,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       await SharedPreferences.getInstance();
                   userInfo = type == iAmUser ? user : artisan;
                   await prefs.setString("userType", userInfo!);
-                  debugPrint("User type : $userInfo");
+                  debugPrint("User type -Registered : $userInfo");
                   setState(() {
                     _userType = value;
                   });

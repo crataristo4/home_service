@@ -4,6 +4,8 @@ import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/home/home.dart';
 
 User? mUser;
+String? currentUserId;
+String? phoneNumber;
 
 class AppState extends StatefulWidget {
   const AppState({Key? key}) : super(key: key);
@@ -27,8 +29,9 @@ class _AppStateState extends State<AppState> {
     User? user = mAuth.currentUser;
     if (user != null) {
       //check if user has profile details
-      String currentUserId = FirebaseAuth.instance.currentUser!.uid;
-      print("Current id: $currentUserId");
+      currentUserId = FirebaseAuth.instance.currentUser!.uid;
+      phoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber;
+      print("Current id: $currentUserId \n Phone number : $phoneNumber");
 
       setState(() {
         mUser = user;

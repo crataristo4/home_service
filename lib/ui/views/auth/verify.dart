@@ -78,9 +78,9 @@ class _VerificationPageState extends State<VerificationPage> {
     final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
         (String verificationId) {
       _verificationId = verificationId;
-      setState(() {
+    /*  setState(() {
         _verificationId = verificationId;
-      });
+      });*/
     };
 
     await firebaseAuth.verifyPhoneNumber(
@@ -113,7 +113,6 @@ class _VerificationPageState extends State<VerificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("User type: ${widget.userType}");
     return Scaffold(
       appBar: AppBar(
           actions: [

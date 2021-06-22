@@ -7,9 +7,8 @@ import 'package:home_service/ui/views/auth/verify.dart';
 import 'package:home_service/ui/views/help/help_page.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
-import 'package:home_service/ui/views/profile/artisan_profile/complete_artisan_profile.dart';
+import 'package:home_service/ui/views/profile/complete_profile.dart';
 import 'package:home_service/ui/views/profile/edit_profile.dart';
-import 'package:home_service/ui/views/profile/user_profile/complete_user_profile.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -47,11 +46,8 @@ class RouteGenerator {
                   userType: data.userType,
                 ));
 
-      case CompleteArtisanProfile.routeName:
-        return MaterialPageRoute(builder: (_) => CompleteArtisanProfile());
-
-      case CompleteUserProfile.routeName:
-        return MaterialPageRoute(builder: (_) => CompleteUserProfile());
+      case CompleteProfile.routeName:
+        return MaterialPageRoute(builder: (_) => CompleteProfile());
 
       case EditProfile.routeName:
         return MaterialPageRoute(builder: (_) => EditProfile());

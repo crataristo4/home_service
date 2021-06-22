@@ -4,18 +4,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/ui/models/users.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/options_page.dart';
 import 'package:home_service/ui/views/home/artwork.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
 import 'package:home_service/ui/views/home/category.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:home_service/ui/views/profile/complete_profile.dart';
 
 CollectionReference usersDbRef = FirebaseFirestore.instance.collection("Users");
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 Users? users;
 Artisans? artisans;
-String? getUserType;
 
 class Home extends StatefulWidget {
   static const routeName = '/homePage';
@@ -33,13 +33,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _tabController.index = 1;
 
     super.initState();
-    getType();
+    checkIfUserProfileExists();
   }
 
-  getType() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    getUserType = prefs.getString("userType");
-    debugPrint("Shared pref user type-1 : $getUserType");
+  checkIfUserProfileExists() async {
+    //todo check user profile offline
+
+    await usersDbRef
+        .doc(currentUserId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (!documentSnapshot.exists) {
+        Navigator.of(context).pushNamed(CompleteProfile.routeName);
+      }
+    }).catchError((onError) {
+      debugPrint("Error: $onError");
+    });
   }
 
   @override
@@ -50,7 +59,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

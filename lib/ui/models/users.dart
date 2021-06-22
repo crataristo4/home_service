@@ -6,6 +6,7 @@ class Users {
   final String photoUrl;
   final String phoneNumber;
   final String id;
+  final String type;
   final String dateJoined;
   GeoPoint? location;
 
@@ -14,6 +15,7 @@ class Users {
       required this.photoUrl,
       required this.phoneNumber,
       required this.id,
+      required this.type,
       required this.dateJoined,
       this.location});
 
@@ -24,6 +26,7 @@ class Users {
       phoneNumber: documentSnapshot['phoneNumber'],
       photoUrl: documentSnapshot['photoUrl'],
       dateJoined: documentSnapshot['dateJoined'],
+      type: documentSnapshot['type'],
     );
   }
 }
@@ -34,7 +37,8 @@ class Artisans {
   final String phoneNumber;
   final String id;
   final String dateJoined;
-  final String artisanType;
+  final String category;
+  final String type;
   final String expLevel;
   final List<String> artworkUrl;
   GeoPoint? location;
@@ -45,7 +49,8 @@ class Artisans {
       required this.phoneNumber,
       required this.id,
       required this.dateJoined,
-      required this.artisanType,
+      required this.category,
+      required this.type,
       required this.expLevel,
       required this.artworkUrl});
 
@@ -56,7 +61,8 @@ class Artisans {
       phoneNumber: documentSnapshot['phoneNumber'],
       photoUrl: documentSnapshot['photoUrl'],
       dateJoined: documentSnapshot['dateJoined'],
-      artisanType: documentSnapshot['artisanType'],
+      category: documentSnapshot['category'],
+      type: documentSnapshot['type'],
       expLevel: documentSnapshot['expLevel'],
       artworkUrl:
           List<String>.from(documentSnapshot["artworkUrl"].map((x) => x)),
