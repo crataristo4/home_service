@@ -29,7 +29,7 @@ class EntryPoint extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
         primaryColor: Colors.indigo,
-      ),
+      ), 
     );
   }
 }
