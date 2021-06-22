@@ -133,7 +133,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           context, AppState.routeName, (route) => false);*/
 
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                          AppState.routeName, (route) => false);
+                          AppState.routeName, (route) => true);
                     },
                     child: Container(
                       height: Platform.isIOS ? 70 : 60,

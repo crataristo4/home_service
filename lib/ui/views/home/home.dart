@@ -10,12 +10,15 @@ import 'package:home_service/ui/views/home/artwork.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
 import 'package:home_service/ui/views/home/category.dart';
 import 'package:home_service/ui/views/profile/complete_profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 CollectionReference usersDbRef = FirebaseFirestore.instance.collection("Users");
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 Users? users;
 Artisans? artisans;
+String? getUserType;
+
 
 class Home extends StatefulWidget {
   static const routeName = '/homePage';
@@ -31,20 +34,27 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     _tabController.index = 1;
-
     super.initState();
     checkIfUserProfileExists();
   }
 
-  checkIfUserProfileExists() async {
-    //todo check user profile offline
+
+  //method to check the state of users / artisans
+  Future<void> checkIfUserProfileExists() async {
+    await new Future.delayed(Duration(seconds: 5));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    getUserType = prefs.getString("userType");
+    debugPrint("Shared pref user type-1 : $getUserType");
 
     await usersDbRef
         .doc(currentUserId)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
-      if (!documentSnapshot.exists) {
-        Navigator.of(context).pushNamed(CompleteProfile.routeName);
+      if (documentSnapshot.exists) {
+        print('Document data: ${documentSnapshot.data()}');
+      } else {
+        print('Document does not exist on the database');
+        Navigator.of(context).restorablePushNamed(CompleteProfile.routeName);
       }
     }).catchError((onError) {
       debugPrint("Error: $onError");

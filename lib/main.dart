@@ -6,14 +6,15 @@ import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 int? initScreen;
-String? userType;
+//String? userType;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   initScreen = prefs.getInt("initScreen");
-  userType = prefs.getString("userType");
+  await prefs.setInt("initScreen", 1);
+  //userType = prefs.getString("userType");
   runApp(EntryPoint());
 }
 

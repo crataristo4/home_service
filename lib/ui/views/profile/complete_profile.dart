@@ -1,13 +1,11 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:home_service/main.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
@@ -91,7 +89,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
         });
 
         //CHECK USER-TYPE AND CREATE USER
-        if (userType == user) {
+        if (getUserType == user) {
           //create normal user database
           await usersDbRef.doc(currentUserId).set({
             "id": currentUserId,
@@ -225,50 +223,42 @@ class _CompleteProfileState extends State<CompleteProfile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ///Contains Users image
+                        //Contains Users image
                         Center(
-                          //swap between network image and file image
-                          child: _image != null
-                              ? Container(
-                                  height: 120,
-                                  width: 120,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: FileImage(_image!),
+                          child: Container(
+                            height: 120,
+                            width: 120,
+                            child: _image == null
+                                ? ClipRRect(
+                                    child: Image.asset(
+                                      "assets/images/a.png",
                                       fit: BoxFit.cover,
                                     ),
-                                    shape: BoxShape.circle,
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                          color: Colors.grey.withOpacity(0.3),
-                                          offset: const Offset(2.0, 4.0),
-                                          blurRadius: 8),
-                                    ],
-                                    //color: Colors.black,
+                                    borderRadius: BorderRadius.circular(100),
+                                    clipBehavior: Clip.antiAlias,
+                                  )
+                                : ClipRRect(
+                                    clipBehavior: Clip.antiAlias,
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image.file(
+                                      _image!,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                )
-                              : GestureDetector(
-                                  onTap: () {
-                                    _showPicker(context);
-                                  },
-                                  child: Container(
-                                    height: 120,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        boxShadow: <BoxShadow>[
-                                          BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.6),
-                                              offset: const Offset(2.0, 4.0),
-                                              blurRadius: 8),
-                                        ],
-                                        image: DecorationImage(
-                                            image: CachedNetworkImageProvider(
-                                                "https://firebasestorage.googleapis.com/v0/b/workit-786bc.appspot.com/o/projects%2Favartar.jpg?alt=media&token=4b45cd92-dfd3-4355-8565-766e53f1f2ab"),
-                                            fit: BoxFit.cover)),
-                                  ),
-                                ),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                  width: 0.3,
+                                  color: Colors.grey.withOpacity(0.2)),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    offset: const Offset(2.0, 4.0),
+                                    blurRadius: 8),
+                              ],
+                              //color: Colors.black,
+                            ),
+                          ),
                         ),
                         SizedBox(
                           height: 10,
@@ -376,7 +366,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
   }
 
   Widget buildArtisanType() {
-    return userType == user
+    return getUserType == user
         ? Container()
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -443,7 +433,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
   }
 
   Widget buildArtisanExperience() {
-    return userType == user
+    return getUserType == user
         ? Container()
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
