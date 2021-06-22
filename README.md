@@ -1,6 +1,6 @@
 # home_service
 
-Locating professional artisans and handymen near you
+A new Flutter project.
 
 ## Getting Started
 
