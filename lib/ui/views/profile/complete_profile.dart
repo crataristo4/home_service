@@ -11,6 +11,7 @@ import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 
 import '../../../constants.dart';
@@ -61,6 +62,11 @@ class _CompleteProfileState extends State<CompleteProfile> {
   }
 
   createUser() async {
+    //get the date user registered
+    DateFormat dateFormat = DateFormat("dd-MM-yyyy HH:mm:ss");
+    String dateJoined = dateFormat.format(DateTime.now());
+    print("Date: $dateJoined");
+
     Dialogs.showLoadingDialog(
         context, _createUserKey, pleaseWait, Colors.white70); //start the dialog
 
@@ -97,7 +103,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
             "photoUrl": imageUrl,
             "phoneNumber": phoneNumber,
             "type": user,
-            "dateJoined": "df"
+            "dateJoined": dateJoined
           }).whenComplete(() {
             ShowAction().showToast(
                 profileCreatedSuccessfully, Colors.black); //show complete msg
@@ -118,7 +124,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
             "type": artisan,
             "category": _selectedCategory,
             "expLevel": _selectedExperience,
-            "dateJoined": "df",
+            "dateJoined": dateJoined,
             "artworkUrl": []
           }).whenComplete(() async {
             await Future.delayed(Duration(seconds: 3));

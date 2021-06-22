@@ -6,7 +6,6 @@ import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 int? initScreen;
-//String? userType;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +13,6 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   initScreen = prefs.getInt("initScreen");
   await prefs.setInt("initScreen", 1);
-  //userType = prefs.getString("userType");
   runApp(EntryPoint());
 }
 

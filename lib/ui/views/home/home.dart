@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,8 +18,9 @@ final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 Users? users;
 Artisans? artisans;
+String? userName;
+String? imageUrl;
 String? getUserType;
-
 
 class Home extends StatefulWidget {
   static const routeName = '/homePage';
@@ -34,24 +36,29 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     _tabController.index = 1;
-    super.initState();
     checkIfUserProfileExists();
+    super.initState();
   }
 
-
   //method to check the state of users / artisans
-  Future<void> checkIfUserProfileExists() async {
-    await new Future.delayed(Duration(seconds: 5));
+  checkIfUserProfileExists() async {
+    await new Future.delayed(Duration(seconds: 10));
     SharedPreferences prefs = await SharedPreferences.getInstance();
     getUserType = prefs.getString("userType");
-    debugPrint("Shared pref user type-1 : $getUserType");
 
     await usersDbRef
         .doc(currentUserId)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        print('Document data: ${documentSnapshot.data()}');
+        imageUrl = documentSnapshot.get(FieldPath(["photoUrl"]));
+
+        if (getUserType == user) {
+          // check userType and display name
+          userName = documentSnapshot.get(FieldPath(["userName"]));
+        } else {
+          userName = documentSnapshot.get(FieldPath(["artisanName"]));
+        }
       } else {
         print('Document does not exist on the database');
         Navigator.of(context).restorablePushNamed(CompleteProfile.routeName);
@@ -75,24 +82,26 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: //user profile image
-            GestureDetector(
+        GestureDetector(
           onTap: () => showModalBottomSheet(
               isDismissible: false,
               context: context,
               builder: (context) => OptionsPage()),
           child: Container(
-            margin: EdgeInsets.only(top: sixDp, left: eightDp),
-            width: sixtyDp,
-            height: sixtyDp,
+            margin: EdgeInsets.only(left: eightDp, top: eightDp),
             decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(sixteenDp),
-                border: Border.all(width: 0.5, color: Colors.grey),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(
-                      "assets/images/a.png"), //todo -load image from network
-                )),
+                border:
+                    Border.all(width: 0.1, color: Colors.grey.withOpacity(0.6)),
+                borderRadius: BorderRadius.circular(60)),
+            child: ClipRRect(
+              clipBehavior: Clip.antiAlias,
+              borderRadius: BorderRadius.circular(40),
+              child: CachedNetworkImage(
+                placeholder: (context, url) => CircularProgressIndicator(),
+                imageUrl: imageUrl!,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ),
         title: Container(
