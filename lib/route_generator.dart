@@ -61,7 +61,7 @@ class RouteGenerator {
       case ViewArtisanByCategoryPage.routeName:
         return MaterialPageRoute(
             builder: (_) => ViewArtisanByCategoryPage(
-                  categoryName: args,
+                  categoryName: args as String,
                 ));
 
       default:

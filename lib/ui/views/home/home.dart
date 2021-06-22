@@ -42,7 +42,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   //method to check the state of users / artisans
   checkIfUserProfileExists() async {
-    await new Future.delayed(Duration(seconds: 10));
+    await new Future.delayed(Duration(seconds: 3));
     SharedPreferences prefs = await SharedPreferences.getInstance();
     getUserType = prefs.getString("userType");
 
@@ -88,14 +88,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               context: context,
               builder: (context) => OptionsPage()),
           child: Container(
-            margin: EdgeInsets.only(left: eightDp, top: eightDp),
+            width: 40,
+            height: 40,
+            margin: EdgeInsets.only(left: eightDp, top: tenDp),
             decoration: BoxDecoration(
                 border:
                     Border.all(width: 0.1, color: Colors.grey.withOpacity(0.6)),
-                borderRadius: BorderRadius.circular(60)),
+                borderRadius: BorderRadius.circular(30)),
             child: ClipRRect(
               clipBehavior: Clip.antiAlias,
-              borderRadius: BorderRadius.circular(40),
+              borderRadius: BorderRadius.circular(30),
               child: CachedNetworkImage(
                 placeholder: (context, url) => CircularProgressIndicator(),
                 imageUrl: imageUrl!,

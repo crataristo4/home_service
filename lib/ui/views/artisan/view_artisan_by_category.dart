@@ -1,13 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:home_service/ui/views/bloc/artisan_category_list_bloc.dart';
+import 'package:home_service/ui/views/home/home.dart';
+import 'package:home_service/ui/widgets/loadingShimmer.dart';
 
 import '../../../constants.dart';
 
 class ViewArtisanByCategoryPage extends StatefulWidget {
   static const routeName = '/viewArtisanByCategory';
-  final categoryName;
+  final String? categoryName;
 
   const ViewArtisanByCategoryPage({Key? key, this.categoryName})
       : super(key: key);
@@ -21,10 +26,14 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  ArtisanCategoryListBloc? _artisanCategoryListBloc;
+
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     _tabController.index = 2;
+    _artisanCategoryListBloc = ArtisanCategoryListBloc();
+    _artisanCategoryListBloc!.fetchFirstList(usersDbRef, widget.categoryName);
     super.initState();
   }
 
@@ -69,19 +78,24 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
         actions: [
           //user profile image
           Container(
-            margin: EdgeInsets.only(right: tenDp, top: tenDp),
-            width: sixtyDp,
-            height: seventyDp,
+            width: 40,
+            height: 40,
+            margin:
+                EdgeInsets.only(right: tenDp, top: twelveDp, bottom: fourDp),
+            child: ClipRRect(
+              clipBehavior: Clip.antiAlias,
+              borderRadius: BorderRadius.circular(30),
+              child: CachedNetworkImage(
+                placeholder: (context, url) => CircularProgressIndicator(),
+                imageUrl: imageUrl!,
+                fit: BoxFit.cover,
+              ),
+            ),
             decoration: BoxDecoration(
-                border: Border.all(width: 0.3, color: Colors.grey),
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(eightDp),
-                // border: Border.all(width: 2,color: Colors.white54),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(
-                      "assets/images/a.png"), //todo -load image from network
-                )),
+              border:
+                  Border.all(width: 0.1, color: Colors.grey.withOpacity(0.9)),
+              borderRadius: BorderRadius.circular(30),
+            ),
           )
         ],
       ),
@@ -95,7 +109,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                 topLeft: Radius.circular(thirtySixDp),
                 topRight: Radius.circular(thirtySixDp)),
             border:
-            Border.all(width: 0.5, color: Colors.grey.withOpacity(0.5))),
+                Border.all(width: 0.5, color: Colors.grey.withOpacity(0.5))),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -226,131 +240,150 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
   }
 
   Widget buildListCategory() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: 20,
-      scrollDirection: Axis.vertical,
-      itemBuilder: (BuildContext context, int index) {
-        return GestureDetector(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 150,
-            margin: EdgeInsets.symmetric(horizontal: tenDp, vertical: tenDp),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(width: 0.2, color: Colors.grey),
-                borderRadius: BorderRadius.circular(tenDp)),
-            child: Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //artisans profile image
-                    Container(
-                      margin: EdgeInsets.all(tenDp),
-                      width: eightyDp,
-                      height: eightyDp,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 0.3, color: Colors.grey.withOpacity(0.2)),
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(eightDp),
-                          // border: Border.all(width: 2,color: Colors.white54),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                                "assets/images/a.png"), //todo -load image from network
-                          )),
-                    ),
+    return StreamBuilder<List<DocumentSnapshot>>(
+        stream: _artisanCategoryListBloc!.itemListStream,
+        builder: (context, snapshot) {
+          debugPrint("Data : ${snapshot.data}");
+          if (!snapshot.hasData) {
+            return LoadingShimmer();
+          } else {
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data!.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 150,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: tenDp, vertical: tenDp),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(width: 0.2, color: Colors.grey),
+                        borderRadius: BorderRadius.circular(tenDp)),
+                    child: Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            //artisans profile image
+                            Container(
+                              margin: EdgeInsets.all(tenDp),
+                              width: eightyDp,
+                              height: eightyDp,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 0.3,
+                                      color: Colors.grey.withOpacity(0.2)),
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(eightDp),
+                                  // border: Border.all(width: 2,color: Colors.white54),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: CachedNetworkImageProvider(
+                                        snapshot.data![index]['photoUrl']),
+                                  )),
+                            ),
 
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: tenDp),
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              //artisan name
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.max,
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: tenDp),
+                              child: Row(
                                 children: [
-                                  Text(
-                                    "Chantel Abrum",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: sixteenDp),
-                                  ),
-                                  SizedBox(
-                                    width: 100,
-                                  ),
-                                  Text(
-                                    "3 km",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: sixteenDp,
-                                    ),
-                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      //artisan name
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Text(
+                                            snapshot.data![index]
+                                                ['artisanName'],
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: sixteenDp),
+                                          ),
+                                          SizedBox(
+                                            width: 100,
+                                          ),
+                                          Text(
+                                            "3 km",
+                                            //todo add artisan location and convert into distance
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: sixteenDp,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      RatingBar.builder(
+                                        //todo add rating to artisan
+                                        itemSize: 20,
+                                        initialRating: 3,
+                                        minRating: 1,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemBuilder: (context, _) => Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        onRatingUpdate: (rating) {
+                                          print(rating);
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: sixteenDp,
+                                      ),
+                                      Text(
+                                        snapshot.data![index]['expLevel'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: sixteenDp,
+                                            color: Colors.grey),
+                                      ),
+                                    ],
+                                  )
                                 ],
                               ),
-                              RatingBar.builder(
-                                itemSize: 20,
-                                initialRating: 3,
-                                minRating: 1,
-                                direction: Axis.horizontal,
-                                allowHalfRating: true,
-                                itemCount: 5,
-                                itemBuilder: (context, _) => Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                ),
-                                onRatingUpdate: (rating) {
-                                  print(rating);
-                                },
-                              ),
-                              SizedBox(
-                                height: sixteenDp,
-                              ),
-                              Text(
-                                "5 years Experience",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: sixteenDp,
-                                    color: Colors.grey),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: fortyEightDp,
-                  width: MediaQuery.of(context).size.width,
-                  child: Container(
-                    margin: EdgeInsets.only(
-                        left: sixteenDp, right: sixteenDp, bottom: fourDp),
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            primary: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(eightDp))),
-                        onPressed: () {},
-                        child: Text(
-                          book,
-                          style: TextStyle(fontSize: fourteenDp),
-                        )),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: fortyEightDp,
+                          width: MediaQuery.of(context).size.width,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                left: sixteenDp,
+                                right: sixteenDp,
+                                bottom: fourDp),
+                            child: TextButton(
+                                style: TextButton.styleFrom(
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
+                                    primary: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(eightDp))),
+                                onPressed: () {},
+                                child: Text(
+                                  book,
+                                  style: TextStyle(fontSize: fourteenDp),
+                                )),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
+                );
+              },
+            );
+          }
+        });
   }
 
   Widget buildGridCategory() {
@@ -464,8 +497,8 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                           primary: Colors.indigo,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(
-                                                      eightDp))),
+                                              BorderRadius.circular(
+                                                  eightDp))),
                                       onPressed: () {},
                                       child: Text(
                                         book,
@@ -491,12 +524,12 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                           width: sixtyDp,
                           height: seventyDp,
                           decoration: BoxDecoration(
-                              // border: Border.all(width: 2,color: Colors.white54),
+                            // border: Border.all(width: 2,color: Colors.white54),
                               image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                                "assets/images/a.png"), //todo -load image from network
-                          )),
+                                fit: BoxFit.cover,
+                                image: AssetImage(
+                                    "assets/images/a.png"), //todo -load image from network
+                              )),
                         ),
                       ),
                     ),
