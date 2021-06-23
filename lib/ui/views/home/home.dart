@@ -82,30 +82,33 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: //user profile image
-        GestureDetector(
-          onTap: () => showModalBottomSheet(
-              isDismissible: false,
-              context: context,
-              builder: (context) => OptionsPage()),
-          child: Container(
-            width: 40,
-            height: 40,
-            margin: EdgeInsets.only(left: eightDp, top: tenDp),
-            decoration: BoxDecoration(
-                border:
-                    Border.all(width: 0.1, color: Colors.grey.withOpacity(0.6)),
-                borderRadius: BorderRadius.circular(30)),
-            child: ClipRRect(
-              clipBehavior: Clip.antiAlias,
-              borderRadius: BorderRadius.circular(30),
-              child: CachedNetworkImage(
-                placeholder: (context, url) => CircularProgressIndicator(),
-                imageUrl: imageUrl!,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
+            imageUrl == null
+                ? Container()
+                : GestureDetector(
+                    onTap: () => showModalBottomSheet(
+                        isDismissible: false,
+                        context: context,
+                        builder: (context) => OptionsPage()),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      margin: EdgeInsets.only(left: eightDp, top: tenDp),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 0.1, color: Colors.grey.withOpacity(0.6)),
+                          borderRadius: BorderRadius.circular(30)),
+                      child: ClipRRect(
+                        clipBehavior: Clip.antiAlias,
+                        borderRadius: BorderRadius.circular(30),
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          imageUrl: imageUrl!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
         title: Container(
           margin: EdgeInsets.only(top: tenDp),
           height: 45,

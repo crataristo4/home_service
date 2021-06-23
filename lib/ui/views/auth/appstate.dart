@@ -15,9 +15,6 @@ class AppState extends StatefulWidget {
 }
 
 class _AppStateState extends State<AppState> {
-  User? mUser;
-  FirebaseAuth mAuth = FirebaseAuth.instance;
-
   @override
   void initState() {
     getCurrentUser();
@@ -26,11 +23,10 @@ class _AppStateState extends State<AppState> {
 
   //get the current user
   getCurrentUser() {
-    //todo - Fix null pointer on mUser
+    FirebaseAuth mAuth = FirebaseAuth.instance;
     User? users = mAuth.currentUser;
     if (users != null) {
       setState(() {
-        mUser = users;
         currentUserId = FirebaseAuth.instance.currentUser!.uid;
         phoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber;
       });
@@ -45,7 +41,10 @@ class _AppStateState extends State<AppState> {
         child: SafeArea(
             top: false,
             bottom: false,
-            child: Scaffold(body: mUser != null ? Home() : RegistrationPage())),
+            child: Scaffold(
+                body: FirebaseAuth.instance != null
+                    ? Home()
+                    : RegistrationPage())),
       ),
     );
   }

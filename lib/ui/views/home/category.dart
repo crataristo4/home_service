@@ -64,15 +64,18 @@ class _CategoryPageState extends State<CategoryPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: tenDp),
-                          child: Text(
-                            "$message $userName",
-                            style: TextStyle(
-                                fontSize: fourteenDp,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ),
+                        //display greeting message to user
+                        userName == null
+                            ? Container()
+                            : Padding(
+                                padding: EdgeInsets.only(top: tenDp),
+                                child: Text(
+                                  "$message $userName",
+                                  style: TextStyle(
+                                      fontSize: fourteenDp,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ),
                         SizedBox(
                           height: eightDp,
                         ),
