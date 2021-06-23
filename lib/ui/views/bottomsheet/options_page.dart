@@ -78,6 +78,7 @@ class _OptionsPageState extends State<OptionsPage> {
           case contactUs:
             Navigator.of(context).pushNamed(HelpPage.routeName);
             break;
+
           case share:
             //write to app path
             Future<void> writeToFile(ByteData data, String path) {
