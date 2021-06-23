@@ -35,7 +35,7 @@ class _CategoryPageState extends State<CategoryPage> {
       setState(() {
         message = goodAfternoon;
       });
-    } else if ((timeNow > 16) && (timeNow < 20)) {
+    } else if ((timeNow > 16) && (timeNow <= 20)) {
       setState(() {
         message = goodEvening;
       });
