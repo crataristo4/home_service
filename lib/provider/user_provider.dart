@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:home_service/constants.dart';
 import 'package:home_service/service/firestore_services.dart';
 import 'package:home_service/ui/models/users.dart';
 import 'package:home_service/ui/views/home/home.dart';
@@ -7,7 +9,7 @@ import 'package:intl/intl.dart';
 
 class UserProvider with ChangeNotifier {
   String? _id,
-      _artisanName,
+      _name,
       _category,
       _expLevel,
       _photoUrl,
@@ -18,7 +20,7 @@ class UserProvider with ChangeNotifier {
 
   // String dateJoined = dateFormat.format(DateTime.now());
 
-  get artisanName => _artisanName;
+  get name => _name;
 
   get category => _category;
 
@@ -27,7 +29,7 @@ class UserProvider with ChangeNotifier {
   UserService userService = UserService();
 
   changeName(value) {
-    _artisanName = value;
+    _name = value;
     notifyListeners();
   }
 
@@ -53,19 +55,34 @@ class UserProvider with ChangeNotifier {
     _phoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber;
     photoUrl = _photoUrl!;
 
-    //creates a new artisan object
-    Artisans newArtisan = Artisans(
-        artisanName: artisanName,
-        photoUrl: photoUrl,
-        phoneNumber: _phoneNumber!,
-        id: _id!,
-        dateJoined: _dateJoined!,
-        category: category,
-        type: _type!,
-        expLevel: expLevel,
-        artworkUrl: []);
+    if (getUserType == artisan) {
+      //creates a new artisan object
+      Artisans newArtisan = Artisans(
+          artisanName: name,
+          photoUrl: photoUrl,
+          phoneNumber: _phoneNumber!,
+          id: _id!,
+          dateJoined: _dateJoined!,
+          category: category,
+          type: _type!,
+          expLevel: expLevel,
+          artworkUrl: [],
+          location: new GeoPoint(0, 0));
 
-    //push to db
-    userService.createArtisan(newArtisan, context);
+      //push to db
+      userService.createArtisan(newArtisan, context);
+    } else {
+      // create new  user
+      Users newUser = Users(
+          userName: name,
+          photoUrl: photoUrl,
+          phoneNumber: _phoneNumber!,
+          id: _id!,
+          type: _type!,
+          dateJoined: _dateJoined!,
+          location: new GeoPoint(0, 0));
+
+      userService.createUser(newUser, context);
+    }
   }
 }

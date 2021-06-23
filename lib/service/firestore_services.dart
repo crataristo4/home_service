@@ -16,15 +16,35 @@ class UserService {
         .doc(artisans.id)
         .set(artisans.artisanToMap())
         .whenComplete(() async {
-      await Future.delayed(Duration(seconds: 3));
-      ShowAction().showToast(
-          profileCreatedSuccessfully, Colors.black); //show complete msg
-      Navigator.of(context, rootNavigator: true).pop();
-      Navigator.of(context).pop(true);
+      showSuccess(context);
     }).catchError((onError) {
-      Navigator.of(context, rootNavigator: true).pop(); //close the dialog
-
-      print("Error: $onError");
+      showFailure(context, onError);
     });
+  }
+
+  //create an artisan
+  Future<void> createUser(Users users, BuildContext context) {
+    return firestoreService
+        .collection('Users')
+        .doc(users.id)
+        .set(users.userToMap())
+        .whenComplete(() async {
+      showSuccess(context);
+    }).catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
+  showSuccess(context) async {
+    await Future.delayed(Duration(seconds: 3));
+    ShowAction().showToast(
+        profileCreatedSuccessfully, Colors.black); //show complete msg
+    Navigator.of(context, rootNavigator: true).pop();
+    Navigator.of(context).pop(true);
+  }
+
+  showFailure(context, error) {
+    ShowAction().showToast(error, Colors.black);
+    Navigator.of(context, rootNavigator: true).pop(); //close the dialog
   }
 }

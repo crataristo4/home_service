@@ -17,17 +17,29 @@ class Users {
       required this.id,
       required this.type,
       required this.dateJoined,
-      this.location});
+      required this.location});
 
   factory Users.fromDocument(DocumentSnapshot documentSnapshot) {
     return Users(
-      id: documentSnapshot['id'],
-      userName: documentSnapshot['userName'],
-      phoneNumber: documentSnapshot['phoneNumber'],
-      photoUrl: documentSnapshot['photoUrl'],
-      dateJoined: documentSnapshot['dateJoined'],
-      type: documentSnapshot['type'],
-    );
+        id: documentSnapshot['id'],
+        userName: documentSnapshot['userName'],
+        phoneNumber: documentSnapshot['phoneNumber'],
+        photoUrl: documentSnapshot['photoUrl'],
+        dateJoined: documentSnapshot['dateJoined'],
+        type: documentSnapshot['type'],
+        location: documentSnapshot['location']);
+  }
+
+  Map<String, dynamic> userToMap() {
+    return {
+      'id': id,
+      'phoneNumber': phoneNumber,
+      'userName': userName,
+      'dateJoined': dateJoined,
+      'type': type,
+      'photoUrl': photoUrl,
+      'location': location
+    };
   }
 }
 
@@ -52,7 +64,8 @@ class Artisans {
       required this.category,
       required this.type,
       required this.artworkUrl,
-      required this.expLevel});
+      required this.expLevel,
+      required this.location});
 
   factory Artisans.fromDocument(DocumentSnapshot documentSnapshot) {
     return Artisans(
@@ -66,7 +79,7 @@ class Artisans {
       expLevel: documentSnapshot['expLevel'],
       artworkUrl:
           List<String>.from(documentSnapshot["artworkUrl"].map((x) => x)),
-    );
+        location: documentSnapshot['location']);
   }
 
   Map<String, dynamic> artisanToMap() {
@@ -79,7 +92,8 @@ class Artisans {
       'type': type,
       'expLevel': expLevel,
       'photoUrl': photoUrl,
-      'artworkUrl': artworkUrl
+      'artworkUrl': artworkUrl,
+      'location': location
     };
   }
 }
