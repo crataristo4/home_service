@@ -43,7 +43,7 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (_) => VerificationPage(
                   phoneNumber: data.phoneNumber,
-                  userType: 'data.userType',
+                  userType: data.phoneNumber,
                 ));
 
       case CompleteProfile.routeName:
