@@ -42,9 +42,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   //method to check the state of users / artisans
   checkIfUserProfileExists() async {
-    await new Future.delayed(Duration(seconds: 3));
+    await new Future.delayed(Duration(seconds: 5));
     SharedPreferences prefs = await SharedPreferences.getInstance();
     getUserType = prefs.getString("userType");
+    print("Current user: $currentUserId");
 
     await usersDbRef
         .doc(currentUserId)

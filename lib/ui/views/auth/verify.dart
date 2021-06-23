@@ -1,18 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/constants.dart';
+import 'package:home_service/provider/auth_provider.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
+import 'package:provider/provider.dart';
 
 class VerificationPage extends StatefulWidget {
   final String phoneNumber;
-  final String userType;
   static const routeName = '/verifyPage';
 
-  VerificationPage(
-      {Key? key, required this.phoneNumber, required this.userType})
-      : super(key: key);
+  VerificationPage({Key? key, required this.phoneNumber}) : super(key: key);
 
   @override
   _VerificationPageState createState() => _VerificationPageState();
@@ -26,15 +24,16 @@ class _VerificationPageState extends State<VerificationPage> {
   //Control the input text field.
   TextEditingController _controller = TextEditingController();
 
+/*
   bool isCodeSent = false;
-  late String _verificationId;
+  late String _verificationId;*/
 
   void initState() {
     super.initState();
-    _onVerifyCode();
+    // _onVerifyCode();
   }
 
-  void _onVerifyCode() async {
+  /* void _onVerifyCode() async {
     setState(() {
       isCodeSent = true;
     });
@@ -78,9 +77,9 @@ class _VerificationPageState extends State<VerificationPage> {
     final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
         (String verificationId) {
       _verificationId = verificationId;
-    /*  setState(() {
+    */ /*  setState(() {
         _verificationId = verificationId;
-      });*/
+      });*/ /*
     };
 
     await firebaseAuth.verifyPhoneNumber(
@@ -107,12 +106,57 @@ class _VerificationPageState extends State<VerificationPage> {
       }
     }).catchError((error) {
       print("Error occurred :" + error.toString());
-      /*ShowAction().showToast("Something went wrong", Colors.red);*/
+      */ /*ShowAction().showToast("Something went wrong", Colors.red);*/ /*
     });
   }
+*/
+  //................................................//
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Error Occured'),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: Text('OK!'),
+          )
+        ],
+      ),
+    );
+  }
+
+  //verify OTP
+  verifyOTP(BuildContext context) {
+    try {
+      Provider.of<AuthProvider>(context, listen: false)
+          .verifyOTP(_controller.text.toString())
+          .then((_) {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
+      }).catchError((e) {
+        String errorMsg = 'Cant authentiate you Right now, Try again later!';
+        if (e.toString().contains("ERROR_SESSION_EXPIRED")) {
+          errorMsg = "Session expired, please resend OTP!";
+        } else if (e.toString().contains("ERROR_INVALID_VERIFICATION_CODE")) {
+          errorMsg = "You have entered wrong OTP!";
+        }
+        _showErrorDialog(context, errorMsg);
+      });
+    } catch (e) {
+      _showErrorDialog(context, e.toString());
+    }
+  }
+
+  //................................................../
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return Scaffold(
       appBar: AppBar(
           actions: [
@@ -194,7 +238,7 @@ class _VerificationPageState extends State<VerificationPage> {
                             controller: _controller,
                             validator: (value) {
                               if (value!.length < 6) {
-                                return "Please enter code sent";
+                                return "invalid code";
                               }
 
                               return null;
@@ -203,10 +247,15 @@ class _VerificationPageState extends State<VerificationPage> {
                             keyboardType: TextInputType.number,
                             onChanged: (code) {
                               if (_formKey.currentState!.validate())
-                                _onFormSubmitted();
+                                // _onFormSubmitted();
+                                verifyOTP(context);
                             },
                             maxLengthEnforcement: MaxLengthEnforcement.enforced,
                             decoration: InputDecoration(
+                              suffix: Icon(
+                                Icons.dialpad_rounded,
+                                color: Colors.indigo,
+                              ),
                               hintText: "X X X X X X",
                               fillColor: Color(0xFFF5F5F5),
                               filled: true,
@@ -235,10 +284,11 @@ class _VerificationPageState extends State<VerificationPage> {
                                 primary: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
-                                        BorderRadius.circular(eightDp))),
-                            onPressed: () => _formKey.currentState!
+                                    BorderRadius.circular(eightDp))),
+                            onPressed: () =>
+                            _formKey.currentState!
                                     .validate() // first check if the code length is six
-                                ? _onFormSubmitted() // then perform action
+                                ? verifyOTP(context) // then perform action
                                 : ShowAction() // else show error message
                                     .showToast(invalidOTP, Colors.red),
                             child: Text(

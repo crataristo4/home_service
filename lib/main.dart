@@ -1,8 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:home_service/provider/auth_provider.dart';
+import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/route_generator.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 int? initScreen;
@@ -19,15 +22,21 @@ void main() async {
 class EntryPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: initScreen == 0 || initScreen == null
-          ? OnboardingScreen.routeName
-          : AppState.routeName,
-      onGenerateRoute: RouteGenerator.generateRoute,
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        primaryColor: Colors.indigo,
-      ), 
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: AuthProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+      ],
+      child: MaterialApp(
+        initialRoute: initScreen == 0 || initScreen == null
+            ? OnboardingScreen.routeName
+            : AppState.routeName,
+        onGenerateRoute: RouteGenerator.generateRoute,
+        theme: ThemeData(
+          primarySwatch: Colors.indigo,
+          primaryColor: Colors.indigo,
+        ),
+      ),
     );
   }
 }

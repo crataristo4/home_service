@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
@@ -133,7 +134,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           context, AppState.routeName, (route) => false);*/
 
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                          AppState.routeName, (route) => true);
+                          AppState.routeName, (route) => false);
                     },
                     child: Container(
                       height: Platform.isIOS ? 70 : 60,
@@ -160,6 +161,8 @@ class SlideTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
       alignment: Alignment.center,

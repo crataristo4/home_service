@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:home_service/ui/models/userdata.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/auth/register.dart';
@@ -38,12 +37,11 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => RegistrationPage());
 
       case VerificationPage.routeName:
-        final data = settings.arguments as UserData;
+        final data = settings.arguments as String;
 
         return MaterialPageRoute(
             builder: (_) => VerificationPage(
-                  phoneNumber: data.phoneNumber,
-                  userType: data.phoneNumber,
+                  phoneNumber: data,
                 ));
 
       case CompleteProfile.routeName:

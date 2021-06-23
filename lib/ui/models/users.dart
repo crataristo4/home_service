@@ -51,8 +51,8 @@ class Artisans {
       required this.dateJoined,
       required this.category,
       required this.type,
-      required this.expLevel,
-      required this.artworkUrl});
+      required this.artworkUrl,
+      required this.expLevel});
 
   factory Artisans.fromDocument(DocumentSnapshot documentSnapshot) {
     return Artisans(
@@ -67,5 +67,19 @@ class Artisans {
       artworkUrl:
           List<String>.from(documentSnapshot["artworkUrl"].map((x) => x)),
     );
+  }
+
+  Map<String, dynamic> artisanToMap() {
+    return {
+      'id': id,
+      'phoneNumber': phoneNumber,
+      'artisanName': artisanName,
+      'dateJoined': dateJoined,
+      'category': category,
+      'type': type,
+      'expLevel': expLevel,
+      'photoUrl': photoUrl,
+      'artworkUrl': artworkUrl
+    };
   }
 }

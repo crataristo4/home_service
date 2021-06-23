@@ -1,15 +1,15 @@
-import 'package:connectivity/connectivity.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/animation/FadeAnimation.dart';
 import 'package:home_service/constants.dart';
-import 'package:home_service/ui/models/userdata.dart';
+import 'package:home_service/provider/auth_provider.dart';
 import 'package:home_service/ui/views/auth/verify.dart';
 import 'package:home_service/ui/views/bloc/Bloc.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -21,7 +21,6 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  String? defaultCountryCode = "+233";
   static String? userInfo;
   UserTypes? _userType = UserTypes.User;
 
@@ -31,7 +30,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final GlobalKey<State> _registerNumberKey = new GlobalKey<State>();
   TextEditingController _phoneNumberController = TextEditingController();
 
-  verifyPhoneNumber(phoneNumber) async {
+  /*  verifyPhoneNumber(phoneNumber) async {
     //check internet connection
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
@@ -74,10 +73,91 @@ class _RegistrationPageState extends State<RegistrationPage> {
       //if internet is not connected show message
       ShowAction().showToast(unableToConnect, Colors.black);
     }
+  }*/
+
+  //...................................................//
+
+  String selectedCountryCode = '+233';
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Error Occurred'),
+        content: Text(message),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: Text('OK!'),
+          )
+        ],
+      ),
+    );
   }
+
+  verifyPhone(BuildContext context) async {
+    //if connected show dialog for user to proceed
+    String phoneNumber = "$selectedCountryCode${_phoneNumberController.text}";
+
+    ShowAction.showAlertDialog(
+        confirmNumber,
+        "$sendCodeTo$phoneNumber",
+        context,
+        TextButton(
+          child: Text(
+            edit,
+            style: TextStyle(color: Colors.red),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        TextButton(
+          child: Text(send, style: TextStyle(color: Colors.green)),
+          onPressed: () {
+            //if yes or ... then push the phone number and user type to verify number
+            //NB: The user type will enable you to switch the state between USERS and ARTISAN
+            Navigator.pop(context);
+            try {
+              Provider.of<AuthProvider>(context, listen: false)
+                  .verifyPhone(phoneNumber)
+                  .then((value) async {
+                Dialogs.showLoadingDialog(
+                    //show dialog and delay
+                    context,
+                    _registerNumberKey,
+                    sendingCode,
+                    Colors.white70);
+                await Future.delayed(const Duration(seconds: 3));
+
+                Navigator.of(context).pushNamed(VerificationPage.routeName,
+                    arguments: phoneNumber);
+              }).catchError((e) {
+                String errorMsg = 'Cant Authenticate you, Try Again Later';
+                if (e.toString().contains(
+                    'We have blocked all requests from this device due to unusual activity. Try again later.')) {
+                  errorMsg =
+                      'Please wait as you have used limited number request';
+                }
+                _showErrorDialog(context, errorMsg);
+              });
+            } catch (e) {
+              _showErrorDialog(context, e.toString());
+            }
+          },
+        ));
+  }
+
+  void _onCountryChange(CountryCode countryCode) {
+    selectedCountryCode = countryCode.toString();
+  }
+
+  //......................................................//
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return SingleChildScrollView(
       child: FadeAnimation(
         1.2,
@@ -112,7 +192,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                       Padding(
                         padding:
-                            EdgeInsets.only(left: thirtySixDp, bottom: fourDp),
+                        EdgeInsets.only(left: thirtySixDp, bottom: fourDp),
                         child: Text(selectAccountType),
                       ),
                       Row(
@@ -132,7 +212,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             stream: loginBloc.phoneNumberStream,
                             builder: (context, snapshot) {
                               return TextFormField(
-                                  // maxLength: 9,
+                                // maxLength: 9,
                                   autofocus: true,
                                   keyboardType: TextInputType.phone,
                                   controller: _phoneNumberController,
@@ -146,11 +226,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                         : snapshot.error as String,
                                     fillColor: Color(0xFFF5F5F5),
                                     prefix: CountryCodePicker(
-                                      onChanged: (code) {
-                                        defaultCountryCode = code.dialCode;
-                                      },
-                                      initialSelection: 'GH',
-                                      favorite: ['+233', 'GH'],
+                                      onChanged: _onCountryChange,
+                                      showFlag: true,
+                                      initialSelection: selectedCountryCode,
                                       showOnlyCountryWhenClosed: false,
                                     ),
                                     suffix: Padding(
@@ -180,30 +258,29 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       StreamBuilder<bool>(
                           stream: loginBloc.submitPhoneNumber,
                           builder: (context, snapshot) => SizedBox(
-                                height: fortyEightDp,
-                                width: MediaQuery.of(context).size.width,
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: thirtySixDp),
-                                  child: TextButton(
-                                      style: TextButton.styleFrom(
-                                          backgroundColor:
-                                              Theme.of(context).primaryColor,
-                                          primary: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8))),
-                                      onPressed: snapshot
+                            height: fortyEightDp,
+                            width: MediaQuery.of(context).size.width,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: thirtySixDp),
+                              child: TextButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                      primary: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(8))),
+                                  onPressed: snapshot
                                               .hasData //if the text form field has some data then proceed to verify number
-                                          ? () => verifyPhoneNumber(
-                                              _phoneNumberController.text)
+                                          ? () => verifyPhone(context)
                                           : null, //else do nothing
-                                      child: Text(
-                                        verifyNumber,
-                                        style: TextStyle(fontSize: 14),
-                                      )),
-                                ),
-                              )),
+                                  child: Text(
+                                    verifyNumber,
+                                    style: TextStyle(fontSize: 14),
+                                  )),
+                            ),
+                          )),
                     ],
                   ),
                 )
@@ -248,7 +325,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       await SharedPreferences.getInstance();
                   userInfo = type == iAmUser ? user : artisan;
                   await prefs.setString("userType", userInfo!);
-                  debugPrint("User type -Registered : $userInfo");
                   setState(() {
                     _userType = value;
                   });
