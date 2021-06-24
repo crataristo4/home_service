@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/ui/models/artisan_type.dart';
+import 'package:home_service/ui/views/artisan/view_all_artisans.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
 import 'package:home_service/ui/views/home/home.dart';
 
@@ -123,8 +124,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           height: sixteenDp,
                         ),
                         Container(
-                          margin:
-                              EdgeInsets.only(bottom: 10, top: 10, right: 10),
+                          margin: EdgeInsets.only(bottom: 10, top: 10),
                           child: SizedBox(
                             height: 100,
                             width: MediaQuery.of(context).size.width,
@@ -141,12 +141,21 @@ class _CategoryPageState extends State<CategoryPage> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: sixteenDp),
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.only(right: eightDp),
+                                    Container(
+                                      padding: EdgeInsets.all(sixDp),
+                                      margin: EdgeInsets.only(right: sixteenDp),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(fourDp),
+                                          border: Border.all(
+                                              width: 0.3,
+                                              color: Colors.grey
+                                                  .withOpacity(0.3))),
                                       child: Text(
-                                        "View all",
+                                        viewAll,
                                         style: TextStyle(
                                             color: Colors.grey,
+                                            fontWeight: FontWeight.bold,
                                             fontSize: twelveDp),
                                       ),
                                     )
@@ -160,10 +169,37 @@ class _CategoryPageState extends State<CategoryPage> {
                             ),
                           ),
                         ),
-                        Text(
-                          "Choose a service",
-                          style: TextStyle(
-                              fontSize: twentyDp, fontWeight: FontWeight.bold),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              chooseAservice,
+                              style: TextStyle(
+                                  fontSize: twentyDp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            GestureDetector(
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed(ViewAllArtisans.routeName),
+                              child: Container(
+                                padding: EdgeInsets.all(sixDp),
+                                margin: EdgeInsets.only(right: sixteenDp),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(fourDp),
+                                    border: Border.all(
+                                        width: 0.3,
+                                        color: Colors.grey.withOpacity(0.3))),
+                                child: Text(
+                                  viewAll,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: twelveDp,
+                                      color: Colors.grey),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           height: sixteenDp,

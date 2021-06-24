@@ -4,6 +4,7 @@ import 'package:home_service/provider/auth_provider.dart';
 import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/route_generator.dart';
 import 'package:home_service/service/firestore_services.dart';
+import 'package:home_service/ui/models/users.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
 import 'package:provider/provider.dart';
@@ -23,16 +24,26 @@ void main() async {
 class EntryPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final getUserData = UserService().getUserStream();
+    final getAllArtisan = UserService();
+
     return MultiProvider(
       providers: [
+        //authentication
         ChangeNotifierProvider.value(value: AuthProvider()),
+        //user creation
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        //get all artisan
+        StreamProvider<List<Artisans>>.value(
+          initialData: [],
+          value: getAllArtisan.getAllArtisans(),
+        ),
       ],
       child: MaterialApp(
+        //checks and switches page
         initialRoute: initScreen == 0 || initScreen == null
-            ? OnboardingScreen.routeName
-            : AppState.routeName,
+            ? OnboardingScreen
+                .routeName //shows when app data is cleared or newly installed
+            : AppState.routeName, //navigate to authentication state page
         onGenerateRoute: RouteGenerator.generateRoute,
         theme: ThemeData(
           primarySwatch: Colors.indigo,

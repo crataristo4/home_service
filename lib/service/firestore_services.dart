@@ -41,6 +41,46 @@ class UserService {
     yield* firestoreService.doc("Users/$currentUserId").snapshots();
   }
 
+  //get all artisans from db
+  Stream<List<Artisans>> getAllArtisans() {
+    return firestoreService
+        .collection('Users')
+        .orderBy("artisanName")
+        .where("type", isEqualTo: artisan)
+        .limit(20)
+        .snapshots()
+        .map((snapshots) => snapshots.docs
+            .map((document) => Artisans.fromFirestore(document.data()))
+            .toList(growable: true));
+  }
+
+  //get initial artisans list by category
+  Stream<List<Artisans>> getInitialArtisanByCategory(String? category) {
+    return firestoreService
+        .collection('Users')
+        .orderBy("artisanName")
+        .where("type", isEqualTo: category)
+        .limit(20)
+        .snapshots()
+        .map((snapshots) => snapshots.docs
+            .map((document) => Artisans.fromFirestore(document.data()))
+            .toList(growable: true));
+  }
+
+  //fetch next list
+  Stream<List<Artisans>> getNextList(
+      List<DocumentSnapshot> documentList, String category) {
+    return firestoreService
+        .collection("Users")
+        .orderBy("artisanName")
+        .where("type", isEqualTo: category)
+        .limit(20)
+        .startAfterDocument(documentList[documentList.length - 1])
+        .snapshots()
+        .map((snapshots) => snapshots.docs
+            .map((document) => Artisans.fromDocument(document))
+            .toList(growable: true));
+  }
 
   showSuccess(context) async {
     await Future.delayed(Duration(seconds: 3));

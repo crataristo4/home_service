@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_service/ui/views/artisan/view_all_artisans.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/auth/register.dart';
@@ -14,28 +15,19 @@ class RouteGenerator {
     final args = settings.arguments;
 
     switch (settings.name) {
+      //user config state checker Screen
       case AppState.routeName:
         return MaterialPageRoute(builder: (_) => AppState());
+
+      //shows when user newly installs the application
       case OnboardingScreen.routeName:
         return MaterialPageRoute(builder: (_) => OnboardingScreen());
-      /*    case '/editProfile':
-        return MaterialPageRoute(
-            builder: (_) => EditProfile(
-                  userName: args,
-                  photoUrl: args,
-                  phoneNumber: args,
-                  email: args,
-                  id: args,
-                ));
 
-      case '/feedBack':
-        return MaterialPageRoute(builder: (_) => FeedbackScreen());
-      case '/inviteFriend':
-        return MaterialPageRoute(builder: (_) => InviteFriend());*/
-
+      //screen to register new users / login
       case RegistrationPage.routeName:
         return MaterialPageRoute(builder: (_) => RegistrationPage());
 
+      //verify users phone number
       case VerificationPage.routeName:
         final data = settings.arguments as String;
 
@@ -44,12 +36,15 @@ class RouteGenerator {
                   phoneNumber: data,
                 ));
 
+    //account completion
       case CompleteProfile.routeName:
         return MaterialPageRoute(builder: (_) => CompleteProfile());
 
+    //edit profile
       case EditProfile.routeName:
         return MaterialPageRoute(builder: (_) => EditProfile());
 
+    //default home page for all users
       case Home.routeName:
         return MaterialPageRoute(
             builder: (_) => Home(
@@ -57,9 +52,15 @@ class RouteGenerator {
                   image: args,
                 ));
 
+      //help and support page where users can contact us
       case HelpPage.routeName:
         return MaterialPageRoute(builder: (_) => HelpPage());
 
+      //view all available artisans
+      case ViewAllArtisans.routeName:
+        return MaterialPageRoute(builder: (_) => ViewAllArtisans());
+
+      //view artisans by category
       case ViewArtisanByCategoryPage.routeName:
         return MaterialPageRoute(
             builder: (_) => ViewArtisanByCategoryPage(
@@ -71,6 +72,7 @@ class RouteGenerator {
     }
   }
 
+  //error page ..
   static Route<dynamic> _errorRoute() {
     return MaterialPageRoute(builder: (_) {
       return Scaffold(

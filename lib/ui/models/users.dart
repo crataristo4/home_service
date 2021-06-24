@@ -75,6 +75,7 @@ class Artisans {
 
   get getImageUrl => photoUrl;
 
+  //for bloc
   factory Artisans.fromDocument(DocumentSnapshot documentSnapshot) {
     return Artisans(
         id: documentSnapshot['id'],
@@ -85,9 +86,24 @@ class Artisans {
         category: documentSnapshot['category'],
         type: documentSnapshot['type'],
         expLevel: documentSnapshot['expLevel'],
-      artworkUrl:
-          List<String>.from(documentSnapshot["artworkUrl"].map((x) => x)),
+        artworkUrl:
+            List<String>.from(documentSnapshot["artworkUrl"].map((x) => x)),
         location: documentSnapshot['location']);
+  }
+
+  //for provider
+  factory Artisans.fromFirestore(Map<String, dynamic> data) {
+    return Artisans(
+        id: data['id'],
+        artisanName: data['artisanName'],
+        phoneNumber: data['phoneNumber'],
+        photoUrl: data['photoUrl'],
+        dateJoined: data['dateJoined'],
+        category: data['category'],
+        type: data['type'],
+        expLevel: data['expLevel'],
+        artworkUrl: List<String>.from(data["artworkUrl"].map((x) => x)),
+        location: data['location']);
   }
 
   Map<String, dynamic> artisanToMap() {
