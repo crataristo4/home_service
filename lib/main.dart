@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/auth_provider.dart';
 import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/route_generator.dart';
 import 'package:home_service/service/firestore_services.dart';
-import 'package:home_service/ui/models/users.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
 import 'package:provider/provider.dart';

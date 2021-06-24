@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:home_service/ui/models/users.dart';
+import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:provider/provider.dart';
 
