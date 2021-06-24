@@ -73,11 +73,6 @@ class _CompleteProfileState extends State<CompleteProfile> {
     }
 
     createUser() async {
-      /*   //get the date user registered
-      DateFormat dateFormat = DateFormat("dd-MM-yyyy HH:mm:ss");
-      String dateJoined = dateFormat.format(DateTime.now());
-      print("Date: $dateJoined");*/
-
       Dialogs.showLoadingDialog(context, _createUserKey, pleaseWait,
           Colors.white70); //start the dialog
 
@@ -120,62 +115,6 @@ class _CompleteProfileState extends State<CompleteProfile> {
               userProvider.createUser(imageUrl!, context);
             }
           }
-
-          /*      //CHECK USER-TYPE AND CREATE USER
-          if (getUserType == user) {
-            //create normal user database
-
-   */ /*         await usersDbRef.doc(currentUserId).set({
-              "id": currentUserId,
-              "userName": name,
-              "photoUrl": imageUrl,
-              "phoneNumber": phoneNumber,
-              "type": user,
-              "dateJoined": dateJoined
-            }).whenComplete(() {
-              ShowAction().showToast(
-                  profileCreatedSuccessfully, Colors.black); //show complete msg
-              Navigator.of(context, rootNavigator: true).pop(); //close the dialog
-              Navigator.of(context).pop(true); // return home
-            }).catchError((onError) {
-              Navigator.of(context, rootNavigator: true).pop(); //close the dialog
-
-              print(onError.toString());
-            });*/ /*
-          } else {
-
-            if(imageUrl != null){
-              //create artisan using provider
-              userProvider.createUser(imageUrl!,context);
-            }
-
-
-
-
-
-          */ /*  //create artisan database
-            await usersDbRef.doc(currentUserId).set({
-              "id": currentUserId,
-              "artisanName": name,
-              "photoUrl": imageUrl,
-              "phoneNumber": phoneNumber,
-              "type": artisan,
-              "category": _selectedCategory,
-              "expLevel": _selectedExperience,
-              "dateJoined": dateJoined,
-              "artworkUrl": []
-            }).whenComplete(() async {
-              await Future.delayed(Duration(seconds: 3));
-              ShowAction().showToast(
-                  profileCreatedSuccessfully, Colors.black); //show complete msg
-              Navigator.of(context, rootNavigator: true).pop(); //close the dialog
-              Navigator.of(context).pop(true); // return home
-            }).catchError((onError) {
-              Navigator.of(context, rootNavigator: true).pop(); //close the dialog
-
-              print("Error: $onError");
-            });*/ /*
-          }*/
         } //do nothing
       } else {
         // no internet

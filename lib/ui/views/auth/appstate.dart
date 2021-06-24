@@ -30,25 +30,32 @@ class _AppStateState extends State<AppState> {
 
   //get the current user id and phone number
   getCurrentUser() async {
+    //get current userId and phone number
     currentUserId = FirebaseAuth.instance.currentUser!.uid;
     phoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber;
 
     if (currentUserId != null) {
-      //method to check the state of users / artisans
+      //check the state of users / artisans if the user exists
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      //get data from shared preferences
       getUserType = prefs.getString("userType");
+      userName = prefs.getString('name');
+      imageUrl = prefs.getString('photoUrl');
 
-      await new Future.delayed(Duration(seconds: 0));
+      //check the database if user has details
       await usersDbRef
           .doc(currentUserId)
           .get()
-          .then((DocumentSnapshot documentSnapshot) {
+          .then((DocumentSnapshot documentSnapshot) async {
         if (documentSnapshot.exists) {
-          userName = prefs.getString('name');
-          imageUrl = prefs.getString('photoUrl');
+          //if true do nothing ...
 
-          print("Name is : $userName \nPhoto url : - $imageUrl");
         } else {
+          //if not then clear shared preference data and navigate to complete profile
+          await new Future.delayed(Duration(seconds: 0));
+          prefs.remove('name');
+          prefs.remove('photoUrl');
+
           Navigator.of(context).restorablePushNamed(CompleteProfile.routeName);
         }
       }).catchError((onError) {
@@ -59,20 +66,22 @@ class _AppStateState extends State<AppState> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Object>(
-        stream: null,
-        builder: (context, snapshot) {
-          return WillPopScope(
-            onWillPop: () async => true,
-            child: Container(
-              child: SafeArea(
-                  top: false,
-                  bottom: false,
-                  child: Scaffold(
-                      body:
-                          currentUserId != null ? Home() : RegistrationPage())),
-            ),
-          );
-        });
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Container(
+        child: SafeArea(
+            top: false,
+            bottom: false,
+            child: Scaffold(
+                body: currentUserId != null ||
+                        imageUrl != null ||
+                        userName != null
+                    ? Home(
+                        name: userName,
+                        image: imageUrl,
+                      )
+                    : RegistrationPage())),
+      ),
+    );
   }
 }

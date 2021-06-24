@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -15,12 +14,7 @@ class _LoadHomeState extends State<LoadHome> {
 
   @override
   void initState() {
-    callTimer();
     super.initState();
-  }
-
-  callTimer() {
-    Timer(Duration(seconds: 5), () {});
   }
 
   @override
@@ -30,22 +24,53 @@ class _LoadHomeState extends State<LoadHome> {
       baseColor: Colors.white,
       highlightColor: Colors.grey.shade200,
       direction: ShimmerDirection.ltr,
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: 10,
-        scrollDirection: Axis.vertical,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            width: MediaQuery.of(context).size.width,
-            height: 150,
-            margin: EdgeInsets.symmetric(horizontal: tenDp, vertical: tenDp),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(width: 0.2, color: Colors.grey),
-                borderRadius: BorderRadius.circular(tenDp)),
-          );
-        },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 60,
+          ),
+          Flexible(
+            child: buildTopExpect(),
+          ),
+        ],
       ),
     ));
+  }
+
+  Widget buildTopExpect() {
+    return Column(
+      children: [
+        Expanded(
+          flex: 1,
+          child: GridView.builder(
+            shrinkWrap: true,
+            itemCount: 10,
+            // scrollDirection: Axis.vertical,
+            itemBuilder: (BuildContext context, index) {
+              return Container(
+                margin: EdgeInsets.only(top: tenDp, right: tenDp),
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Colors.grey,
+                        width: 0.2,
+                        style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(tenDp),
+                    image: DecorationImage(
+                        fit: BoxFit.contain,
+                        image: AssetImage("assets/images/aa.jpg"))),
+              );
+            },
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: twelveDp,
+              mainAxisSpacing: twelveDp,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
