@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Bookings {
+  final id;
   final userName;
   final artisanName;
   final userId;
@@ -14,7 +15,8 @@ class Bookings {
   final GeoPoint? artisanLocation;
 
   Bookings(
-      {required this.userName,
+      {required this.id,
+      required this.userName,
       required this.artisanName,
       required this.userId,
       required this.artisanId,
@@ -28,6 +30,7 @@ class Bookings {
 
   factory Bookings.fromFirestore(Map<String, dynamic> data) {
     return Bookings(
+        id: data['id'],
         userName: data['userName'],
         artisanName: data['artisanName'],
         userId: data['userId'],
@@ -43,6 +46,7 @@ class Bookings {
 
   Map<String, dynamic> bookToMap() {
     return {
+      'id': id,
       'userName': userName,
       'artisanName': artisanName,
       'userId': userId,
