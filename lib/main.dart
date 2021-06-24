@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:home_service/provider/auth_provider.dart';
 import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/route_generator.dart';
+import 'package:home_service/service/firestore_services.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ void main() async {
 class EntryPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final getUserData = UserService().getUserStream();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: AuthProvider()),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/ui/models/users.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 
 import '../constants.dart';
@@ -34,6 +35,11 @@ class UserService {
       showFailure(context, onError);
     });
   }
+
+  Stream<DocumentSnapshot> getUserStream() async* {
+    yield* firestoreService.doc("Users/$currentUserId").snapshots();
+  }
+
 
   showSuccess(context) async {
     await Future.delayed(Duration(seconds: 3));

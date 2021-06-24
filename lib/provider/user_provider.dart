@@ -6,6 +6,7 @@ import 'package:home_service/service/firestore_services.dart';
 import 'package:home_service/ui/models/users.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider with ChangeNotifier {
   String? _id,
@@ -18,7 +19,6 @@ class UserProvider with ChangeNotifier {
       _phoneNumber;
   DateFormat dateFormat = DateFormat("dd-MM-yyyy HH:mm:ss");
 
-  // String dateJoined = dateFormat.format(DateTime.now());
 
   get name => _name;
 
@@ -48,12 +48,13 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  createUser(String photoUrl, BuildContext context) {
+  createUser(String photoUrl, BuildContext context) async {
     _id = FirebaseAuth.instance.currentUser!.uid;
     _dateJoined = dateFormat.format(DateTime.now());
     _type = getUserType;
     _phoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber;
     photoUrl = _photoUrl!;
+
 
     if (getUserType == artisan) {
       //creates a new artisan object
@@ -71,6 +72,7 @@ class UserProvider with ChangeNotifier {
 
       //push to db
       userService.createArtisan(newArtisan, context);
+
     } else {
       // create new  user
       Users newUser = Users(
@@ -84,5 +86,10 @@ class UserProvider with ChangeNotifier {
 
       userService.createUser(newUser, context);
     }
+
+    //store values
+    SharedPreferences userData = await SharedPreferences.getInstance();
+    await userData.setString("name", name);
+    await userData.setString("photoUrl", photoUrl);
   }
 }

@@ -32,8 +32,8 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
   @override
   void initState() {
     getCategoryCount();
-    _tabController = TabController(length: 3, vsync: this);
-    _tabController.index = 2;
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.index = 1;
     _artisanCategoryListBloc = ArtisanCategoryListBloc();
     _artisanCategoryListBloc!.fetchFirstList(usersDbRef, widget.categoryName);
 
@@ -200,12 +200,12 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                               color: Colors.white,
                             ),
                           ),
-                          Tab(
+                          /*     Tab(
                             icon: Icon(
                               Icons.widgets,
                               color: Colors.white,
                             ),
-                          ),
+                          ),*/
                           Tab(
                             icon: Icon(
                               Icons.view_stream,
@@ -244,7 +244,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                 controller: _tabController,
                 children: [
                   buildMapItem(),
-                  buildGridCategory(),
+                  //buildGridCategory(),
                   buildListCategory(),
                 ],
               ),

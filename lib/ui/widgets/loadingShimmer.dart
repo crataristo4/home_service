@@ -24,16 +24,14 @@ class _LoadingShimmerState extends State<LoadingShimmer> {
   }
 
   callTimer() {
-    Timer(Duration(seconds: 3), () {
-      setState(() {
-        isLoading = false;
-      });
+    Timer(Duration(seconds: 5), () {
+      isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return isLoading == true
+    return isLoading == false
         ? Center(
             child: Shimmer.fromColors(
             baseColor: Colors.white,

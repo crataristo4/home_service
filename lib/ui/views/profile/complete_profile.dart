@@ -84,7 +84,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
       String fileName = path.basename(_image!.path);
       String fileExtension = fileName.split(".").last;
 
-      ///check internet
+      //check internet
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
@@ -104,7 +104,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
             imageUrl = value;
 
             //update provider
-            //  userProvider.changeArtisanPhotoUrl(imageUrl);
+            userProvider.changeArtisanPhotoUrl(imageUrl);
           }).catchError((onError) {
             ShowAction().showToast("Error occurred : $onError", Colors.black);
           });
@@ -185,7 +185,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
       }
     }
 
-    ///choose camera or from gallery
+    //choose camera or from gallery
     void _showPicker(context) {
       showModalBottomSheet(
           context: context,
@@ -431,9 +431,9 @@ class _CompleteProfileState extends State<CompleteProfile> {
                             child: _image == null
                                 ? ClipRRect(
                               child: Image.asset(
-                                "assets/images/a.png",
-                                fit: BoxFit.cover,
-                              ),
+                                "assets/images/avatar.png",
+                                      fit: BoxFit.cover,
+                                    ),
                               borderRadius: BorderRadius.circular(100),
                               clipBehavior: Clip.antiAlias,
                             )
@@ -464,7 +464,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
                           height: 10,
                         ),
 
-                        ///button to change users image
+                        //button to change users image
                         Center(
                           child: ElevatedButton.icon(
                             onPressed: () {
@@ -546,4 +546,3 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
 }
 
-//todo - fix null value assigned to image picker

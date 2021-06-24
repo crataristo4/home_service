@@ -19,6 +19,10 @@ class Users {
       required this.dateJoined,
       required this.location});
 
+  get getUserName => userName;
+
+  get getImageUrl => photoUrl;
+
   factory Users.fromDocument(DocumentSnapshot documentSnapshot) {
     return Users(
         id: documentSnapshot['id'],
@@ -67,16 +71,20 @@ class Artisans {
       required this.expLevel,
       required this.location});
 
+  get getArtisanName => artisanName;
+
+  get getImageUrl => photoUrl;
+
   factory Artisans.fromDocument(DocumentSnapshot documentSnapshot) {
     return Artisans(
-      id: documentSnapshot['id'],
-      artisanName: documentSnapshot['artisanName'],
-      phoneNumber: documentSnapshot['phoneNumber'],
-      photoUrl: documentSnapshot['photoUrl'],
-      dateJoined: documentSnapshot['dateJoined'],
-      category: documentSnapshot['category'],
-      type: documentSnapshot['type'],
-      expLevel: documentSnapshot['expLevel'],
+        id: documentSnapshot['id'],
+        artisanName: documentSnapshot['artisanName'],
+        phoneNumber: documentSnapshot['phoneNumber'],
+        photoUrl: documentSnapshot['photoUrl'],
+        dateJoined: documentSnapshot['dateJoined'],
+        category: documentSnapshot['category'],
+        type: documentSnapshot['type'],
+        expLevel: documentSnapshot['expLevel'],
       artworkUrl:
           List<String>.from(documentSnapshot["artworkUrl"].map((x) => x)),
         location: documentSnapshot['location']);
