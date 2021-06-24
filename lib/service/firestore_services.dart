@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/ui/models/users.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 
 import '../constants.dart';
@@ -46,7 +47,8 @@ class UserService {
     ShowAction().showToast(
         profileCreatedSuccessfully, Colors.black); //show complete msg
     Navigator.of(context, rootNavigator: true).pop();
-    Navigator.of(context).pop(true);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(AppState.routeName, (route) => false);
   }
 
   showFailure(context, error) {

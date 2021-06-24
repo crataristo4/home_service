@@ -380,165 +380,172 @@ class _CompleteProfileState extends State<CompleteProfile> {
             );
     }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
         backgroundColor: Colors.white,
-        leading: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: Container(
-            margin: EdgeInsets.all(tenDp),
-            decoration: BoxDecoration(
-                border: Border.all(width: 0.3, color: Colors.grey),
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(thirtyDp)),
-            child: Padding(
-              padding: EdgeInsets.all(eightDp),
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.grey,
-                size: sixteenDp,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leading: InkWell(
+            onTap: () => Navigator.restorablePopAndPushNamed(
+                context, AppState.routeName),
+            child: Container(
+              margin: EdgeInsets.all(tenDp),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.3, color: Colors.grey),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(thirtyDp)),
+              child: Padding(
+                padding: EdgeInsets.all(eightDp),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.grey,
+                  size: sixteenDp,
+                ),
               ),
             ),
           ),
+          title: Text(
+            completeProfile,
+            style: TextStyle(color: Colors.black),
+          ),
         ),
-        title: Text(
-          completeProfile,
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      body: CustomScrollView(
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(sixteenDp),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //Contains Users image
-                        Center(
-                          child: Container(
-                            height: 120,
-                            width: 120,
-                            child: _image == null
-                                ? ClipRRect(
-                              child: Image.asset(
-                                "assets/images/avatar.png",
-                                      fit: BoxFit.cover,
+        body: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(sixteenDp),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //Contains Users image
+                          Center(
+                            child: Container(
+                              height: 120,
+                              width: 120,
+                              child: _image == null
+                                  ? ClipRRect(
+                                      child: Image.asset(
+                                        "assets/images/avatar.png",
+                                        fit: BoxFit.cover,
+                                      ),
+                                      borderRadius: BorderRadius.circular(100),
+                                      clipBehavior: Clip.antiAlias,
+                                    )
+                                  : ClipRRect(
+                                      clipBehavior: Clip.antiAlias,
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: Image.file(
+                                        _image!,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                              borderRadius: BorderRadius.circular(100),
-                              clipBehavior: Clip.antiAlias,
-                            )
-                                : ClipRRect(
-                              clipBehavior: Clip.antiAlias,
-                              borderRadius: BorderRadius.circular(100),
-                              child: Image.file(
-                                _image!,
-                                fit: BoxFit.cover,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                    width: 0.3,
+                                    color: Colors.grey.withOpacity(0.2)),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      offset: const Offset(2.0, 4.0),
+                                      blurRadius: 8),
+                                ],
+                                //color: Colors.black,
                               ),
                             ),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  width: 0.3,
-                                  color: Colors.grey.withOpacity(0.2)),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    offset: const Offset(2.0, 4.0),
-                                    blurRadius: 8),
-                              ],
-                              //color: Colors.black,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+
+                          //button to change users image
+                          Center(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                _showPicker(context);
+                              },
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(eightDp)),
+                                  ),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.indigo)),
+                              icon: Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                              ),
+                              label: Text(
+                                chooseImage,
+                                style: TextStyle(
+                                    fontSize: fourteenDp, color: Colors.white),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        //button to change users image
-                        Center(
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              _showPicker(context);
-                            },
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(eightDp)),
-                                ),
-                                backgroundColor:
-                                MaterialStateProperty.all<Color>(
-                                    Colors.indigo)),
-                            icon: Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
-                            ),
-                            label: Text(
-                              chooseImage,
-                              style: TextStyle(
-                                  fontSize: fourteenDp, color: Colors.white),
-                            ),
+                          buildName(),
+                          SizedBox(
+                            height: eightDp,
                           ),
-                        ),
-                        buildName(),
-                        SizedBox(
-                          height: eightDp,
-                        ),
 
-                        buildArtisanType(),
-                        SizedBox(
-                          height: eightDp,
-                        ),
+                          buildArtisanType(),
+                          SizedBox(
+                            height: eightDp,
+                          ),
 
-                        buildArtisanExperience(),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 60,
-                    width: MediaQuery.of(context).size.width,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: sixDp),
-                      margin: EdgeInsets.symmetric(
-                        horizontal: eightDp,
+                          buildArtisanExperience(),
+                        ],
                       ),
-                      child: TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Theme.of(context).primaryColor,
-                              primary: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8))),
-                          onPressed: () {
-                            if (formKey.currentState!.validate() &&
-                                _image != null) {
-                              userProvider.changeArtisanPhotoUrl(imageUrl);
-                              createUser();
-                            }
-                          },
-                          child: Text(
-                            finish,
-                            style: TextStyle(fontSize: 14),
-                          )),
                     ),
-                  ),
 
-                  // SizedBox(height: 1,)
-                ],
+                    SizedBox(
+                      height: 60,
+                      width: MediaQuery.of(context).size.width,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: sixDp),
+                        margin: EdgeInsets.symmetric(
+                          horizontal: eightDp,
+                        ),
+                        child: TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                primary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8))),
+                            onPressed: () {
+                              if (formKey.currentState!.validate() &&
+                                  _image != null) {
+                                userProvider.changeArtisanPhotoUrl(imageUrl);
+                                createUser();
+                              } else if (_image == null) {
+                                ShowAction().showToast(
+                                    "Must select a picture", Colors.red);
+                              }
+                            },
+                            child: Text(
+                              finish,
+                              style: TextStyle(fontSize: 14),
+                            )),
+                      ),
+                    ),
+
+                    // SizedBox(height: 1,)
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

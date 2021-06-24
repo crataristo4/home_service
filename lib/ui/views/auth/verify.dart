@@ -115,14 +115,14 @@ class _VerificationPageState extends State<VerificationPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Error Occured'),
+        title: Text(anErrorOccurred),
         content: Text(message),
         actions: <Widget>[
-          FlatButton(
+          ElevatedButton(
             onPressed: () {
               Navigator.of(ctx).pop();
             },
-            child: Text('OK!'),
+            child: Text(OK),
           )
         ],
       ),
@@ -138,7 +138,7 @@ class _VerificationPageState extends State<VerificationPage> {
         Navigator.of(context)
             .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
       }).catchError((e) {
-        String errorMsg = 'Cant authentiate you Right now, Try again later!';
+        String errorMsg = cantAuthenticate;
         if (e.toString().contains("ERROR_SESSION_EXPIRED")) {
           errorMsg = "Session expired, please resend OTP!";
         } else if (e.toString().contains("ERROR_INVALID_VERIFICATION_CODE")) {

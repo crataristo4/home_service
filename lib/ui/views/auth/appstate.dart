@@ -38,6 +38,7 @@ class _AppStateState extends State<AppState> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       getUserType = prefs.getString("userType");
 
+      await new Future.delayed(Duration(seconds: 0));
       await usersDbRef
           .doc(currentUserId)
           .get()
@@ -48,7 +49,6 @@ class _AppStateState extends State<AppState> {
 
           print("Name is : $userName \nPhoto url : - $imageUrl");
         } else {
-          new Future.delayed(Duration(seconds: 10));
           Navigator.of(context).restorablePushNamed(CompleteProfile.routeName);
         }
       }).catchError((onError) {
@@ -59,15 +59,20 @@ class _AppStateState extends State<AppState> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => true,
-      child: Container(
-        child: SafeArea(
-            top: false,
-            bottom: false,
-            child: Scaffold(
-                body: currentUserId != null ? Home() : RegistrationPage())),
-      ),
-    );
+    return StreamBuilder<Object>(
+        stream: null,
+        builder: (context, snapshot) {
+          return WillPopScope(
+            onWillPop: () async => true,
+            child: Container(
+              child: SafeArea(
+                  top: false,
+                  bottom: false,
+                  child: Scaffold(
+                      body:
+                          currentUserId != null ? Home() : RegistrationPage())),
+            ),
+          );
+        });
   }
 }

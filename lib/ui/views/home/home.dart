@@ -77,16 +77,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return StreamBuilder<DocumentSnapshot>(
         stream: usersDbRef.doc(currentUserId).snapshots(),
         builder: (context, snapshot) {
+          try {
+            if (snapshot.data!.get(FieldPath(['photoUrl']))) {
+              imageUrl = snapshot.data!.get(FieldPath(['photoUrl']));
+            }
+
+            if (getUserType == user) {
+              userName = snapshot.data!.get(FieldPath(['userName']));
+            } else {
+              userName = snapshot.data!.get(FieldPath(['artisanName']));
+            }
+          } catch (error) {}
           if (!snapshot.hasData) {
             return LoadHome();
           }
-          imageUrl = snapshot.data!.get(FieldPath(['photoUrl']));
-          if (getUserType == user) {
-            userName = snapshot.data!.get(FieldPath(['userName']));
-          } else {
-            userName = snapshot.data!.get(FieldPath(['artisanName']));
-          }
-
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
@@ -115,8 +119,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               child: CachedNetworkImage(
                                 placeholder: (context, url) =>
                                     CircularProgressIndicator(),
-                                imageUrl:
-                                    snapshot.data!.get(FieldPath(['photoUrl'])),
+                                imageUrl: imageUrl!,
                                 fit: BoxFit.cover,
                               ),
                             ),

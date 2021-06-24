@@ -43,8 +43,14 @@ const emailUx = 'Email us';
 const call = 'Call';
 const chatUx = 'Chat Us';
 const callUx = 'Call Us';
+const OK = 'OK!';
+const anErrorOccurred = 'An error occurred';
 const msg = 'Message';
 const report = 'Report';
+const cantAuthenticate = 'Cant Authenticate you, Try Again Later';
+const plsTryAgain = 'Please wait as you have used limited number request';
+const containsBlockedMsg =
+    'We have blocked all requests from this device due to unusual activity. Try again later.';
 const reportDes = 'Report a user or any suspicious action';
 const share = 'Share this app';
 const shareDes = 'Share app to a friend';

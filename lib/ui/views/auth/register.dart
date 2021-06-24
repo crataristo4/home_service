@@ -83,14 +83,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Error Occurred'),
+        title: Text(anErrorOccurred),
         content: Text(message),
         actions: <Widget>[
           ElevatedButton(
             onPressed: () {
               Navigator.of(ctx).pop();
             },
-            child: Text('OK!'),
+            child: Text(OK),
           )
         ],
       ),
@@ -133,11 +133,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 Navigator.of(context).pushNamed(VerificationPage.routeName,
                     arguments: phoneNumber);
               }).catchError((e) {
-                String errorMsg = 'Cant Authenticate you, Try Again Later';
-                if (e.toString().contains(
-                    'We have blocked all requests from this device due to unusual activity. Try again later.')) {
-                  errorMsg =
-                      'Please wait as you have used limited number request';
+                String errorMsg = cantAuthenticate;
+                if (e.toString().contains(containsBlockedMsg)) {
+                  errorMsg = plsTryAgain;
                 }
                 _showErrorDialog(context, errorMsg);
               });

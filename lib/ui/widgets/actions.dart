@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:home_service/constants.dart';
 
 class ShowAction {
   void showToast(message, Color color) {
@@ -12,7 +13,7 @@ class ShowAction {
         timeInSecForIosWeb: 1,
         backgroundColor: color,
         textColor: Colors.white,
-        fontSize: 16.0);
+        fontSize: sixteenDp);
   }
 
   static void showAlertDialog(String title, String content,
