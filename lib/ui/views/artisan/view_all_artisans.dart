@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_service/ui/models/users.dart';
+import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
@@ -16,6 +19,31 @@ class ViewAllArtisans extends StatefulWidget {
 }
 
 class _ViewAllArtisansState extends State<ViewAllArtisans> {
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    showLoading();
+
+    super.initState();
+  }
+
+  showLoading() {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      Timer(Duration(seconds: 5), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final artisanListProvider = Provider.of<List<Artisans>>(context);
@@ -52,18 +80,20 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
           ),
         ),
         body: Builder(builder: (BuildContext context) {
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: eightDp),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border:
-                            Border.all(width: 20, color: Colors.indigoAccent)),
-                    child: ListTile(
-                      onTap: () {
+          return isLoading
+              ? LoadHome()
+              : ListView.builder(
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: eightDp),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                  width: 20, color: Colors.indigoAccent)),
+                          child: ListTile(
+                            onTap: () {
                         //1.pass artisans details
                         //todo
                         //2.navigate to artisan's profile
