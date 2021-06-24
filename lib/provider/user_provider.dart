@@ -55,6 +55,8 @@ class UserProvider with ChangeNotifier {
     _phoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber;
     photoUrl = _photoUrl!;
 
+    //store values
+    SharedPreferences userData = await SharedPreferences.getInstance();
 
     if (getUserType == artisan) {
       //creates a new artisan object
@@ -87,8 +89,6 @@ class UserProvider with ChangeNotifier {
       userService.createUser(newUser, context);
     }
 
-    //store values
-    SharedPreferences userData = await SharedPreferences.getInstance();
     await userData.setString("name", name);
     await userData.setString("photoUrl", photoUrl);
   }
