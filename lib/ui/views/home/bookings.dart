@@ -29,6 +29,9 @@ class _BookingPageState extends State<BookingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: Center(
+        child: bookingOptions.elementAt(_selectedIndex),
+      ),
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
         key: globalKey,
