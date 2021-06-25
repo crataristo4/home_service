@@ -14,6 +14,7 @@ import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants.dart';
 
@@ -37,8 +38,6 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +124,10 @@ class _CompleteProfileState extends State<CompleteProfile> {
     }
 
     //choose camera or from gallery
-    void _showPicker(context) {
+    void _showPicker(context) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      print('User types is: ${prefs.getString("userType")}');
+
       showModalBottomSheet(
           context: context,
           builder: (BuildContext bc) {
@@ -488,7 +490,4 @@ class _CompleteProfileState extends State<CompleteProfile> {
       ),
     );
   }
-
-
 }
-

@@ -211,7 +211,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             builder: (context, snapshot) {
                               return TextFormField(
                                 // maxLength: 9,
-                                  autofocus: true,
+                                  //autofocus: true,
                                   keyboardType: TextInputType.phone,
                                   controller: _phoneNumberController,
                                   onChanged: loginBloc.onPhoneNumberChanged,
@@ -321,7 +321,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 onChanged: (UserTypes? value) async {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
-                  userInfo = type == iAmUser ? user : artisan;
+                  userInfo = type == iAmUser ? 'user' : 'artisan';
                   await prefs.setString("userType", userInfo!);
                   setState(() {
                     _userType = value;
