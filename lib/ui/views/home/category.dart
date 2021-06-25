@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:home_service/models/artisan_type.dart';
 import 'package:home_service/ui/views/artisan/view_all_artisans.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
-import 'package:home_service/ui/views/home/home.dart';
 
 import '../../../constants.dart';
 
@@ -17,34 +17,9 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  String? message;
-
   @override
   void initState() {
-    greetingMessage();
     super.initState();
-  }
-
-  //greeting message to user
-  greetingMessage() {
-    var timeNow = DateTime.now().hour;
-    if (timeNow <= 12) {
-      setState(() {
-        message = goodMorning;
-      });
-    } else if ((timeNow > 12) && (timeNow <= 16)) {
-      setState(() {
-        message = goodAfternoon;
-      });
-    } else if ((timeNow > 16) && (timeNow <= 20)) {
-      setState(() {
-        message = goodEvening;
-      });
-    } else {
-      setState(() {
-        message = goodNight;
-      });
-    }
   }
 
   @override
@@ -65,18 +40,6 @@ class _CategoryPageState extends State<CategoryPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        //display greeting message to user
-                        userName == null
-                            ? Container()
-                            : Padding(
-                                padding: EdgeInsets.only(top: tenDp),
-                                child: Text(
-                                  "$message $userName",
-                                  style: TextStyle(
-                                      fontSize: fourteenDp,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ),
                         SizedBox(
                           height: eightDp,
                         ),
