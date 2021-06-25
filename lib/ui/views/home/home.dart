@@ -254,8 +254,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             //close alert dialog
             Navigator.pop(context);
             //navigate to register
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                RegistrationPage.routeName, (route) => false);
+            Navigator.of(context).popAndPushNamed(RegistrationPage.routeName);
           },
         ));
   }

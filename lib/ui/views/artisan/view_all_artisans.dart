@@ -166,8 +166,8 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                         padding: EdgeInsets.only(top: eightDp),
                         child: CircleAvatar(
                           radius: 40,
-                          backgroundImage: CachedNetworkImageProvider(
-                              artisanListProvider[index].photoUrl),
+                          foregroundImage: CachedNetworkImageProvider(
+                                    artisanListProvider[index].photoUrl),
                           backgroundColor: Colors.indigo,
                         ),
                       ),

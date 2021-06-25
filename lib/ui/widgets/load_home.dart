@@ -19,23 +19,25 @@ class _LoadHomeState extends State<LoadHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Shimmer.fromColors(
-      baseColor: Colors.white,
-      highlightColor: Colors.grey.shade200,
-      direction: ShimmerDirection.ltr,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 60,
-          ),
-          Flexible(
-            child: buildTopExpect(),
-          ),
-        ],
-      ),
-    ));
+    return Container(
+      child: Center(
+          child: Shimmer.fromColors(
+        baseColor: Colors.white,
+        highlightColor: Colors.grey.shade200,
+        direction: ShimmerDirection.ltr,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 60,
+            ),
+            Flexible(
+              child: buildTopExpect(),
+            ),
+          ],
+        ),
+      )),
+    );
   }
 
   Widget buildTopExpect() {
