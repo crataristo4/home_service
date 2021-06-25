@@ -292,7 +292,7 @@ class _VerificationPageState extends State<VerificationPage> {
                                 : ShowAction() // else show error message
                                     .showToast(invalidOTP, Colors.red),
                             child: Text(
-                              verifyNumber,
+                              confirmOTP,
                               style: TextStyle(fontSize: fourteenDp),
                             )),
                       ),
