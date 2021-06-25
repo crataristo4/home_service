@@ -73,7 +73,7 @@ class UserProvider with ChangeNotifier {
 
       //push to db
       userService.createArtisan(newArtisan, context);
-    } else {
+    } else if (getUserType == user) {
       // create new  user
       Users newUser = Users(
           userName: name,

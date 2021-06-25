@@ -349,7 +349,7 @@ class _HelpPageState extends State<HelpPage>
           keyboardType: TextInputType.multiline,
           maxLines: 4,
           decoration: InputDecoration(
-            hintText: "Enter email address",
+            hintText: "Enter a message to send",
             fillColor: Color(0xFFF5F5F5),
             filled: true,
             contentPadding:
