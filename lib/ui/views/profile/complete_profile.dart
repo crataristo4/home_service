@@ -125,9 +125,6 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
     //choose camera or from gallery
     void _showPicker(context) async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      print('User types is: ${prefs.getString("userType")}');
-
       showModalBottomSheet(
           context: context,
           builder: (BuildContext bc) {
