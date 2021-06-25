@@ -19,8 +19,8 @@ class _LoadHomeState extends State<LoadHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
+    return Scaffold(
+      body: Container(
           child: Shimmer.fromColors(
         baseColor: Colors.white,
         highlightColor: Colors.grey.shade200,

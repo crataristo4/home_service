@@ -4,10 +4,10 @@ class Bookings {
   final id;
   final userName;
   final artisanName;
-  final userId;
-  final artisanId;
-  final userPhoneNumber;
-  final artisanPhoneNumber;
+  final senderId;
+  final receiverId;
+  final senderPhoneNumber;
+  final receiverPhoneNumber;
   final status;
   final dateTime;
   final message;
@@ -18,10 +18,10 @@ class Bookings {
       {required this.id,
       required this.userName,
       required this.artisanName,
-      required this.userId,
-      required this.artisanId,
-      required this.userPhoneNumber,
-      required this.artisanPhoneNumber,
+      required this.senderId,
+      required this.receiverId,
+      required this.senderPhoneNumber,
+      required this.receiverPhoneNumber,
       required this.status,
       required this.dateTime,
       required this.message,
@@ -33,10 +33,10 @@ class Bookings {
         id: data['id'],
         userName: data['userName'],
         artisanName: data['artisanName'],
-        userId: data['userId'],
-        artisanId: data['artisanId'],
-        userPhoneNumber: data['userPhoneNumber'],
-        artisanPhoneNumber: data['artisanPhoneNumber'],
+        senderId: data['senderId'],
+        receiverId: data['receiverId'],
+        senderPhoneNumber: data['senderPhoneNumber'],
+        receiverPhoneNumber: data['receiverPhoneNumber'],
         status: data['status'],
         dateTime: data['dateTime'],
         message: data['message'],
@@ -49,10 +49,10 @@ class Bookings {
       'id': id,
       'userName': userName,
       'artisanName': artisanName,
-      'userId': userId,
-      'artisanId': artisanId,
-      'userPhoneNumber': userPhoneNumber,
-      'artisanPhoneNumber': artisanPhoneNumber,
+      'senderId': senderId,
+      'receiverId': receiverId,
+      'senderPhoneNumber': senderPhoneNumber,
+      'receiverPhoneNumber': receiverPhoneNumber,
       'status': status,
       'dateTime': dateTime,
       'message': message,
