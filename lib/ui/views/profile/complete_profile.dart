@@ -14,7 +14,6 @@ import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants.dart';
 
@@ -109,7 +108,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
             if (getUserType == user) {
               //create normal user database
               userProvider.createUser(imageUrl!, context);
-            } else {
+            } else if (getUserType == artisan) {
               //create artisan using provider
               userProvider.createUser(imageUrl!, context);
             }
@@ -254,6 +253,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
     }
 
     Widget buildArtisanExperience() {
+      print("complete profile : $getUserType");
       return getUserType == user
           ? Container()
           : Column(
@@ -265,57 +265,57 @@ class _CompleteProfileState extends State<CompleteProfile> {
                     pleaseSelectExp,
                     style: TextStyle(
                       fontSize: sixteenDp,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(sixDp),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(eightDp),
-                      border: Border.all(
-                          width: 0.5, color: Colors.grey.withOpacity(0.5))),
-                  child: DropdownButtonFormField<String>(
-                    value: _selectedExperience,
-                    elevation: 1,
-                    isExpanded: true,
-                    style: TextStyle(color: Color(0xFF424242)),
-                    // underline: Container(),
-                    items: [
-                      noExperience,
-                      oneYrs,
-                      twoYrs,
-                      threeYrs,
-                      fourYrs,
-                      fiveYrs,
-                      sixYrs,
-                      sevenYrs,
-                      eightYrs,
-                      nineYrs,
-                      tenPlusYrs
-                    ].map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    hint: Text(
-                      experienceLvl,
-                      style: TextStyle(color: Color(0xFF757575), fontSize: 16),
-                    ),
-                    onChanged: (String? value) {
-                      //update provider
-                      userProvider.changeArtisanExperience(value);
-                      setState(() {
-                        _selectedExperience = value;
-                      });
-                    },
-                    validator: (value) =>
-                        value == null ? experienceRequired : null,
-                  ),
-                ),
-              ],
-            );
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(sixDp),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(eightDp),
+                border: Border.all(
+                    width: 0.5, color: Colors.grey.withOpacity(0.5))),
+            child: DropdownButtonFormField<String>(
+              value: _selectedExperience,
+              elevation: 1,
+              isExpanded: true,
+              style: TextStyle(color: Color(0xFF424242)),
+              // underline: Container(),
+              items: [
+                noExperience,
+                oneYrs,
+                twoYrs,
+                threeYrs,
+                fourYrs,
+                fiveYrs,
+                sixYrs,
+                sevenYrs,
+                eightYrs,
+                nineYrs,
+                tenPlusYrs
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              hint: Text(
+                experienceLvl,
+                style: TextStyle(color: Color(0xFF757575), fontSize: 16),
+              ),
+              onChanged: (String? value) {
+                //update provider
+                userProvider.changeArtisanExperience(value);
+                setState(() {
+                  _selectedExperience = value;
+                });
+              },
+              validator: (value) =>
+              value == null ? experienceRequired : null,
+            ),
+          ),
+        ],
+      );
     }
 
     return WillPopScope(

@@ -1,3 +1,5 @@
+import 'package:home_service/ui/views/home/home.dart';
+
 const appTitle = 'Home service';
 const getApp = 'Home servicing app';
 const shareText = 'Looking for a home servicing app where you can find \n'
@@ -104,7 +106,13 @@ const pleaseSelectExp = 'Select experience level';
 const pleaseWait = 'Please wait...';
 const customerCare = 'Customer care';
 const register = 'Register';
+const logOut = 'LOG OUT';
+const yesLogMeOut = 'Yes! Logout';
+const noCancel = 'No! cancel';
+var youWillBeLoggedOut =
+    'Hi $userName, yow will be logged out from this device.Do you wish to continue?';
 const verifyNumber = 'Verify number';
+const confirmOTP = 'Confirm code sent';
 const completeProfile = "Complete profile";
 const enterCode = 'Enter code';
 const enterVerificationCode = 'Enter the verification code sent to your SMS';
@@ -114,7 +122,8 @@ const edit = 'Edit';
 const selectCategory = 'Select Category';
 const categoryRequired = "category is required";
 const selectAccountType = 'Please select an account type';
-const enterPhoneToRegister = "Enter your phone number to register";
+
+const enterPhoneToLogin = "Enter your phone number to Log in";
 const confirmNumber = 'Confirm number';
 const sendCodeTo = 'Send verification code to ';
 const invalidPhone = 'Invalid phone number';

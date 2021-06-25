@@ -5,6 +5,8 @@ import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/auth/verify.dart';
 import 'package:home_service/ui/views/help/help_page.dart';
+import 'package:home_service/ui/views/home/bookings/confirmed_bookings.dart';
+import 'package:home_service/ui/views/home/bookings/pending_bookings.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
 import 'package:home_service/ui/views/profile/complete_profile.dart';
@@ -59,6 +61,13 @@ class RouteGenerator {
       //view all available artisans
       case ViewAllArtisans.routeName:
         return MaterialPageRoute(builder: (_) => ViewAllArtisans());
+
+      //pending bookings
+      case PendingBookings.routeName:
+        return MaterialPageRoute(builder: (_) => PendingBookings());
+      //confirmed bookings
+      case ConfirmedBookings.routeName:
+        return MaterialPageRoute(builder: (_) => ConfirmedBookings());
 
       //view artisans by category
       case ViewArtisanByCategoryPage.routeName:

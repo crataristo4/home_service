@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:home_service/models/booking.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/auth_provider.dart';
 import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/route_generator.dart';
+import 'package:home_service/service/booking_service.dart';
 import 'package:home_service/service/firestore_services.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
@@ -25,6 +27,8 @@ class EntryPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final getAllArtisan = UserService();
+    final getPendingBookings = BookingService();
+    final getConfirmedBookings = BookingService();
 
     return MultiProvider(
       providers: [
@@ -37,6 +41,17 @@ class EntryPoint extends StatelessWidget {
           initialData: [],
           value: getAllArtisan.getAllArtisans(),
         ),
+
+        //get list of pending bookings
+        StreamProvider<List<Bookings>>.value(
+          initialData: [],
+          value: getPendingBookings.getPendingBookings(),
+        ),
+
+        //fetch list of confirmed bookings
+        StreamProvider<List<Bookings>>.value(
+            value: getConfirmedBookings.getConfirmedBookings(),
+            initialData: []),
       ],
       child: MaterialApp(
         //checks and switches page

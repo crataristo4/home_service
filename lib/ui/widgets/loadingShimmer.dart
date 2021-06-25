@@ -26,7 +26,7 @@ class _LoadingShimmerState extends State<LoadingShimmer> {
   callTimer() {
     Timer(Duration(seconds: 5), () {
       setState(() {
-        isLoading = false;
+        isLoading = !isLoading;
       });
     });
   }
