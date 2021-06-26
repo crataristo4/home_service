@@ -5,16 +5,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/users.dart';
-import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/bottomsheet/options_page.dart';
 import 'package:home_service/ui/views/home/artwork.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
 import 'package:home_service/ui/views/home/category.dart';
-import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 CollectionReference usersDbRef = FirebaseFirestore.instance.collection("Users");
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -110,7 +108,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       ? Container()
                       : GestureDetector(
                           onTap: () => showModalBottomSheet(
-                              isDismissible: false,
                               context: context,
                               builder: (context) => OptionsPage()),
                           child: Container(
@@ -166,51 +163,25 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               ),
             ),
             body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //display greeting message and logout to user
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: eightDp),
-                      child: userName == null
-                          ? Container()
-                          : Padding(
-                              padding:
-                                  EdgeInsets.only(top: tenDp, left: sixteenDp),
-                              child: Text(
-                                "$message $userName",
-                                style: TextStyle(
-                                    fontSize: fourteenDp,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ),
-                    ),
-
-                    //logout button
-                    Container(
-                      margin: EdgeInsets.only(right: sixteenDp, top: eightDp),
-                      child: SizedBox(
-                        height: fortyDp,
-                        child: TextButton(
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.red,
-                                primary: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(eightDp))),
-                            onPressed: () {
-                              signOut();
-                            },
+                //display greeting message to user
+                Container(
+                  margin: EdgeInsets.only(top: eightDp),
+                  child: userName == null
+                      ? Container()
+                      : Padding(
+                          padding: EdgeInsets.only(top: tenDp, left: sixteenDp),
+                          child: Shimmer.fromColors(
+                            baseColor: Colors.grey,
+                            highlightColor: Colors.indigo,
                             child: Text(
-                              logOut,
+                              "$message $userName",
                               style: TextStyle(
-                                  fontSize: fourteenDp, color: Colors.white),
-                            )),
-                      ),
-                    ),
-                  ],
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
                 ),
 
                 Expanded(
@@ -226,36 +197,5 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               ],
             ),
           );
-  }
-
-  signOut() {
-    ShowAction.showAlertDialog(
-        logOut,
-        youWillBeLoggedOut,
-        context,
-        TextButton(
-          child: Text(
-            noCancel,
-            style: TextStyle(color: Colors.green),
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        TextButton(
-          child: Text(yesLogMeOut, style: TextStyle(color: Colors.red)),
-          onPressed: () async {
-            //if yes ... sign out from firebase
-            await FirebaseAuth.instance.signOut();
-            //clear all shared preference data to avoid getting old data when user changes phone number
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.remove('name');
-            prefs.remove('photoUrl');
-            prefs.remove('userType');
-
-            //close alert dialog
-            Navigator.pop(context);
-            //navigate to register
-            Navigator.of(context).popAndPushNamed(RegistrationPage.routeName);
-          },
-        ));
   }
 }
