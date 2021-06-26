@@ -35,7 +35,7 @@ class ArtworkService {
     });
   }
 
-//retrieve artwork
+//retrieve all artwork
   Stream<List<ArtworkModel>> fetchAllArtwork() {
     return firestoreService
         .collection('Artworks')

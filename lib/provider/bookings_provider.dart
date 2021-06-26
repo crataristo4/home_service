@@ -105,9 +105,7 @@ class BookingsProvider with ChangeNotifier {
   }
 
   updateBook() {
-    /* Bookings updateBooking = Bookings(id: _id, title: title, desc: desc);
-    bookService.updateBooks(updateBooking);
-   */
+// update price and image only or when user changes profile
   }
 
   deleteBook(String id) {

@@ -47,10 +47,11 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+//@Param photoUrl ... is passed after the download url is generated
   createUser(String photoUrl, BuildContext context) async {
     _id = FirebaseAuth.instance.currentUser!.uid;
     _dateJoined = dateFormat.format(DateTime.now());
-    _type = getUserType;
+    _type = getUserType; //from shared pref
     _phoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber;
     photoUrl = _photoUrl!;
 
@@ -78,7 +79,7 @@ class UserProvider with ChangeNotifier {
       //push to db
       userService.createArtisan(newArtisan, context);
     } else if (getUserType == user) {
-      // create new  user
+      // create new  user object
       Users newUser = Users(
           userName: name,
           photoUrl: photoUrl,
@@ -88,9 +89,11 @@ class UserProvider with ChangeNotifier {
           dateJoined: _dateJoined!,
           location: new GeoPoint(0, 0));
 
+      //put values into shared prefs
       await userData.setString("name", name);
       await userData.setString("photoUrl", photoUrl);
 
+      //create record in db
       userService.createUser(newUser, context);
     }
   }

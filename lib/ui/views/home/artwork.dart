@@ -10,11 +10,7 @@ import 'home.dart';
 class ArtworksPage extends StatefulWidget {
   static const routeName = '/artworkPage';
 
-  //to be corrected later with the appropriate variables
-  final image;
-  final name;
 
-  const ArtworksPage({Key? key, this.image, this.name}) : super(key: key);
 
   @override
   _ArtworksPageState createState() => _ArtworksPageState();

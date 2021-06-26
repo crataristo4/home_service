@@ -24,92 +24,11 @@ class _VerificationPageState extends State<VerificationPage> {
   //Control the input text field.
   TextEditingController _controller = TextEditingController();
 
-/*
-  bool isCodeSent = false;
-  late String _verificationId;*/
 
   void initState() {
     super.initState();
-    // _onVerifyCode();
   }
 
-  /* void _onVerifyCode() async {
-    setState(() {
-      isCodeSent = true;
-    });
-
-    //automatic verification
-    final PhoneVerificationCompleted verificationCompleted =
-        (AuthCredential phoneAuthCredential) {
-      firebaseAuth.signInWithCredential(phoneAuthCredential).then((value) {
-        if (value.user != null) {
-          //push to home and check for user details to complete account
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            Home.routeName,
-            (route) => false,
-          );
-        }
-      }).catchError((error) {
-        ShowAction().showToast(tryAgainSometime, Colors.red);
-      });
-    };
-
-    //phone verification failed
-    final PhoneVerificationFailed verificationFailed = (authException) {
-      ShowAction().showToast(authException.message, Colors.red);
-      debugPrint("Error ${authException.message}");
-      Navigator.pop(context);
-      setState(() {
-        isCodeSent = false;
-      });
-    };
-
-    final PhoneCodeSent codeSent =
-        (String verificationId, [int? forceResendingToken]) async {
-      _verificationId = verificationId;
-      await Future.delayed(const Duration(seconds: 3));
-
-      setState(() {
-        _verificationId = verificationId;
-      });
-      Navigator.pop(context);
-    };
-    final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
-        (String verificationId) {
-      _verificationId = verificationId;
-    */ /*  setState(() {
-        _verificationId = verificationId;
-      });*/ /*
-    };
-
-    await firebaseAuth.verifyPhoneNumber(
-        phoneNumber: "${widget.phoneNumber}",
-        timeout: Duration(seconds: 60),
-        verificationCompleted: verificationCompleted,
-        verificationFailed: verificationFailed,
-        codeSent: codeSent,
-        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
-  }
-
-  ///from user tapping button
-  void _onFormSubmitted() async {
-    AuthCredential _authCredential = PhoneAuthProvider.credential(
-        verificationId: _verificationId, smsCode: _controller.text);
-
-    firebaseAuth.signInWithCredential(_authCredential).then((value) {
-      if (value.user != null) {
-        //push to home and check for user details to complete account
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          Home.routeName,
-          (route) => false,
-        );
-      }
-    }).catchError((error) {
-      print("Error occurred :" + error.toString());
-      */ /*ShowAction().showToast("Something went wrong", Colors.red);*/ /*
-    });
-  }
-*/
   //................................................//
   void _showErrorDialog(BuildContext context, String message) {
     showDialog(

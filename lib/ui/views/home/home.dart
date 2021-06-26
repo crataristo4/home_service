@@ -189,11 +189,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
-                    children: [
-                      ArtworksPage(image: imageUrl, name: userName),
-                      CategoryPage(),
-                      BookingPage()
-                    ],
+                    children: [ArtworksPage(), CategoryPage(), BookingPage()],
                   ),
                 ),
               ],
