@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/ui/views/bloc/artisan_category_list_bloc.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/loadingShimmer.dart';
@@ -24,12 +25,24 @@ class ViewArtisanByCategoryPage extends StatefulWidget {
 
 class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  int? itemCount, xxLength;
-  ArtisanCategoryListBloc? _artisanCategoryListBloc;
+  late TabController _tabController; // tabs
+  int? itemCount; // shows number of artisans in a category
+  ArtisanCategoryListBloc? _artisanCategoryListBloc; // fetches artisan category
+  //form key to validate input
+  final _formKey = GlobalKey<FormState>();
+
+  //message editing controller
+  TextEditingController _controller = TextEditingController();
+
+  //object for booking provider
+  final bookingProvider = BookingsProvider();
+
+  //for getting and passing receiver details to provider
+  String? receiverName, receiverPhoneNumber, receiverPhotoUrl, receiverId;
 
   @override
   void initState() {
+    //initialise state
     _tabController = TabController(length: 2, vsync: this);
     _tabController.index = 1;
     _artisanCategoryListBloc = ArtisanCategoryListBloc();
@@ -42,8 +55,10 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
   void dispose() {
     super.dispose();
     _tabController.dispose();
+    _controller.dispose();
   }
 
+  //method to get number of artisans in a category
   Future<void> getCategoryCount() async {
     QuerySnapshot querySnapshot = await usersDbRef
         .orderBy("artisanName")
@@ -135,7 +150,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                   padding: EdgeInsets.only(left: sixteenDp, top: twentyDp),
                   child: Text(
                     itemCount == null || itemCount == 0
-                        ? "No ${widget.categoryName}\'s near you"
+                        ? ""
                         : "$itemCount ${widget.categoryName} near you ",
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -189,7 +204,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                 controller: _tabController,
                 children: [
                   buildMapItem(),
-                  buildListCategory(),
+                  buildListCategory(context),
                 ],
               ),
             )
@@ -199,21 +214,37 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
     );
   }
 
-  Widget buildListCategory() {
+  Widget buildListCategory(context) {
+    // list of all artisans by category
     return StreamBuilder<List<DocumentSnapshot>>(
         stream: _artisanCategoryListBloc!.itemListStream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
+            //load if empty
             return LoadingShimmer(
               category: widget.categoryName,
             );
           } else {
+            //retrieve data into a list
             return ListView.builder(
               shrinkWrap: true,
-              //  itemCount: snapshot.data!.length,
               itemCount: snapshot.data!.length,
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int index) {
+                //get the details from the receiver
+                receiverName = snapshot.data![index]['artisanName'];
+                receiverId = snapshot.data![index]['id'];
+                receiverPhoneNumber = snapshot.data![index]['phoneNumber'];
+                receiverPhotoUrl = snapshot.data![index]['photoUrl'];
+
+                //todo get location
+
+                //update provider ,set data
+                bookingProvider.setReceiverName(receiverName);
+                bookingProvider.setReceiverId(receiverId);
+                bookingProvider.setReceiverPhone(receiverPhoneNumber);
+                bookingProvider.setReceiverPhotoUrl(receiverPhotoUrl);
+
                 return GestureDetector(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -254,17 +285,17 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                 children: [
                                   Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       //artisan name
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           Text(
                                             snapshot.data![index]
-                                                ['artisanName'],
+                                            ['artisanName'],
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: sixteenDp),
@@ -273,6 +304,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                             width: 100,
                                           ),
                                           Text(
+                                            //shows artisans distance
                                             "3 km",
                                             //todo add artisan location and convert into distance
                                             style: TextStyle(
@@ -302,6 +334,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                         height: sixteenDp,
                                       ),
                                       Text(
+                                        //shows artisans experience level
                                         snapshot.data![index]['expLevel'],
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -331,7 +364,13 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(eightDp))),
-                                onPressed: () {},
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      useRootNavigator: true,
+                                      builder: (context) =>
+                                          buildMsgBox(context));
+                                },
                                 child: Text(
                                   book,
                                   style: TextStyle(fontSize: fourteenDp),
@@ -346,6 +385,116 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
             );
           }
         });
+  }
+
+  Widget buildMsgBox(context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: sixteenDp),
+      height: MediaQuery.of(context).size.height,
+      child: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: fiftyDp,
+                    ),
+                    Form(
+                        key: _formKey,
+                        child: TextFormField(
+                            maxLines: 7,
+                            maxLength: 500,
+                            controller: _controller,
+                            onChanged: (value) {
+                              value = _controller.text;
+                              //_controller.text = value;
+                              bookingProvider.setMessage(value);
+                            },
+                            validator: (value) {
+                              return value!.length > 20
+                                  ? null
+                                  : 'Please clearly state your intention';
+                            },
+                            keyboardType: TextInputType.multiline,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                                hintStyle: TextStyle(fontSize: sixteenDp),
+                                suffix: Container(
+                                  child: Icon(
+                                    Icons.message,
+                                    color: Colors.white,
+                                  ),
+                                  width: thirtySixDp,
+                                  height: thirtySixDp,
+                                  decoration: BoxDecoration(
+                                    color: Colors.indigo,
+                                    borderRadius:
+                                        BorderRadius.circular(eightDp),
+                                    border: Border.all(
+                                        width: 0.5, color: Colors.white54),
+                                  ),
+                                ),
+                                hintText: enterMsg,
+                                helperText: msgDes,
+                                helperMaxLines: 2,
+                                fillColor: Colors.white70,
+                                filled: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: tenDp, horizontal: tenDp),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFF5F5F5)),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFFF5F5F5)))))),
+                    SizedBox(
+                      height: fiftyDp,
+                    ),
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: twentyDp),
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          primary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(eightDp))),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          //create new booking
+                          bookingProvider.createNewBookings(
+                              context,
+                              receiverName,
+                              receiverId,
+                              receiverPhoneNumber,
+                              receiverPhotoUrl,
+                              _controller.text);
+                          //clear controller
+                          _controller.clear();
+                        }
+                      },
+                      child: Text(
+                        submitNow,
+                        style: TextStyle(fontSize: fourteenDp),
+                      )),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Widget buildGridCategory() {

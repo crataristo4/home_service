@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/views/bottomsheet/options_page.dart';
@@ -13,6 +12,7 @@ import 'package:home_service/ui/views/home/artwork.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
 import 'package:home_service/ui/views/home/category.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
+import 'package:shimmer/shimmer.dart';
 
 CollectionReference usersDbRef = FirebaseFirestore.instance.collection("Users");
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -150,13 +150,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   unselectedLabelColor: Color(0xFF757575),
                   tabs: [
                     Tab(
-                      text: 'Artworks',
+                      text: Artwork,
                     ),
                     Tab(
-                      text: 'Artisans',
+                      text: Artisanz,
                     ),
                     Tab(
-                      text: 'Bookings',
+                      text: Bookingz,
                     ),
                   ],
                 ),
