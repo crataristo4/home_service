@@ -11,8 +11,8 @@ class Bookings {
   final status;
   final dateTime;
   final message;
-  final GeoPoint? userLocation;
-  final GeoPoint? artisanLocation;
+  final GeoPoint? senderLocation;
+  final GeoPoint? receiverLocation;
 
   Bookings(
       {required this.id,
@@ -25,8 +25,8 @@ class Bookings {
       required this.status,
       required this.dateTime,
       required this.message,
-      required this.userLocation,
-      required this.artisanLocation});
+      required this.senderLocation,
+      required this.receiverLocation});
 
   factory Bookings.fromFirestore(Map<String, dynamic> data) {
     return Bookings(
@@ -40,8 +40,8 @@ class Bookings {
         status: data['status'],
         dateTime: data['dateTime'],
         message: data['message'],
-        userLocation: data['userLocation'],
-        artisanLocation: data['artisanLocation']);
+        senderLocation: data['senderLocation'],
+        receiverLocation: data['receiverLocation']);
   }
 
   Map<String, dynamic> bookToMap() {
@@ -56,8 +56,8 @@ class Bookings {
       'status': status,
       'dateTime': dateTime,
       'message': message,
-      'userLocation': userLocation,
-      'artisanLocation': artisanLocation,
+      'senderLocation': senderLocation,
+      'receiverLocation': receiverLocation,
     };
   }
 }
