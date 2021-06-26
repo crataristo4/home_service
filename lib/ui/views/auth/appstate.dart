@@ -12,6 +12,8 @@ String? phoneNumber;
 String? name;
 String? photoUrl;
 String? type;
+String? category;
+final DateTime timeStamp = DateTime.now();
 
 class AppState extends StatefulWidget {
   const AppState({Key? key}) : super(key: key);
@@ -46,10 +48,13 @@ class _AppStateState extends State<AppState> {
         //get data from shared preferences
         // if(  prefs.containsKey('userType'))
 
-        if (prefs.containsKey('name') || prefs.containsKey('photoUrl')) {
+        if (prefs.containsKey('name') ||
+            prefs.containsKey('photoUrl') ||
+            prefs.containsKey('category')) {
           userName = prefs.getString('name');
           imageUrl = prefs.getString('photoUrl');
           getUserType = prefs.getString('userType');
+          category = prefs.getString('category');
           print(
               "Username from shared pref is: $userName and type is $getUserType");
         } else {

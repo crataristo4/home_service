@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/help/help_page.dart';
+import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/views/profile/edit_profile.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:path_provider/path_provider.dart';
@@ -162,9 +163,17 @@ class _OptionsPageState extends State<OptionsPage> {
             await FirebaseAuth.instance.signOut();
             //clear all shared preference data to avoid getting old data when user changes phone number
             SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.remove('name');
-            prefs.remove('photoUrl');
-            prefs.remove('userType');
+
+            if (getUserType == user) {
+              prefs.remove('name');
+              prefs.remove('photoUrl');
+              prefs.remove('userType');
+            } else {
+              prefs.remove('name');
+              prefs.remove('photoUrl');
+              prefs.remove('userType');
+              prefs.remove('category');
+            }
 
             //close alert dialog
             Navigator.pop(context);

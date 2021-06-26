@@ -8,7 +8,7 @@ import 'package:home_service/ui/views/home/home.dart';
 import 'package:uuid/uuid.dart';
 
 class BookingsProvider with ChangeNotifier {
-  String? _id, _dateTime, _message, _status;
+  String? _id, bookingDate, _message, _status;
   String? _senderName, _senderId, _senderPhoneNumber, _senderPhotoUrl;
   GeoPoint? _senderLocation, _receiverLocation;
   String? _receiverName, _receiverId, _receiverPhoneNumber, _receiverPhotoUrl;
@@ -20,10 +20,10 @@ class BookingsProvider with ChangeNotifier {
   BookingService bookingService = BookingService();
   var _uuid = Uuid();
 
-  get dateTime => _dateTime;
+  get dateTime => bookingDate;
 
   changeDateTime(value) {
-    _dateTime = value;
+    bookingDate = value;
     notifyListeners();
   }
 
@@ -94,7 +94,8 @@ class BookingsProvider with ChangeNotifier {
         senderPhotoUrl: _senderPhotoUrl,
         receiverPhotoUrl: _receiverPhotoUrl,
         status: _status,
-        dateTime: dateTime,
+        timestamp: timeStamp,
+        bookingDate: bookingDate,
         message: _message,
         senderLocation: _senderLocation,
         receiverLocation: _receiverLocation);
@@ -110,6 +111,6 @@ class BookingsProvider with ChangeNotifier {
   }
 
   deleteBook(String id) {
-    //  bookService.deleteBook(id);
+    bookingService.deleteBookings(id);
   }
 }

@@ -71,6 +71,10 @@ class UserProvider with ChangeNotifier {
           artworkUrl: [],
           location: new GeoPoint(0, 0));
 
+      await userData.setString("category", category);
+      await userData.setString("name", name);
+      await userData.setString("photoUrl", photoUrl);
+
       //push to db
       userService.createArtisan(newArtisan, context);
     } else if (getUserType == user) {
@@ -84,10 +88,10 @@ class UserProvider with ChangeNotifier {
           dateJoined: _dateJoined!,
           location: new GeoPoint(0, 0));
 
+      await userData.setString("name", name);
+      await userData.setString("photoUrl", photoUrl);
+
       userService.createUser(newUser, context);
     }
-
-    await userData.setString("name", name);
-    await userData.setString("photoUrl", photoUrl);
   }
 }

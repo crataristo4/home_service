@@ -11,7 +11,8 @@ class Bookings {
   final senderPhotoUrl;
   final receiverPhotoUrl;
   final status;
-  final Timestamp? dateTime;
+  final dynamic timestamp;
+  final String? bookingDate;
   final message;
   final GeoPoint? senderLocation;
   final GeoPoint? receiverLocation;
@@ -27,7 +28,8 @@ class Bookings {
       required this.senderPhotoUrl,
       required this.receiverPhotoUrl,
       required this.status,
-      required this.dateTime,
+      required this.timestamp,
+      required this.bookingDate,
       required this.message,
       required this.senderLocation,
       required this.receiverLocation});
@@ -44,7 +46,8 @@ class Bookings {
         senderPhotoUrl: data['senderPhotoUrl'],
         receiverPhotoUrl: data['receiverPhotoUrl'],
         status: data['status'],
-        dateTime: data['dateTime'],
+        bookingDate: data['bookingDate'],
+        timestamp: data['timestamp'],
         message: data['message'],
         senderLocation: data['senderLocation'],
         receiverLocation: data['receiverLocation']);
@@ -62,7 +65,8 @@ class Bookings {
       'senderPhotoUrl': senderPhotoUrl,
       'receiverPhotoUrl': receiverPhotoUrl,
       'status': status,
-      'dateTime': dateTime,
+      'bookingDate': bookingDate,
+      'timestamp': timestamp,
       'message': message,
       'senderLocation': senderLocation,
       'receiverLocation': receiverLocation,
