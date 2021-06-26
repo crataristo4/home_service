@@ -178,7 +178,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             child: Text(
                               "$message $userName",
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
+                                  fontSize: 18, fontWeight: FontWeight.w500),
                             ),
                           ),
                         ),
