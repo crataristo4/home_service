@@ -2,26 +2,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Bookings {
   final id;
-  final userName;
-  final artisanName;
+  final senderName;
+  final receiverName;
   final senderId;
   final receiverId;
   final senderPhoneNumber;
   final receiverPhoneNumber;
+  final senderPhotoUrl;
+  final receiverPhotoUrl;
   final status;
-  final dateTime;
+  final Timestamp? dateTime;
   final message;
   final GeoPoint? senderLocation;
   final GeoPoint? receiverLocation;
 
   Bookings(
       {required this.id,
-      required this.userName,
-      required this.artisanName,
+      required this.senderName,
+      required this.receiverName,
       required this.senderId,
       required this.receiverId,
       required this.senderPhoneNumber,
       required this.receiverPhoneNumber,
+      required this.senderPhotoUrl,
+      required this.receiverPhotoUrl,
       required this.status,
       required this.dateTime,
       required this.message,
@@ -31,12 +35,14 @@ class Bookings {
   factory Bookings.fromFirestore(Map<String, dynamic> data) {
     return Bookings(
         id: data['id'],
-        userName: data['userName'],
-        artisanName: data['artisanName'],
+        senderName: data['senderName'],
+        receiverName: data['receiverName'],
         senderId: data['senderId'],
         receiverId: data['receiverId'],
         senderPhoneNumber: data['senderPhoneNumber'],
         receiverPhoneNumber: data['receiverPhoneNumber'],
+        senderPhotoUrl: data['senderPhotoUrl'],
+        receiverPhotoUrl: data['receiverPhotoUrl'],
         status: data['status'],
         dateTime: data['dateTime'],
         message: data['message'],
@@ -47,12 +53,14 @@ class Bookings {
   Map<String, dynamic> bookToMap() {
     return {
       'id': id,
-      'userName': userName,
-      'artisanName': artisanName,
+      'senderName': senderName,
+      'receiverName': receiverName,
       'senderId': senderId,
       'receiverId': receiverId,
       'senderPhoneNumber': senderPhoneNumber,
       'receiverPhoneNumber': receiverPhoneNumber,
+      'senderPhotoUrl': senderPhotoUrl,
+      'receiverPhotoUrl': receiverPhotoUrl,
       'status': status,
       'dateTime': dateTime,
       'message': message,
