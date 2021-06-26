@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:home_service/models/artwork.dart';
+import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeAgo;
 import 'package:url_launcher/url_launcher.dart';
 
 import 'home.dart';
@@ -30,7 +33,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
     }
   }
 
-  Widget _buildArtworksCard() {
+  Widget _buildArtworksCard(List<ArtworkModel> artworkList, int index) {
     return Container(
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -42,13 +45,27 @@ class _ArtworksPageState extends State<ArtworksPage> {
             children: [
               Row(
                 children: [
+                  //artisan image
                   CircleAvatar(
-                    foregroundImage: NetworkImage(widget.image),
+                    foregroundImage: CachedNetworkImageProvider(
+                        artworkList[index].artworkImageUrl),
                   ),
                   SizedBox(width: 10),
-                  Text(
-                    widget.name,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        //artisan name
+                        artworkList[index].artisanName,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      Text(
+                        //TIME POSTED
+                        timeAgo.format(artworkList[index].timeStamp.toDate()),
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    ],
                   )
                 ],
               ),
@@ -68,10 +85,11 @@ class _ArtworksPageState extends State<ArtworksPage> {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: CachedNetworkImage(
+              //artwork image
               height: 200,
-              placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-              imageUrl:
-                  'https://lh3.googleusercontent.com/proxy/7vucF8d5EU3szbWBNMa9ulwtXan5HwwLy_vL4bGTMrRs2fmLbbyEl-fE8sBOrPKZiePL9uQAXj9LR-bCVQqBpw-Ow8oj5VsfqCLwZj_ud1Ynq2ESbDyP82GM58jQsWTR_3NJxPzfJS8',
+              placeholder: (context, url) =>
+                  Center(child: CircularProgressIndicator()),
+              imageUrl: artworkList[index].artworkImageUrl,
               fit: BoxFit.cover,
             ),
           ),
@@ -82,17 +100,18 @@ class _ArtworksPageState extends State<ArtworksPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Category: Plumber',
+                  Text('Category: ${artworkList[index].artisanCategory}',
                       style: TextStyle(color: Colors.grey)),
                   SizedBox(height: 10),
-                  Text('Priced @: GH200', style: TextStyle(color: Colors.grey)),
+                  Text('Priced @: ${artworkList[index].artworkPrice}',
+                      style: TextStyle(color: Colors.grey)),
                 ],
               ),
               ElevatedButton(
                   onPressed: () => setState(() {
-                        _launched = _makePhoneCall(
-                            'tel:${firebaseAuth.currentUser?.phoneNumber}');
-                      }),
+                    _launched = _makePhoneCall(
+                        'tel:${firebaseAuth.currentUser?.phoneNumber}');
+                  }),
                   child: Text('CALL'))
             ],
           ),
@@ -103,14 +122,22 @@ class _ArtworksPageState extends State<ArtworksPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.all(24),
-        child: ListView.builder(
-            itemCount: 8,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                children: [_buildArtworksCard(), SizedBox(height: 24)],
-              );
-            }));
+    final artworkList = Provider.of<List<ArtworkModel>>(context);
+    return Builder(
+      builder: (BuildContext context) {
+        return Container(
+            margin: EdgeInsets.all(24),
+            child: ListView.builder(
+                itemCount: artworkList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    children: [
+                      _buildArtworksCard(artworkList, index),
+                      SizedBox(height: 24)
+                    ],
+                  );
+                }));
+      },
+    );
   }
 }
