@@ -8,7 +8,7 @@ import 'package:home_service/ui/views/home/home.dart';
 import 'package:uuid/uuid.dart';
 
 class BookingsProvider with ChangeNotifier {
-  String? _id, bookingDate, _message, _status;
+  String? _id, _bookingDateTime, _message, _status;
   String? _senderName, _senderId, _senderPhoneNumber, _senderPhotoUrl;
   GeoPoint? _senderLocation, _receiverLocation;
   String? _receiverName, _receiverId, _receiverPhoneNumber, _receiverPhotoUrl;
@@ -17,16 +17,16 @@ class BookingsProvider with ChangeNotifier {
   BookingService bookingService = BookingService();
   var _uuid = Uuid();
 
-  get dateTime => bookingDate;
+  get bookingDateTime => _bookingDateTime;
 
-  changeDateTime(value) {
-    bookingDate = value;
+  changeBookingDateTime(value) {
+    _bookingDateTime = value;
     notifyListeners();
   }
 
   get message => _message;
 
-  setMessage(value) {
+  changeMessage(value) {
     _message = value;
     notifyListeners();
   }
@@ -54,12 +54,12 @@ class BookingsProvider with ChangeNotifier {
   loadBookData(Bookings bookings) {}
 
   createNewBookings(
-      BuildContext context,
-      String? receiverName,
-      String? receiverId,
-      String? receiverPhoneNumber,
-      String? receiverPhotoUrl,
-      String? message) {
+    BuildContext context,
+    String? receiverName,
+    String? receiverId,
+    String? receiverPhoneNumber,
+    String? receiverPhotoUrl,
+  ) {
     _id = _uuid.v4();
     //sender's details
     _senderName = userName;
@@ -92,8 +92,8 @@ class BookingsProvider with ChangeNotifier {
         receiverPhotoUrl: _receiverPhotoUrl,
         status: _status,
         timestamp: timeStamp,
-        bookingDate: bookingDate,
-        message: _message,
+        bookingDate: bookingDateTime,
+        message: message,
         senderLocation: _senderLocation,
         receiverLocation: _receiverLocation);
 
