@@ -5,7 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 import 'package:url_launcher/url_launcher.dart';
 
-import 'home.dart';
+import '../../../constants.dart';
+
 
 class ArtworksPage extends StatefulWidget {
   static const routeName = '/artworkPage';
@@ -99,14 +100,14 @@ class _ArtworksPageState extends State<ArtworksPage> {
                   Text('Category: ${artworkList[index].artisanCategory}',
                       style: TextStyle(color: Colors.grey)),
                   SizedBox(height: 10),
-                  Text('Priced @: ${artworkList[index].artworkPrice}',
+                  Text('Priced @: $kGhanaCedi${artworkList[index].artworkPrice}',
                       style: TextStyle(color: Colors.grey)),
                 ],
               ),
               ElevatedButton(
                   onPressed: () => setState(() {
                         _launched = _makePhoneCall(
-                            'tel:${firebaseAuth.currentUser?.phoneNumber}');
+                            'tel:${artworkList[index].artisanPhoneNumber}');
                       }),
                   child: Text('CALL'))
             ],

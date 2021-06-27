@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'add_artwork.dart';
 import '../../../constants.dart';
 import '../home/home.dart';
 
@@ -61,7 +62,12 @@ class _OptionsPageState extends State<OptionsPage> {
                     getUserType == 'user'
                         ? Container()
                         : IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => AddArtwork());
+                            },
                             icon: Icon(
                               Icons.add_a_photo,
                               size: 30,
