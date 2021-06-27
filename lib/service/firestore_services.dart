@@ -25,7 +25,7 @@ class UserService {
     });
   }
 
-  //create an artisan
+  //create a user
   Future<void> createUser(Users users, BuildContext context) {
     return firestoreService
         .collection('Users')

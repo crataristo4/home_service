@@ -71,7 +71,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
               height: 200,
               placeholder: (context, url) => Center(child: CircularProgressIndicator()),
               imageUrl:
-                  'https://lh3.googleusercontent.com/proxy/7vucF8d5EU3szbWBNMa9ulwtXan5HwwLy_vL4bGTMrRs2fmLbbyEl-fE8sBOrPKZiePL9uQAXj9LR-bCVQqBpw-Ow8oj5VsfqCLwZj_ud1Ynq2ESbDyP82GM58jQsWTR_3NJxPzfJS8',
+                  'https://media.istockphoto.com/photos/set-of-plumbing-tools-on-wooden-table-background-picture-id1153465197?k=6&m=1153465197&s=612x612&w=0&h=uB1eYMMxOaKiCX12rUy_RTec9cfcoPpHAMWj8qor2TY=',
               fit: BoxFit.cover,
             ),
           ),

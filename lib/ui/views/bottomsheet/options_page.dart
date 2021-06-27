@@ -12,6 +12,7 @@ import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants.dart';
+import '../home/home.dart';
 
 class OptionsPage extends StatefulWidget {
   @override
@@ -35,23 +36,39 @@ class _OptionsPageState extends State<OptionsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                InkWell(
-                  onTap: () => Navigator.pop(context),
-                  child: Container(
-                    margin: EdgeInsets.all(tenDp),
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 0.3, color: Colors.grey),
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(thirtyDp)),
-                    child: Padding(
-                      padding: EdgeInsets.all(eightDp),
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.grey,
-                        size: sixteenDp,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        margin: EdgeInsets.all(tenDp),
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 0.3, color: Colors.grey),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(thirtyDp)),
+                        child: Padding(
+                          padding: EdgeInsets.all(eightDp),
+                          child: Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.grey,
+                            size: sixteenDp,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    getUserType == 'user'
+                        ? Container()
+                        : IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.add_a_photo,
+                              size: 30,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            tooltip: 'Add Artwork',
+                          )
+                  ],
                 ),
                 buildOptionsList(
                     editProfile, editProfileDes, Icons.edit, Colors.indigo),
