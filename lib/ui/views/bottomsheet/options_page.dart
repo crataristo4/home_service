@@ -186,17 +186,22 @@ class _OptionsPageState extends State<OptionsPage> {
             await FirebaseAuth.instance.signOut();
             //clear all shared preference data to avoid getting old data when user changes phone number
             SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.remove('name');
+            prefs.remove('photoUrl');
+            prefs.remove('userType');
+            prefs.remove('category');
+            prefs.clear();
 
-            if (getUserType == user) {
+            /*  if (getUserType == user) {
               prefs.remove('name');
               prefs.remove('photoUrl');
               prefs.remove('userType');
-            } else {
+            } else if (getUserType == artisan) {
               prefs.remove('name');
               prefs.remove('photoUrl');
               prefs.remove('userType');
               prefs.remove('category');
-            }
+            }*/
 
             //close alert dialog
             Navigator.pop(context);

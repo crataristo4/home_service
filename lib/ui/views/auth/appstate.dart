@@ -6,6 +6,7 @@ import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/views/profile/complete_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 String? currentUserId;
 String? phoneNumber;
@@ -77,10 +78,18 @@ class _AppStateState extends State<AppState> {
                 print(
                     "type from database is $type And type from shared pref is $getUserType");
                 //delete user record
-                await usersDbRef.doc(currentUserId).delete().then((value) {
-                  //then navigate to complete profile
-                  pushToCompleteProfile();
-                });
+                await usersDbRef
+                    .doc(currentUserId)
+                    .delete()
+                    .then((value) {})
+                    .then((value) {
+                  //delete image from storage
+                  firebase_storage.Reference deleteProfilePhoto =
+                      firebase_storage.FirebaseStorage.instance
+                          .refFromURL(imageUrl!);
+                  deleteProfilePhoto.delete();
+                }).whenComplete(() => //then navigate to complete profile
+                        pushToCompleteProfile());
                 print("Deleting user record");
               } else {
                 //if true  ... shared pref keys for user name and photoUrl can be null so get data
@@ -88,6 +97,7 @@ class _AppStateState extends State<AppState> {
                   userName = documentSnapshot.get(FieldPath(['userName']));
                 } else {
                   userName = documentSnapshot.get(FieldPath(['artisanName']));
+                  category = documentSnapshot.get(FieldPath(['category']));
                 }
 
                 imageUrl = documentSnapshot.get(FieldPath(['photoUrl']));
@@ -95,6 +105,7 @@ class _AppStateState extends State<AppState> {
                 //put values into shared pref to avoid null values
                 prefs.setString("name", userName!);
                 prefs.setString("photoUrl", imageUrl!);
+                prefs.setString("category", category!);
 
                 print("Username after loading database is: $userName");
               }

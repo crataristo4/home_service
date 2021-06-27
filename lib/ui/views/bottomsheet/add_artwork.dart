@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/provider/artwork_provider.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
@@ -146,6 +149,10 @@ class _AddArtworkState extends State<AddArtwork> {
         //todo -- update user profile
       }).whenComplete(() => //push to db
           artworkProvider.createArtwork(context));
+      //ADD TO ARTWORK URL ON USER PROFILE
+      usersDbRef.doc(currentUserId).update({
+        "artworkUrl": FieldValue.arrayUnion([imageUrl])
+      });
     } else {
       // no internet
       await new Future.delayed(const Duration(seconds: 2));
@@ -208,7 +215,8 @@ class _AddArtworkState extends State<AddArtwork> {
                                 width: MediaQuery.of(context).size.width,
                                 child: Center(
                                     child: Text('Click Me To Add Artwork',
-                                        style: TextStyle(color: Colors.black54))),
+                                        style:
+                                            TextStyle(color: Colors.black54))),
                               ),
                             ),
                           )
@@ -237,7 +245,7 @@ class _AddArtworkState extends State<AddArtwork> {
                                     borderRadius:
                                         BorderRadius.circular(eightDp))),
                             onPressed: () {
-                               if (_formKey.currentState!.validate() &&
+                              if (_formKey.currentState!.validate() &&
                                   _image != null) {
                                 // trigger function
                                 createArtworkToDb();

@@ -45,6 +45,7 @@ class ArtworkProvider with ChangeNotifier {
       _artisanCategory = category;
 
       _timeStamp = timeStamp;
+      _artisanPhotoUrl = imageUrl;
 
       ArtworkModel artworkModel = ArtworkModel(
           artworkImageUrl: artworkImageUrl,
