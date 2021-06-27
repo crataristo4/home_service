@@ -182,17 +182,10 @@ class _OptionsPageState extends State<OptionsPage> {
         TextButton(
           child: Text(yesLogMeOut, style: TextStyle(color: Colors.red)),
           onPressed: () async {
-            //if yes ... sign out from firebase
-            await FirebaseAuth.instance.signOut();
             //clear all shared preference data to avoid getting old data when user changes phone number
             SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.remove('name');
-            prefs.remove('photoUrl');
-            prefs.remove('userType');
-            prefs.remove('category');
-            prefs.clear();
 
-            /*  if (getUserType == user) {
+            if (getUserType == user) {
               prefs.remove('name');
               prefs.remove('photoUrl');
               prefs.remove('userType');
@@ -201,7 +194,11 @@ class _OptionsPageState extends State<OptionsPage> {
               prefs.remove('photoUrl');
               prefs.remove('userType');
               prefs.remove('category');
-            }*/
+              prefs.remove('expLevel');
+            }
+
+            //if yes ... sign out from firebase
+            await FirebaseAuth.instance.signOut();
 
             //close alert dialog
             Navigator.pop(context);
