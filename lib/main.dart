@@ -1,10 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/models/users.dart';
+import 'package:home_service/provider/artwork_provider.dart';
 import 'package:home_service/provider/auth_provider.dart';
 import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/route_generator.dart';
+import 'package:home_service/service/artwork_service.dart';
 import 'package:home_service/service/booking_service.dart';
 import 'package:home_service/service/firestore_services.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
@@ -29,6 +32,7 @@ class EntryPoint extends StatelessWidget {
     final getAllArtisan = UserService();
     final getPendingBookings = BookingService();
     final getConfirmedBookings = BookingService();
+    final getArtworks = ArtworkService();
 
     return MultiProvider(
       providers: [
@@ -52,6 +56,13 @@ class EntryPoint extends StatelessWidget {
         StreamProvider<List<Bookings>>.value(
             value: getConfirmedBookings.getConfirmedBookings(),
             initialData: []),
+
+        ChangeNotifierProvider(create: (context) => ArtworkProvider()),
+
+        StreamProvider<List<ArtworkModel>>.value(
+          initialData: [],
+          value: getArtworks.fetchAllArtwork(),
+        ),
       ],
       child: MaterialApp(
         //checks and switches page

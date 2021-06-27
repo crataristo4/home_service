@@ -2,62 +2,74 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Bookings {
   final id;
-  final userName;
-  final artisanName;
+  final senderName;
+  final receiverName;
   final senderId;
   final receiverId;
   final senderPhoneNumber;
   final receiverPhoneNumber;
+  final senderPhotoUrl;
+  final receiverPhotoUrl;
   final status;
-  final dateTime;
+  final dynamic timestamp;
+  final String? bookingDate;
   final message;
-  final GeoPoint? userLocation;
-  final GeoPoint? artisanLocation;
+  final GeoPoint? senderLocation;
+  final GeoPoint? receiverLocation;
 
   Bookings(
       {required this.id,
-      required this.userName,
-      required this.artisanName,
+      required this.senderName,
+      required this.receiverName,
       required this.senderId,
       required this.receiverId,
       required this.senderPhoneNumber,
       required this.receiverPhoneNumber,
+      required this.senderPhotoUrl,
+      required this.receiverPhotoUrl,
       required this.status,
-      required this.dateTime,
+      required this.timestamp,
+      required this.bookingDate,
       required this.message,
-      required this.userLocation,
-      required this.artisanLocation});
+      required this.senderLocation,
+      required this.receiverLocation});
 
   factory Bookings.fromFirestore(Map<String, dynamic> data) {
     return Bookings(
         id: data['id'],
-        userName: data['userName'],
-        artisanName: data['artisanName'],
+        senderName: data['senderName'],
+        receiverName: data['receiverName'],
         senderId: data['senderId'],
         receiverId: data['receiverId'],
         senderPhoneNumber: data['senderPhoneNumber'],
         receiverPhoneNumber: data['receiverPhoneNumber'],
+        senderPhotoUrl: data['senderPhotoUrl'],
+        receiverPhotoUrl: data['receiverPhotoUrl'],
         status: data['status'],
-        dateTime: data['dateTime'],
+        bookingDate: data['bookingDate'],
+        timestamp: data['timestamp'],
         message: data['message'],
-        userLocation: data['userLocation'],
-        artisanLocation: data['artisanLocation']);
+        senderLocation: data['senderLocation'],
+        receiverLocation: data['receiverLocation']);
   }
 
   Map<String, dynamic> bookToMap() {
     return {
       'id': id,
-      'userName': userName,
-      'artisanName': artisanName,
+      'senderName': senderName,
+      'receiverName': receiverName,
       'senderId': senderId,
       'receiverId': receiverId,
       'senderPhoneNumber': senderPhoneNumber,
       'receiverPhoneNumber': receiverPhoneNumber,
+      'senderPhotoUrl': senderPhotoUrl,
+      'receiverPhotoUrl': receiverPhotoUrl,
       'status': status,
-      'dateTime': dateTime,
+      'bookingDate': bookingDate,
+      'timestamp': timestamp,
       'message': message,
-      'userLocation': userLocation,
-      'artisanLocation': artisanLocation,
+      'senderLocation': senderLocation,
+      'receiverLocation': receiverLocation,
     };
   }
 }

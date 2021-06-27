@@ -44,6 +44,6 @@ List<SliderModel> getSlides = [
       desc: scheduleDes),
   SliderModel(
       imageAssetPath: "assets/images/c.webp",
-      title: artwork,
+      title: Artwork,
       desc: artworkDesc),
 ];

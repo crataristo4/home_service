@@ -1,23 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:home_service/constants.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
+import 'package:home_service/ui/views/home/bookings/confirmed_bookings.dart';
+import 'package:home_service/ui/views/home/bookings/pending_bookings.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
+import 'package:home_service/ui/widgets/progress_dialog.dart';
+
+import '../constants.dart';
 
 class BookingService {
   final firestoreService = FirebaseFirestore.instance;
 
   //create new booking
-  Future<void> createBooking(Bookings bookings, BuildContext context) {
+  Future<void> createBooking(
+      Bookings bookings, BuildContext context, dynamic key) {
     return firestoreService
         .collection('Bookings')
         .doc(bookings.id)
         .set(bookings.bookToMap())
         .whenComplete(() async {
-      showSuccess(context);
+      showSuccess(context, key);
     }).catchError((onError) {
       showFailure(context, onError);
     });
@@ -38,15 +43,15 @@ class BookingService {
 
   //get all bookings by status - Pending ,  order by user type
   Stream<List<Bookings>> getPendingBookings() {
-    return firestoreService.collection('Bookings').snapshots().map(
+    /*   return firestoreService.collection('Bookings').snapshots().map(
         (snapshots) => snapshots.docs
             .map((document) => Bookings.fromFirestore(document.data()))
-            .toList(growable: true));
+            .toList(growable: true));*/
     if (getUserType == user) {
       return firestoreService
           .collection('Bookings')
           .orderBy("dateTime")
-          .where("userId", isEqualTo: currentUserId)
+          .where("senderId", isEqualTo: currentUserId)
           .where("status", isEqualTo: pending)
           .limit(20)
           .snapshots()
@@ -60,7 +65,7 @@ class BookingService {
       return firestoreService
           .collection('Bookings')
           .orderBy("dateTime")
-          .where("artisan", isEqualTo: currentUserId)
+          .where("receiverId", isEqualTo: currentUserId)
           .where("status", isEqualTo: pending)
           .limit(20)
           .snapshots()
@@ -79,7 +84,7 @@ class BookingService {
       return firestoreService
           .collection('Bookings')
           .orderBy("dateTime")
-          .where("userId", isEqualTo: currentUserId)
+          .where("senderId", isEqualTo: currentUserId)
           .where("status", isEqualTo: confirmed)
           .limit(20)
           .snapshots()
@@ -90,7 +95,7 @@ class BookingService {
       return firestoreService
           .collection('Bookings')
           .orderBy("dateTime")
-          .where("artisanId", isEqualTo: currentUserId)
+          .where("receiverId", isEqualTo: currentUserId)
           .where("status", isEqualTo: confirmed)
           .limit(20)
           .snapshots()
@@ -100,12 +105,19 @@ class BookingService {
     }
   }
 
-  showSuccess(context) async {
-    await Future.delayed(Duration(seconds: 3));
+  showSuccess(context, loadingKey) async {
+    Dialogs.showLoadingDialog(
+        //show dialog and delay
+        context,
+        loadingKey,
+        bookingARequest,
+        Colors.white70);
+    await Future.delayed(const Duration(seconds: 5));
+    Navigator.of(context, rootNavigator: false).pop();
+
     ShowAction().showToast(successful, Colors.black); //show complete msg
-    Navigator.of(context, rootNavigator: true).pop();
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(BookingPage.routeName, (route) => false);
+
+    Navigator.of(context).pushNamed(BookingPage.routeName);
   }
 
   showFailure(context, error) {

@@ -41,7 +41,6 @@ class AuthProvider with ChangeNotifier {
       );
       final user = await _firebaseAuth.signInWithCredential(credential);
       final User? currentUser = _firebaseAuth.currentUser;
-      print(user);
 
       if (currentUser!.uid != "") {
         print(currentUser.uid);

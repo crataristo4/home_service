@@ -5,6 +5,7 @@ const getApp = 'Home servicing app';
 const shareText = 'Looking for a home servicing app where you can find \n'
     'lots of artisans and handy men?\n'
     'Then Download => https://play.google.com/store/apps/details?id=com.home.service.app';
+//.......................................................................................................................
 //artisans
 const carpenter = 'Carpenter';
 const maison = 'Maison';
@@ -86,7 +87,10 @@ const search = 'Search';
 const scheduleDes =
     'Book and schedule appointments with artisans to help them get your works done';
 const book = 'Book';
-const artwork = 'Artwork';
+const submitNow = 'Submit Now';
+const Artwork = 'Artwork';
+const Artisanz = 'Artisans';
+const Bookingz = 'Bookings';
 const artworkDesc =
     'Have a view of the artistic talents ,designs , works  and creativity of the artisans';
 const photoLibrary = 'Photo Library';
@@ -136,8 +140,12 @@ const labelSkip = 'Skip';
 const labelNext = 'Next';
 const labelGetStarted = 'Get started';
 const sendingCode = 'Please wait sending code...';
+const bookingARequest = 'Booking a request ,please wait...';
 const unableToConnect = 'Unable to connect';
 const searchService = "Search for a service";
+const msgDes =
+    "This helps an artisan to understand and quickly follow up on the booking";
+const enterMsg = "Let Artisan know what you want";
 const sixteenDp = 16.0;
 const eightDp = 8.0;
 const fourDp = 4.0;
