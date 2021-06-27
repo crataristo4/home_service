@@ -6,7 +6,7 @@ import 'package:timeago/timeago.dart' as timeAgo;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants.dart';
-
+import '../profile/artisan_profile.dart';
 
 class ArtworksPage extends StatefulWidget {
   static const routeName = '/artworkPage';
@@ -29,90 +29,101 @@ class _ArtworksPageState extends State<ArtworksPage> {
   }
 
   Widget _buildArtworksCard(List<ArtworkModel> artworkList, int index) {
-    return Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-          color: Colors.grey[100], borderRadius: BorderRadius.circular(10)),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  //artisan image
-                  CircleAvatar(
-                    foregroundImage: CachedNetworkImageProvider(
-                        artworkList[index].artworkImageUrl),
-                  ),
-                  SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        //artisan name
-                        artworkList[index].artisanName,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      Text(
-                        //TIME POSTED
-                        timeAgo.format(artworkList[index].timeStamp.toDate()),
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _favorite = !_favorite;
-                    });
-                  },
-                  icon: Icon(
-                    _favorite ? Icons.favorite : Icons.favorite_border,
-                    color: Colors.red,
-                  ))
-            ],
+    return GestureDetector(
+      onTap: () => Navigator.push<void>(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) =>  ArtisanProfile(
+            artisanId: artworkList[index].artisanId,
           ),
-          SizedBox(height: 10),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: CachedNetworkImage(
-              //artwork image
-              height: 200,
-
-              placeholder: (context, url) =>
-                  Center(child: CircularProgressIndicator()),
-              imageUrl: artworkList[index].artworkImageUrl,
-
-              fit: BoxFit.cover,
+        ),
+      ),
+      child: Container(
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+            color: Colors.grey[100], borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    //artisan image
+                    CircleAvatar(
+                      foregroundImage: CachedNetworkImageProvider(
+                          artworkList[index].artisanPhotoUrl),
+                    ),
+                    SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          //artisan name
+                          artworkList[index].artisanName,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        Text(
+                          //TIME POSTED
+                          timeAgo.format(artworkList[index].timeStamp.toDate()),
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _favorite = !_favorite;
+                      });
+                    },
+                    icon: Icon(
+                      _favorite ? Icons.favorite : Icons.favorite_border,
+                      color: Colors.red,
+                    ))
+              ],
             ),
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Category: ${artworkList[index].artisanCategory}',
-                      style: TextStyle(color: Colors.grey)),
-                  SizedBox(height: 10),
-                  Text('Priced @: $kGhanaCedi${artworkList[index].artworkPrice}',
-                      style: TextStyle(color: Colors.grey)),
-                ],
+            SizedBox(height: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: CachedNetworkImage(
+                //artwork image
+                height: 200,
+
+                placeholder: (context, url) =>
+                    Center(child: CircularProgressIndicator()),
+                imageUrl: artworkList[index].artworkImageUrl,
+
+                fit: BoxFit.cover,
               ),
-              ElevatedButton(
-                  onPressed: () => setState(() {
-                        _launched = _makePhoneCall(
-                            'tel:${artworkList[index].artisanPhoneNumber}');
-                      }),
-                  child: Text('CALL'))
-            ],
-          ),
-        ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Category: ${artworkList[index].artisanCategory}',
+                        style: TextStyle(color: Colors.grey)),
+                    SizedBox(height: 10),
+                    Text(
+                        'Priced @: $kGhanaCedi${artworkList[index].artworkPrice}',
+                        style: TextStyle(color: Colors.grey)),
+                  ],
+                ),
+                ElevatedButton(
+                    onPressed: () => setState(() {
+                          _launched = _makePhoneCall(
+                              'tel:${artworkList[index].artisanPhoneNumber}');
+                        }),
+                    child: Text('CALL'))
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
