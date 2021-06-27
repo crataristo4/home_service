@@ -33,7 +33,7 @@ class _OptionsPageState extends State<OptionsPage> {
                 topLeft: Radius.circular(twentyDp),
                 topRight: Radius.circular(twentyDp))),
         child: Padding(
-          padding: const EdgeInsets.all(twentyFourDp),
+          padding: const EdgeInsets.all(sixteenDp),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,11 +84,11 @@ class _OptionsPageState extends State<OptionsPage> {
                 buildOptionsList(
                     share, shareDes, Icons.share_sharp, Colors.deepOrange),
                 buildOptionsList(report, reportDes, Icons.report, Colors.amber),
-                SizedBox(height: 10),
                 //logout button
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.only(right: sixteenDp, top: eightDp),
+                  margin: EdgeInsets.only(
+                      right: sixteenDp, top: eightDp, left: sixteenDp),
                   child: SizedBox(
                     height: fortyDp,
                     child: TextButton(
