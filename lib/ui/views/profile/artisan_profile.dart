@@ -24,10 +24,6 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
 
   @override
   Widget build(BuildContext context) {
-    print(_seletedArtisan!.artworkUrl.length);
-    print(widget.artisanId);
-    print(_seletedArtisan!.artisanName);
-    print(_seletedArtisan!.id);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
