@@ -12,9 +12,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'add_artwork.dart';
 import '../../../constants.dart';
 import '../home/home.dart';
+import 'add_artwork.dart';
 
 class OptionsPage extends StatefulWidget {
   @override

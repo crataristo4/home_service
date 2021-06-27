@@ -105,7 +105,8 @@ class BookingService {
     await Future.delayed(const Duration(seconds: 3));
     Navigator.of(context, rootNavigator: true).pop();
     ShowAction().showToast(successful, Colors.black); //show complete msg
-    Navigator.of(context).pushNamed(BookingPage.routeName);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(BookingPage.routeName, (route) => false);
   }
 
   showFailure(context, error) {
