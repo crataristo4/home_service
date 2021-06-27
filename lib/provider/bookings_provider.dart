@@ -14,9 +14,6 @@ class BookingsProvider with ChangeNotifier {
   String? _receiverName, _receiverId, _receiverPhoneNumber, _receiverPhotoUrl;
   final DateTime timeStamp = DateTime.now();
 
-  //loading key
-  final GlobalKey<State> _loadingKey = new GlobalKey<State>();
-
   BookingService bookingService = BookingService();
   var _uuid = Uuid();
 
@@ -101,7 +98,7 @@ class BookingsProvider with ChangeNotifier {
         receiverLocation: _receiverLocation);
 
     //create book
-    bookingService.createBooking(newBooking, context, _loadingKey);
+    bookingService.createBooking(newBooking, context);
   }
 
   updateBook() {

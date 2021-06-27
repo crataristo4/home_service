@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
-import 'package:home_service/ui/views/home/bookings/confirmed_bookings.dart';
-import 'package:home_service/ui/views/home/bookings/pending_bookings.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
-import 'package:home_service/ui/widgets/progress_dialog.dart';
 
 import '../constants.dart';
 
@@ -15,14 +12,13 @@ class BookingService {
   final firestoreService = FirebaseFirestore.instance;
 
   //create new booking
-  Future<void> createBooking(
-      Bookings bookings, BuildContext context, dynamic key) {
+  Future<void> createBooking(Bookings bookings, BuildContext context) {
     return firestoreService
         .collection('Bookings')
         .doc(bookings.id)
         .set(bookings.bookToMap())
         .whenComplete(() async {
-      showSuccess(context, key);
+      showSuccess(context);
     }).catchError((onError) {
       showFailure(context, onError);
     });
@@ -53,7 +49,7 @@ class BookingService {
           .orderBy("dateTime")
           .where("senderId", isEqualTo: currentUserId)
           .where("status", isEqualTo: pending)
-          .limit(20)
+          .limit(50)
           .snapshots()
           .map((snapshots) => snapshots.docs
               .map((document) => Bookings.fromFirestore(document.data()))
@@ -67,7 +63,7 @@ class BookingService {
           .orderBy("dateTime")
           .where("receiverId", isEqualTo: currentUserId)
           .where("status", isEqualTo: pending)
-          .limit(20)
+          .limit(50)
           .snapshots()
           .map((snapshots) => snapshots.docs
               .map((document) => Bookings.fromFirestore(document.data()))
@@ -105,18 +101,10 @@ class BookingService {
     }
   }
 
-  showSuccess(context, loadingKey) async {
-    Dialogs.showLoadingDialog(
-        //show dialog and delay
-        context,
-        loadingKey,
-        bookingARequest,
-        Colors.white70);
-    await Future.delayed(const Duration(seconds: 5));
-    Navigator.of(context, rootNavigator: false).pop();
-
+  showSuccess(context) async {
+    await Future.delayed(const Duration(seconds: 3));
+    Navigator.of(context, rootNavigator: true).pop();
     ShowAction().showToast(successful, Colors.black); //show complete msg
-
     Navigator.of(context).pushNamed(BookingPage.routeName);
   }
 
