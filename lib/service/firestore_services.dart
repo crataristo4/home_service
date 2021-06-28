@@ -90,10 +90,11 @@ class UserService {
   }
 
   //get all artisans from db
+  //todo -- remove current artisan from list
   Stream<List<Artisans>> getAllArtisans() {
     return firestoreService
         .collection('Users')
-        .orderBy("artisanName")
+        .orderBy("name")
         .where("type", isEqualTo: artisan)
         .limit(20)
         .snapshots()
