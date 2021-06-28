@@ -98,11 +98,11 @@ class _AppStateState extends State<AppState> {
                     .then((value) {
                   //delete image from storage
                   firebase_storage.Reference deleteProfilePhoto =
-                  firebase_storage.FirebaseStorage.instance
-                      .refFromURL(imageUrl!);
+                      firebase_storage.FirebaseStorage.instance
+                          .refFromURL(imageUrl!);
                   deleteProfilePhoto.delete();
                 }).whenComplete(() => //then navigate to complete profile
-                pushToCompleteProfile());
+                        pushToCompleteProfile());
                 print("Deleting user record");
               } else {
                 //if true  ... shared pref keys for user name and photoUrl can be null so get data
@@ -155,10 +155,7 @@ class _AppStateState extends State<AppState> {
                 body: currentUserId != null ||
                         imageUrl != null ||
                         userName != null
-                    ? Home(
-                        name: userName,
-                        image: imageUrl,
-                      )
+                    ? Home()
                     : RegistrationPage())),
       ),
     );

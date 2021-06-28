@@ -9,6 +9,7 @@ import 'package:home_service/ui/views/help/help_page.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/views/profile/edit_profile.dart';
 import 'package:home_service/ui/widgets/actions.dart';
+import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -197,9 +198,19 @@ class _OptionsPageState extends State<OptionsPage> {
               prefs.remove('category');
               prefs.remove('expLevel');
             }
+            //close alert dialog
+            Navigator.pop(context);
 
             //if yes ... sign out from firebase
             await FirebaseAuth.instance.signOut();
+
+            Dialogs.showLoadingDialog(
+                //show dialog and delay
+                context,
+                loadingKey,
+                loggingYouOut,
+                Colors.white70);
+            await Future.delayed(const Duration(seconds: 3));
 
             //close alert dialog
             Navigator.pop(context);

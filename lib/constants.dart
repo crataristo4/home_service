@@ -143,6 +143,7 @@ const labelSkip = 'Skip';
 const labelNext = 'Next';
 const labelGetStarted = 'Get started';
 const sendingCode = 'Please wait sending code...';
+const loggingYouOut = 'logging you out ...';
 const bookingARequest = 'Booking a request ,please wait...';
 const unableToConnect = 'Unable to connect';
 const searchService = "Search for a service";

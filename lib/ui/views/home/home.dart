@@ -25,10 +25,8 @@ String? getUserType;
 
 class Home extends StatefulWidget {
   static const routeName = '/homePage';
-  final name;
-  final image;
 
-  Home({Key? key, this.name, this.image}) : super(key: key);
+  Home({Key? key}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();

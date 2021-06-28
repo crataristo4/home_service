@@ -58,11 +58,7 @@ class RouteGenerator {
 
       //default home page for all users
       case Home.routeName:
-        return MaterialPageRoute(
-            builder: (_) => Home(
-                  name: args as String,
-                  image: args,
-                ));
+        return MaterialPageRoute(builder: (_) => Home());
 
       //help and support page where users can contact us
       case HelpPage.routeName:
