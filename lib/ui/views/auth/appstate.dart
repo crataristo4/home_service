@@ -107,9 +107,9 @@ class _AppStateState extends State<AppState> {
               } else {
                 //if true  ... shared pref keys for user name and photoUrl can be null so get data
                 if (getUserType == user) {
-                  userName = documentSnapshot.get(FieldPath(['userName']));
+                  userName = documentSnapshot.get(FieldPath(['name']));
                 } else if (getUserType == artisan) {
-                  userName = documentSnapshot.get(FieldPath(['artisanName']));
+                  userName = documentSnapshot.get(FieldPath(['name']));
                   category = documentSnapshot.get(FieldPath(['category']));
                   expLevel = documentSnapshot.get(FieldPath(['expLevel']));
                 }

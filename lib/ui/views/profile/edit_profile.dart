@@ -115,7 +115,7 @@ class _EditProfileState extends State<EditProfile> {
             //first update provider
             userUpdateProvider.changeName(value);
             //then push to database
-            await Future.delayed(Duration(seconds: 10));
+            await Future.delayed(Duration(seconds: 3));
             userUpdateProvider.updateUserName(context);
           },
           decoration: InputDecoration(
@@ -238,9 +238,13 @@ class _EditProfileState extends State<EditProfile> {
                       experienceLvl,
                       style: TextStyle(color: Color(0xFF757575), fontSize: 16),
                     ),
-                    onChanged: (String? value) {
+                    onChanged: (String? value) async {
                       //update provider
                       userUpdateProvider.changeArtisanExperience(value);
+                      //push to database ..
+                      await Future.delayed(Duration(seconds: 3));
+                      userUpdateProvider.updateArtisanExperience(context);
+
                       setState(() {
                         _selectedExperience = value;
                       });
@@ -464,7 +468,13 @@ class _EditProfileState extends State<EditProfile> {
                             height: sixteenDp,
                           ),
                           buildPhoneNumber(),
+                          SizedBox(
+                            height: sixteenDp,
+                          ),
                           buildCategory(),
+                          SizedBox(
+                            height: sixteenDp,
+                          ),
                           buildArtisanExperience()
                         ],
                       ),

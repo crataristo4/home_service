@@ -62,7 +62,7 @@ class UserProvider with ChangeNotifier {
     if (getUserType == artisan) {
       //creates a new artisan object
       Artisans newArtisan = Artisans(
-          artisanName: name,
+          name: name,
           photoUrl: photoUrl,
           phoneNumber: _phoneNumber!,
           id: _id!,
@@ -70,7 +70,6 @@ class UserProvider with ChangeNotifier {
           category: category,
           type: _type!,
           expLevel: expLevel,
-          artworkUrl: [],
           location: new GeoPoint(0, 0));
 
       await userData.setString("category", category);
@@ -83,7 +82,7 @@ class UserProvider with ChangeNotifier {
     } else if (getUserType == user) {
       // create new  user object
       Users newUser = Users(
-          userName: name,
+          name: name,
           photoUrl: photoUrl,
           phoneNumber: _phoneNumber!,
           id: _id!,
@@ -100,9 +99,8 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  //UPDATE USER NAME
+  //UPDATE USER / artisan name
   updateUserName(BuildContext context) async {
-    print("New name is $name");
     //store values
     SharedPreferences updateUserData = await SharedPreferences.getInstance();
     //remove shared prefs value
@@ -112,9 +110,26 @@ class UserProvider with ChangeNotifier {
     await updateUserData.setString("name", name);
 
     // update  user object
-    Users updateUser = Users.userName(userName: name);
+    Users updateUser = Users.name(name: name);
     //create record in db
     userService.updateUserName(updateUser, context);
+  }
+
+  //UPDATE Artisan experience
+  updateArtisanExperience(BuildContext context) async {
+    //store values
+    SharedPreferences updateUserData = await SharedPreferences.getInstance();
+    //remove shared prefs value
+    if (updateUserData.containsKey('expLevel'))
+      updateUserData.remove('expLevel');
+
+//update values into shared prefs
+    await updateUserData.setString("expLevel", expLevel);
+
+    // update  user object
+    Artisans updateExpLevel = Artisans.expLevel(expLevel: expLevel);
+    //create record in db
+    userService.updateArtisanExpLevel(updateExpLevel, context);
   }
 
   //UPDATE PHOTO

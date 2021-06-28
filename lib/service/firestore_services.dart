@@ -38,15 +38,13 @@ class UserService {
     });
   }
 
-  //update name  user
+  //update name
   Future<void> updateUserName(Users user, BuildContext context) {
     return firestoreService
         .collection('Users')
         .doc(currentUserId)
         .update(user.updateUserNameToMap())
-        .whenComplete(() async {
-      showNameUpdatingSuccess(context);
-    }).catchError((onError) {
+        .catchError((onError) {
       showFailure(context, onError);
     });
   }
@@ -64,7 +62,28 @@ class UserService {
     });
   }
 
-  //update artisan
+  //update artisan experience
+  Future<void> updateArtisanExpLevel(Artisans artisan, BuildContext context) {
+    return firestoreService
+        .collection('Users')
+        .doc(currentUserId)
+        .update(artisan.updateExpLevelToMap())
+        .catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
+  //update location
+  Future<void> updateLocation(Users user, BuildContext context) {
+    return firestoreService
+        .collection('Users')
+        .doc(currentUserId)
+        .update(user.updateUserLocationToMap())
+        .whenComplete(() async {})
+        .catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
 
   Stream<DocumentSnapshot> getUserStream() async* {
     yield* firestoreService.doc("Users/$currentUserId").snapshots();
