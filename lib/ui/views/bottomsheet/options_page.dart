@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/help/help_page.dart';
 import 'package:home_service/ui/views/home/home.dart';
@@ -203,7 +204,10 @@ class _OptionsPageState extends State<OptionsPage> {
             //close alert dialog
             Navigator.pop(context);
             //navigate to register
-            Navigator.of(context).popAndPushNamed(RegistrationPage.routeName);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                RegistrationPage.routeName, (route) => false);
+
+            print("From shared prefs ?? $userName , $category");
           },
         ));
   }

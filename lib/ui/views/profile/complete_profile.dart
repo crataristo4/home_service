@@ -254,7 +254,6 @@ class _CompleteProfileState extends State<CompleteProfile> {
     }
 
     Widget buildArtisanExperience() {
-      print("complete profile : $getUserType");
       return getUserType == user
           ? Container()
           : Column(
