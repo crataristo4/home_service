@@ -45,8 +45,20 @@ class UserService {
         .doc(currentUserId)
         .update(user.updateUserNameToMap())
         .whenComplete(() async {
-      print('updated name from model ${user.userName}');
-      showSuccess(context);
+      showNameUpdatingSuccess(context);
+    }).catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
+  //update PHOTO
+  Future<void> updatePhotoUrl(Users user, BuildContext context) {
+    return firestoreService
+        .collection('Users')
+        .doc(currentUserId)
+        .update(user.updateUserPhotoToMap())
+        .whenComplete(() async {
+      showUpdatingSuccess(context);
     }).catchError((onError) {
       showFailure(context, onError);
     });
@@ -172,6 +184,16 @@ class UserService {
     Navigator.of(context, rootNavigator: true).pop();
     Navigator.of(context)
         .pushNamedAndRemoveUntil(AppState.routeName, (route) => false);
+  }
+
+  showUpdatingSuccess(context) async {
+    await Future.delayed(Duration(seconds: 3));
+    ShowAction().showToast(successful, Colors.black); //show complete msg
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+
+  showNameUpdatingSuccess(context) async {
+    ShowAction().showToast(userNameUpdated, Colors.black); //show complete msg
   }
 
   showFailure(context, error) {

@@ -97,7 +97,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
             imageUrl = value;
 
             //update provider
-            userProvider.changeArtisanPhotoUrl(imageUrl);
+            userProvider.setPhotoUrl(imageUrl);
           }).whenComplete(() {
             //CHECK IF IMAGE URL IS READY
             if (imageUrl != null) {
@@ -463,7 +463,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
                             onPressed: () {
                               if (formKey.currentState!.validate() &&
                                   _image != null) {
-                                userProvider.changeArtisanPhotoUrl(imageUrl);
+                                userProvider.setPhotoUrl(imageUrl);
                                 createUser();
                               } else if (_image == null) {
                                 ShowAction().showToast(

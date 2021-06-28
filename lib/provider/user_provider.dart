@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/service/firestore_services.dart';
-import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,11 +44,12 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  changeArtisanPhotoUrl(value) {
+  setPhotoUrl(value) {
     _photoUrl = value;
     notifyListeners();
   }
 
+  //CREATE NEW USER
   createUser(BuildContext context) async {
     _id = FirebaseAuth.instance.currentUser!.uid;
     _dateJoined = dateFormat.format(DateTime.now());
@@ -100,28 +100,37 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  updateUser(BuildContext context) async {
+  //UPDATE USER NAME
+  updateUserName(BuildContext context) async {
+    print("New name is $name");
     //store values
     SharedPreferences updateUserData = await SharedPreferences.getInstance();
-    print('Name from input on update $name');
-
-    if (getUserType == artisan) {
-      //creates a new artisan object
-      await updateUserData.setString("name", name);
-
-      //push to db
-    }
-    if (getUserType == user) {
-      //remove shared prefs value
-      if (updateUserData.containsKey('name')) updateUserData.remove('name');
+    //remove shared prefs value
+    if (updateUserData.containsKey('name')) updateUserData.remove('name');
 
 //update values into shared prefs
-      await updateUserData.setString("name", name);
+    await updateUserData.setString("name", name);
 
-      // update  user object
-      Users updateUser = Users.userName(userName: name);
-      //create record in db
-      userService.updateUserName(updateUser, context);
-    }
+    // update  user object
+    Users updateUser = Users.userName(userName: name);
+    //create record in db
+    userService.updateUserName(updateUser, context);
+  }
+
+  //UPDATE PHOTO
+  updatePhoto(BuildContext context) async {
+    //store values
+    SharedPreferences updateUserData = await SharedPreferences.getInstance();
+    //remove shared prefs value
+    if (updateUserData.containsKey('photoUrl'))
+      updateUserData.remove('photoUrl');
+
+//update values into shared prefs
+    await updateUserData.setString("photoUrl", photoUrl);
+
+    // update  user object
+    Users updateUser = Users.photoUrl(photoUrl: photoUrl);
+    //create record in db
+    userService.updatePhotoUrl(updateUser, context);
   }
 }
