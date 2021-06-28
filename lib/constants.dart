@@ -109,6 +109,7 @@ const please = 'Please';
 const finish = 'Finish';
 const save = 'Save';
 const pleaseSelectExp = 'Select experience level';
+const updateExp = 'Update experience level';
 const pleaseWait = 'Please wait...';
 const customerCare = 'Customer care';
 const register = 'Register';
@@ -145,6 +146,8 @@ const sendingCode = 'Please wait sending code...';
 const bookingARequest = 'Booking a request ,please wait...';
 const unableToConnect = 'Unable to connect';
 const searchService = "Search for a service";
+const scheduleDateAndTime = "Schedule date and time";
+const scheduleDateTimeDes = "Helps artisan to know when to follow up on work";
 const msgDes =
     "This helps an artisan to understand and quickly follow up on the booking";
 const enterMsg = "Let Artisan know what you want";

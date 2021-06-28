@@ -1,9 +1,18 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:home_service/provider/artwork_provider.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
+import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:uuid/uuid.dart';
 
 import '../../../constants.dart';
 
@@ -19,8 +28,14 @@ class _AddArtworkState extends State<AddArtwork> {
   File? _image;
   String? price;
   final picker = ImagePicker();
-
   final _formKey = GlobalKey<FormState>();
+  var uuid = Uuid();
+
+  //loading key
+  final GlobalKey<State> _loadingKey = new GlobalKey<State>();
+
+  final artworkProvider = ArtworkProvider();
+  TextEditingController _priceController = TextEditingController();
 
   //get image from camera
   Future getImageFromCamera(BuildContext context) async {
@@ -84,13 +99,12 @@ class _AddArtworkState extends State<AddArtwork> {
         maxLength: 10,
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        onChanged: (value) {
-          // name = value;
-          // userProvider.changeName(value);
-        },
+        controller: _priceController,
         validator: (value) {
           return value!.trim().length < 1 ? 'Enter an amount' : null;
         },
+        onChanged: (value) =>
+            artworkProvider.setArtworkPrice(double.parse(value)),
         decoration: InputDecoration(
           labelText: 'Enter price of artwork',
           fillColor: Color(0xFFF5F5F5),
@@ -101,6 +115,50 @@ class _AddArtworkState extends State<AddArtwork> {
           border: OutlineInputBorder(
               borderSide: BorderSide(color: Color(0xFFF5F5F5))),
         ));
+  }
+
+  createArtworkToDb() async {
+    //get the file
+    String fileName = path.basename(_image!.path);
+    //split file at a dot
+    String fileExtension = fileName.split(".").last;
+
+    //check internet
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+      // if connected then ..
+
+      //start the dialog
+      Dialogs.showLoadingDialog(
+          context, _loadingKey, pleaseWait, Colors.white70);
+
+      //create a storage reference for artworks
+      firebase_storage.Reference firebaseStorageRef = firebase_storage
+          .FirebaseStorage.instance
+          .ref()
+          .child('artworks/${uuid.v4()}.$fileExtension');
+
+      //put image file to storage
+      await firebaseStorageRef.putFile(_image!);
+      //get the image url
+      await firebaseStorageRef.getDownloadURL().then((value) async {
+        imageUrl = value;
+        //update provider
+        artworkProvider.setArtworkImageUrl(imageUrl);
+        //todo -- update user profile
+      }).whenComplete(() => //push to db
+          artworkProvider.createArtwork(context));
+      //ADD TO ARTWORK URL ON USER PROFILE
+      usersDbRef.doc(currentUserId).update({
+        "artworkUrl": FieldValue.arrayUnion([imageUrl])
+      });
+    } else {
+      // no internet
+      await new Future.delayed(const Duration(seconds: 2));
+      Navigator.of(context, rootNavigator: true).pop(); //close the dialog
+      ShowAction().showToast(unableToConnect, Colors.black);
+    }
   }
 
   @override
@@ -157,7 +215,8 @@ class _AddArtworkState extends State<AddArtwork> {
                                 width: MediaQuery.of(context).size.width,
                                 child: Center(
                                     child: Text('Click Me To Add Artwork',
-                                        style: TextStyle(color: Colors.black54))),
+                                        style:
+                                            TextStyle(color: Colors.black54))),
                               ),
                             ),
                           )
@@ -186,10 +245,10 @@ class _AddArtworkState extends State<AddArtwork> {
                                     borderRadius:
                                         BorderRadius.circular(eightDp))),
                             onPressed: () {
-                               if (_formKey.currentState!.validate() &&
+                              if (_formKey.currentState!.validate() &&
                                   _image != null) {
-                                // userProvider.changeArtisanPhotoUrl(imageUrl);
-                                // createUser();
+                                // trigger function
+                                createArtworkToDb();
                               } else if (_image == null) {
                                 ShowAction().showToast(
                                     "Must select an image", Colors.red);

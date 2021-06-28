@@ -18,15 +18,12 @@ class ArtworkProvider with ChangeNotifier {
   dynamic _timeStamp;
   var _uuid = Uuid();
 
-  //loading key
-  final GlobalKey<State> _loadingKey = new GlobalKey<State>();
-
   //artwork service
   ArtworkService artworkService = ArtworkService();
 
   get artworkPrice => _artworkPrice;
 
-  setArtworkPrice(value) {
+  setArtworkPrice(double value) {
     _artworkPrice = value;
     notifyListeners();
   }
@@ -39,7 +36,7 @@ class ArtworkProvider with ChangeNotifier {
   }
 
   //create artwork -- first check the user type
-  createArtwork(BuildContext context, price, imageUrl) {
+  createArtwork(BuildContext context) {
     if (getUserType == artisan) {
       _artworkId = _uuid.v4();
       _artisanName = userName;
@@ -47,9 +44,8 @@ class ArtworkProvider with ChangeNotifier {
       _artisanPhoneNumber = phoneNumber;
       _artisanCategory = category;
 
-      price = artworkPrice;
-      imageUrl = artworkImageUrl;
       _timeStamp = timeStamp;
+      _artisanPhotoUrl = imageUrl;
 
       ArtworkModel artworkModel = ArtworkModel(
           artworkImageUrl: artworkImageUrl,

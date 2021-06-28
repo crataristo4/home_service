@@ -10,6 +10,7 @@ import 'package:home_service/ui/views/home/bookings/confirmed_bookings.dart';
 import 'package:home_service/ui/views/home/bookings/pending_bookings.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
+import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:home_service/ui/views/profile/complete_profile.dart';
 import 'package:home_service/ui/views/profile/edit_profile.dart';
 
@@ -39,15 +40,23 @@ class RouteGenerator {
                   phoneNumber: data,
                 ));
 
-    //account completion
+      //account completion
       case CompleteProfile.routeName:
         return MaterialPageRoute(builder: (_) => CompleteProfile());
 
-    //edit profile
+      //edit user profile
       case EditProfile.routeName:
         return MaterialPageRoute(builder: (_) => EditProfile());
 
-    //default home page for all users
+      //edit artisan profile
+      case ArtisanProfile.routeName:
+        final data = settings.arguments as String;
+        return MaterialPageRoute(
+            builder: (_) => ArtisanProfile(
+                  artisanId: data,
+                ));
+
+      //default home page for all users
       case Home.routeName:
         return MaterialPageRoute(
             builder: (_) => Home(

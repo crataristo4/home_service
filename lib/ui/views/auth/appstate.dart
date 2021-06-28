@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/ui/views/auth/register.dart';
@@ -13,6 +14,8 @@ String? name;
 String? photoUrl;
 String? type;
 String? category;
+String? expLevel;
+
 final DateTime timeStamp = DateTime.now();
 
 class AppState extends StatefulWidget {
@@ -46,17 +49,18 @@ class _AppStateState extends State<AppState> {
         //check the state of users / artisans if the user exists
 
         //get data from shared preferences
-        // if(  prefs.containsKey('userType'))
-
         if (prefs.containsKey('name') ||
             prefs.containsKey('photoUrl') ||
-            prefs.containsKey('category')) {
+            prefs.containsKey('category') ||
+            prefs.containsKey('expLevel')) {
           userName = prefs.getString('name');
           imageUrl = prefs.getString('photoUrl');
           getUserType = prefs.getString('userType');
           category = prefs.getString('category');
+          expLevel = prefs.getString('expLevel');
+
           print(
-              "Username from shared pref is: $userName and type is $getUserType");
+              "Username from shared pref is: $userName , type is $getUserType , category is $category , experience level is $expLevel");
         } else {
           print(
               "Username from empty Shared pref is: $userName and type is $getUserType");
@@ -77,10 +81,18 @@ class _AppStateState extends State<AppState> {
                 print(
                     "type from database is $type And type from shared pref is $getUserType");
                 //delete user record
-                await usersDbRef.doc(currentUserId).delete().then((value) {
-                  //then navigate to complete profile
-                  pushToCompleteProfile();
-                });
+                await usersDbRef
+                    .doc(currentUserId)
+                    .delete()
+                    .then((value) {})
+                    .then((value) {
+                  //delete image from storage
+                  firebase_storage.Reference deleteProfilePhoto =
+                      firebase_storage.FirebaseStorage.instance
+                          .refFromURL(imageUrl!);
+                  deleteProfilePhoto.delete();
+                }).whenComplete(() => //then navigate to complete profile
+                        pushToCompleteProfile());
                 print("Deleting user record");
               } else {
                 //if true  ... shared pref keys for user name and photoUrl can be null so get data
@@ -88,6 +100,7 @@ class _AppStateState extends State<AppState> {
                   userName = documentSnapshot.get(FieldPath(['userName']));
                 } else {
                   userName = documentSnapshot.get(FieldPath(['artisanName']));
+                  category = documentSnapshot.get(FieldPath(['category']));
                 }
 
                 imageUrl = documentSnapshot.get(FieldPath(['photoUrl']));
@@ -95,6 +108,8 @@ class _AppStateState extends State<AppState> {
                 //put values into shared pref to avoid null values
                 prefs.setString("name", userName!);
                 prefs.setString("photoUrl", imageUrl!);
+                prefs.setString("category", category!);
+                prefs.setString("expLevel", expLevel!);
 
                 print("Username after loading database is: $userName");
               }

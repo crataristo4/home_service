@@ -25,6 +25,8 @@ class UserProvider with ChangeNotifier {
 
   get expLevel => _expLevel;
 
+  get photoUrl => _photoUrl;
+
   UserService userService = UserService();
 
   changeName(value) {
@@ -47,13 +49,11 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-//@Param photoUrl ... is passed after the download url is generated
-  createUser(String photoUrl, BuildContext context) async {
+  createUser(BuildContext context) async {
     _id = FirebaseAuth.instance.currentUser!.uid;
     _dateJoined = dateFormat.format(DateTime.now());
     _type = getUserType; //from shared pref
     _phoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber;
-    photoUrl = _photoUrl!;
 
     //store values
     SharedPreferences userData = await SharedPreferences.getInstance();

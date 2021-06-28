@@ -6,6 +6,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/ui/views/bloc/artisan_category_list_bloc.dart';
+import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/loadingShimmer.dart';
 
@@ -285,17 +286,17 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                 children: [
                                   Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       //artisan name
                                       Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           Text(
                                             snapshot.data![index]
-                                            ['artisanName'],
+                                                ['artisanName'],
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: sixteenDp),
@@ -357,6 +358,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                 right: sixteenDp,
                                 bottom: fourDp),
                             child: TextButton(
+                              // button to open bottom sheet
                                 style: TextButton.styleFrom(
                                     backgroundColor:
                                         Theme.of(context).primaryColor,
@@ -368,8 +370,14 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                   showModalBottomSheet(
                                       context: context,
                                       useRootNavigator: true,
-                                      builder: (context) =>
-                                          buildMsgBox(context));
+                                      builder: (context) => AddBooking(
+                                            //bottom sheet to send a short message
+                                            receiverName: receiverName,
+                                            receiverPhoneNumber:
+                                                receiverPhoneNumber,
+                                            receiverPhotoUrl: receiverPhotoUrl,
+                                            receiverId: receiverId,
+                                          ));
                                 },
                                 child: Text(
                                   book,
@@ -387,115 +395,117 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
         });
   }
 
-  Widget buildMsgBox(context) {
+/*  Widget buildMsgBox(context) {
     return Container(
+      color: Color(0xFF757575),
       margin: EdgeInsets.symmetric(horizontal: sixteenDp),
-      height: MediaQuery.of(context).size.height,
-      child: CustomScrollView(
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: fiftyDp,
-                    ),
-                    Form(
-                        key: _formKey,
-                        child: TextFormField(
-                            maxLines: 7,
-                            maxLength: 500,
-                            controller: _controller,
-                            onChanged: (value) {
-                              value = _controller.text;
-                              //_controller.text = value;
-                              bookingProvider.setMessage(value);
-                            },
-                            validator: (value) {
-                              return value!.length > 20
-                                  ? null
-                                  : 'Please clearly state your intention';
-                            },
-                            keyboardType: TextInputType.multiline,
-                            autofocus: true,
-                            decoration: InputDecoration(
-                                hintStyle: TextStyle(fontSize: sixteenDp),
-                                suffix: Container(
-                                  child: Icon(
-                                    Icons.message,
-                                    color: Colors.white,
+      child: Container(
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: fiftyDp,
+                      ),
+                      Form(
+                          key: _formKey,
+                          child: TextFormField(
+                              maxLines: 7,
+                              maxLength: 500,
+                              controller: _controller,
+                              onChanged: (value) {
+                                value = _controller.text;
+                                //_controller.text = value;
+                                bookingProvider.setMessage(value);
+                              },
+                              validator: (value) {
+                                return value!.length > 20
+                                    ? null
+                                    : 'Please clearly state your intention';
+                              },
+                              keyboardType: TextInputType.multiline,
+                              autofocus: true,
+                              decoration: InputDecoration(
+                                  hintStyle: TextStyle(fontSize: sixteenDp),
+                                  suffix: Container(
+                                    child: Icon(
+                                      Icons.message,
+                                      color: Colors.white,
+                                    ),
+                                    width: thirtySixDp,
+                                    height: thirtySixDp,
+                                    decoration: BoxDecoration(
+                                      color: Colors.indigo,
+                                      borderRadius:
+                                          BorderRadius.circular(eightDp),
+                                      border: Border.all(
+                                          width: 0.5, color: Colors.white54),
+                                    ),
                                   ),
-                                  width: thirtySixDp,
-                                  height: thirtySixDp,
-                                  decoration: BoxDecoration(
-                                    color: Colors.indigo,
-                                    borderRadius:
-                                        BorderRadius.circular(eightDp),
-                                    border: Border.all(
-                                        width: 0.5, color: Colors.white54),
+                                  hintText: enterMsg,
+                                  helperText: msgDes,
+                                  helperMaxLines: 2,
+                                  fillColor: Colors.white70,
+                                  filled: true,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: tenDp, horizontal: tenDp),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFF5F5F5)),
                                   ),
-                                ),
-                                hintText: enterMsg,
-                                helperText: msgDes,
-                                helperMaxLines: 2,
-                                fillColor: Colors.white70,
-                                filled: true,
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: tenDp, horizontal: tenDp),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFF5F5F5)),
-                                ),
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Color(0xFFF5F5F5)))))),
-                    SizedBox(
-                      height: fiftyDp,
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: twentyDp),
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  child: TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          primary: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(eightDp))),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          //create new booking
-                          bookingProvider.createNewBookings(
-                              context,
-                              receiverName,
-                              receiverId,
-                              receiverPhoneNumber,
-                              receiverPhotoUrl,
-                              _controller.text);
-                          //clear controller
-                          _controller.clear();
-                        }
-                      },
-                      child: Text(
-                        submitNow,
-                        style: TextStyle(fontSize: fourteenDp),
-                      )),
-                )
-              ],
-            ),
-          )
-        ],
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFFF5F5F5)))))),
+                      SizedBox(
+                        height: fiftyDp,
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: twentyDp),
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    child: TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor: Theme.of(context).primaryColor,
+                            primary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(eightDp))),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            //create new booking
+                            bookingProvider.createNewBookings(
+                                context,
+                                receiverName,
+                                receiverId,
+                                receiverPhoneNumber,
+                                receiverPhotoUrl,
+                                _controller.text);
+                            //clear controller
+                            _controller.clear();
+                          }
+                        },
+                        child: Text(
+                          submitNow,
+                          style: TextStyle(fontSize: fourteenDp),
+                        )),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
-  }
+  }*/
 
   Widget buildGridCategory() {
     return StreamBuilder<List<DocumentSnapshot>>(

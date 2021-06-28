@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 
 class ArtisanProfile extends StatefulWidget {
   final String? artisanId;
+
   const ArtisanProfile({Key? key, this.artisanId}) : super(key: key);
+  static const routeName = '/artisanProfile';
 
   @override
   _ArtisanProfileState createState() => _ArtisanProfileState();

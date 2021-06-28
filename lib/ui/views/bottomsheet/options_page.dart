@@ -12,9 +12,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'add_artwork.dart';
 import '../../../constants.dart';
 import '../home/home.dart';
+import 'add_artwork.dart';
 
 class OptionsPage extends StatefulWidget {
   @override
@@ -33,7 +33,7 @@ class _OptionsPageState extends State<OptionsPage> {
                 topLeft: Radius.circular(twentyDp),
                 topRight: Radius.circular(twentyDp))),
         child: Padding(
-          padding: const EdgeInsets.all(twentyFourDp),
+          padding: const EdgeInsets.all(sixteenDp),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,11 +84,11 @@ class _OptionsPageState extends State<OptionsPage> {
                 buildOptionsList(
                     share, shareDes, Icons.share_sharp, Colors.deepOrange),
                 buildOptionsList(report, reportDes, Icons.report, Colors.amber),
-                SizedBox(height: 10),
                 //logout button
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.only(right: sixteenDp, top: eightDp),
+                  margin: EdgeInsets.only(
+                      right: sixteenDp, top: eightDp, left: sixteenDp),
                   child: SizedBox(
                     height: fortyDp,
                     child: TextButton(
@@ -182,8 +182,6 @@ class _OptionsPageState extends State<OptionsPage> {
         TextButton(
           child: Text(yesLogMeOut, style: TextStyle(color: Colors.red)),
           onPressed: () async {
-            //if yes ... sign out from firebase
-            await FirebaseAuth.instance.signOut();
             //clear all shared preference data to avoid getting old data when user changes phone number
             SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -191,12 +189,16 @@ class _OptionsPageState extends State<OptionsPage> {
               prefs.remove('name');
               prefs.remove('photoUrl');
               prefs.remove('userType');
-            } else {
+            } else if (getUserType == artisan) {
               prefs.remove('name');
               prefs.remove('photoUrl');
               prefs.remove('userType');
               prefs.remove('category');
+              prefs.remove('expLevel');
             }
+
+            //if yes ... sign out from firebase
+            await FirebaseAuth.instance.signOut();
 
             //close alert dialog
             Navigator.pop(context);

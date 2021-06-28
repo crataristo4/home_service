@@ -98,21 +98,22 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
             //update provider
             userProvider.changeArtisanPhotoUrl(imageUrl);
+          }).whenComplete(() {
+            //CHECK IF IMAGE URL IS READY
+            if (imageUrl != null) {
+              //CHECK USER-TYPE AND CREATE USER
+              if (getUserType == user) {
+                //create normal user database
+                userProvider.createUser(context);
+              } else if (getUserType == artisan) {
+                //create artisan using provider
+                userProvider.createUser(context);
+              }
+            }
           }).catchError((onError) {
             ShowAction().showToast("Error occurred : $onError", Colors.black);
           });
 
-          //CHECK IF IMAGE URL IS READY
-          if (imageUrl != null) {
-            //CHECK USER-TYPE AND CREATE USER
-            if (getUserType == user) {
-              //create normal user database
-              userProvider.createUser(imageUrl!, context);
-            } else if (getUserType == artisan) {
-              //create artisan using provider
-              userProvider.createUser(imageUrl!, context);
-            }
-          }
         } //do nothing
       } else {
         // no internet
