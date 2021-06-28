@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 //todo -- add user coordinates
 class Users {
-  String? userName;
+  String? name;
   String? photoUrl;
   String? phoneNumber;
   String? id;
@@ -10,14 +10,14 @@ class Users {
   String? dateJoined;
   GeoPoint? location;
 
-  Users.userName({this.userName});
+  Users.name({this.name});
 
   Users.photoUrl({this.photoUrl});
 
   Users.location({this.location});
 
   Users(
-      {this.userName,
+      {this.name,
       required this.photoUrl,
       required this.phoneNumber,
       required this.id,
@@ -25,12 +25,12 @@ class Users {
       required this.dateJoined,
       required this.location});
 
-  get getUserName => userName;
+  get getUserName => name;
 
   get getImageUrl => photoUrl;
 
   set setUserName(String? userName) {
-    this.userName = userName;
+    this.name = userName;
   }
 
   set setPhotoUrl(String? photoUrl) {
@@ -40,7 +40,7 @@ class Users {
   factory Users.fromDocument(DocumentSnapshot documentSnapshot) {
     return Users(
         id: documentSnapshot['id'],
-        userName: documentSnapshot['userName'],
+        name: documentSnapshot['name'],
         phoneNumber: documentSnapshot['phoneNumber'],
         photoUrl: documentSnapshot['photoUrl'],
         dateJoined: documentSnapshot['dateJoined'],
@@ -50,7 +50,7 @@ class Users {
 
   Map<String, dynamic> updateUserNameToMap() {
     return {
-      'userName': userName,
+      'name': name,
     };
   }
 
@@ -70,7 +70,7 @@ class Users {
     return {
       'id': id,
       'phoneNumber': phoneNumber,
-      'userName': userName,
+      'name': name,
       'dateJoined': dateJoined,
       'type': type,
       'photoUrl': photoUrl,
@@ -80,30 +80,34 @@ class Users {
 }
 
 class Artisans {
-  final String artisanName;
-  final String photoUrl;
-  final String phoneNumber;
-  final String id;
-  final String dateJoined;
-  final String category;
-  final String type;
-  final String expLevel;
-  final List<String> artworkUrl;
+  String? name;
+  String? photoUrl;
+  String? phoneNumber;
+  String? id;
+  String? dateJoined;
+  String? category;
+  String? type;
+  String? expLevel;
   GeoPoint? location;
 
   Artisans(
-      {required this.artisanName,
+      {required this.name,
       required this.photoUrl,
       required this.phoneNumber,
       required this.id,
       required this.dateJoined,
       required this.category,
       required this.type,
-      required this.artworkUrl,
       required this.expLevel,
       required this.location});
 
-  get getArtisanName => artisanName;
+  Artisans.expLevel({this.expLevel});
+
+  Artisans.name({this.name});
+
+  Artisans.location({this.location});
+
+  get getArtisanName => name;
 
   get getImageUrl => photoUrl;
 
@@ -111,15 +115,13 @@ class Artisans {
   factory Artisans.fromDocument(DocumentSnapshot documentSnapshot) {
     return Artisans(
         id: documentSnapshot['id'],
-        artisanName: documentSnapshot['artisanName'],
+        name: documentSnapshot['name'],
         phoneNumber: documentSnapshot['phoneNumber'],
         photoUrl: documentSnapshot['photoUrl'],
         dateJoined: documentSnapshot['dateJoined'],
         category: documentSnapshot['category'],
         type: documentSnapshot['type'],
         expLevel: documentSnapshot['expLevel'],
-        artworkUrl:
-            List<String>.from(documentSnapshot["artworkUrl"].map((x) => x)),
         location: documentSnapshot['location']);
   }
 
@@ -127,14 +129,13 @@ class Artisans {
   factory Artisans.fromFirestore(Map<String, dynamic> data) {
     return Artisans(
         id: data['id'],
-        artisanName: data['artisanName'],
+        name: data['name'],
         phoneNumber: data['phoneNumber'],
         photoUrl: data['photoUrl'],
         dateJoined: data['dateJoined'],
         category: data['category'],
         type: data['type'],
         expLevel: data['expLevel'],
-        artworkUrl: List<String>.from(data["artworkUrl"].map((x) => x)),
         location: data['location']);
   }
 
@@ -142,14 +143,31 @@ class Artisans {
     return {
       'id': id,
       'phoneNumber': phoneNumber,
-      'artisanName': artisanName,
+      'name': name,
       'dateJoined': dateJoined,
       'category': category,
       'type': type,
       'expLevel': expLevel,
       'photoUrl': photoUrl,
-      'artworkUrl': artworkUrl,
       'location': location
+    };
+  }
+
+  Map<String, dynamic> updateArtisanNameToMap() {
+    return {
+      'name': name,
+    };
+  }
+
+  Map<String, dynamic> updateExpLevelToMap() {
+    return {
+      'expLevel': expLevel,
+    };
+  }
+
+  Map<String, dynamic> updateLocationToMap() {
+    return {
+      'location': location,
     };
   }
 }
