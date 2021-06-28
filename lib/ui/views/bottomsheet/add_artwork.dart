@@ -1,13 +1,11 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/provider/artwork_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
-import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,8 +29,6 @@ class _AddArtworkState extends State<AddArtwork> {
   final _formKey = GlobalKey<FormState>();
   var uuid = Uuid();
 
-  //loading key
-  final GlobalKey<State> _loadingKey = new GlobalKey<State>();
 
   final artworkProvider = ArtworkProvider();
   TextEditingController _priceController = TextEditingController();
@@ -131,7 +127,7 @@ class _AddArtworkState extends State<AddArtwork> {
 
       //start the dialog
       Dialogs.showLoadingDialog(
-          context, _loadingKey, pleaseWait, Colors.white70);
+          context, loadingKey, addingArtworkPleaseWait, Colors.white70);
 
       //create a storage reference for artworks
       firebase_storage.Reference firebaseStorageRef = firebase_storage
@@ -149,10 +145,6 @@ class _AddArtworkState extends State<AddArtwork> {
         //todo -- update user profile
       }).whenComplete(() => //push to db
           artworkProvider.createArtwork(context));
-      //ADD TO ARTWORK URL ON USER PROFILE
-      usersDbRef.doc(currentUserId).update({
-        "artworkUrl": FieldValue.arrayUnion([imageUrl])
-      });
     } else {
       // no internet
       await new Future.delayed(const Duration(seconds: 2));

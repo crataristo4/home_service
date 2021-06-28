@@ -55,7 +55,11 @@ class RouteGenerator {
 
       //default home page for all users
       case Home.routeName:
-        return MaterialPageRoute(builder: (_) => Home());
+        final tabIndex = settings.arguments as int;
+        return MaterialPageRoute(
+            builder: (_) => Home(
+                  tabIndex: tabIndex,
+                ));
 
       //help and support page where users can contact us
       case HelpPage.routeName:

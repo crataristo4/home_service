@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/artwork.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 
 class ArtworkService {
@@ -69,8 +70,9 @@ class ArtworkService {
     await Future.delayed(Duration(seconds: 3));
     ShowAction().showToast(successful, Colors.black); //show complete msg
     Navigator.of(context, rootNavigator: true).pop();
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(AppState.routeName, (route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        Home.routeName, (route) => false,
+        arguments: 0);
   }
 
   showFailure(context, error) {

@@ -23,8 +23,9 @@ Artisans? artisans;
 
 class Home extends StatefulWidget {
   static const routeName = '/homePage';
+  final int? tabIndex;
 
-  Home({Key? key}) : super(key: key);
+  Home({Key? key, this.tabIndex}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -40,7 +41,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     greetingMessage();
     showLoading();
     _tabController = TabController(length: 3, vsync: this);
-    _tabController.index = 1;
+    _tabController.index = widget.tabIndex!;
 
     super.initState();
   }

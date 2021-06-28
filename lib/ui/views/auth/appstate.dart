@@ -159,7 +159,9 @@ class _AppStateState extends State<AppState> {
                         userName != null ||
                         category != null ||
                         expLevel != null
-                    ? Home()
+                    ? Home(
+                        tabIndex: 1,
+                      )
                     : RegistrationPage())),
       ),
     );

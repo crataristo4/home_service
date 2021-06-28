@@ -112,6 +112,7 @@ const save = 'Save';
 const pleaseSelectExp = 'Select experience level';
 const updateExp = 'Update experience level';
 const pleaseWait = 'Please wait...';
+const addingArtworkPleaseWait = 'Adding Artwork...';
 const updatingProfilePicture = 'Updating profile picture...';
 const updatingName = 'Updating name...';
 const customerCare = 'Customer care';

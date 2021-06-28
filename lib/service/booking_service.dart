@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
-import 'package:home_service/ui/views/home/bookings.dart';
+import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 
 import '../constants.dart';
@@ -104,8 +104,9 @@ class BookingService {
     await Future.delayed(const Duration(seconds: 3));
     Navigator.of(context, rootNavigator: true).pop();
     ShowAction().showToast(successful, Colors.black); //show complete msg
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(BookingPage.routeName, (route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        Home.routeName, (route) => false,
+        arguments: 2);
   }
 
   showFailure(context, error) {
