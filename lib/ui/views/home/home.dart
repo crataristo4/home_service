@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/users.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/options_page.dart';
 import 'package:home_service/ui/views/home/artwork.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
@@ -19,9 +20,6 @@ final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 Users? users;
 Artisans? artisans;
-String? userName;
-String? imageUrl;
-String? getUserType;
 
 class Home extends StatefulWidget {
   static const routeName = '/homePage';

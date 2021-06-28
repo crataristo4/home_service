@@ -1,4 +1,4 @@
-import 'package:home_service/ui/views/home/home.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 
 const appTitle = 'Home service';
 const getApp = 'Home servicing app';

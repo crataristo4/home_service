@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
-import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 
 import '../constants.dart';

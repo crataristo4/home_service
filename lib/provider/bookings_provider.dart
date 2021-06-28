@@ -4,7 +4,6 @@ import 'package:home_service/constants.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/service/booking_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
-import 'package:home_service/ui/views/home/home.dart';
 import 'package:uuid/uuid.dart';
 
 class BookingsProvider with ChangeNotifier {

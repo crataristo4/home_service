@@ -107,9 +107,9 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                         children: [
                           //artisans name
                           Text(
-                            artisanListProvider[index].artisanName,
-                            style: TextStyle(color: Colors.white),
-                          ),
+                            artisanListProvider[index].name!,
+                                  style: TextStyle(color: Colors.white),
+                                ),
                           //todo implement location
                           Text(
                             "3 km",
@@ -130,8 +130,10 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                   //artisan's category
                                   flex: 1,
                                   child: Text(
-                                      artisanListProvider[index].category,
-                                      style: TextStyle(color: Colors.white)),
+                                      artisanListProvider[index]
+                                                .category!,
+                                            style:
+                                                TextStyle(color: Colors.white)),
                                 ),
                                 Flexible(
                                   //todo implement rating logic
@@ -157,19 +159,19 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                           ),
                           Text(
                             // artisan's experience
-                            artisanListProvider[index].expLevel,
-                            style: TextStyle(color: Colors.white),
-                          )
+                            artisanListProvider[index].expLevel!,
+                                  style: TextStyle(color: Colors.white),
+                                )
                         ],
                       ),
                       leading: Padding(
                         padding: EdgeInsets.only(top: eightDp),
                         child: CircleAvatar(
                           radius: 40,
-                          foregroundImage: CachedNetworkImageProvider(
-                                    artisanListProvider[index].photoUrl),
-                          backgroundColor: Colors.indigo,
-                        ),
+                                foregroundImage: CachedNetworkImageProvider(
+                                    artisanListProvider[index].photoUrl!),
+                                backgroundColor: Colors.indigo,
+                              ),
                       ),
                     ),
                   ),

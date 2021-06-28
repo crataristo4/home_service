@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/service/firestore_services.dart';
-import 'package:home_service/ui/views/home/home.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
-import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
