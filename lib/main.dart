@@ -63,6 +63,11 @@ class EntryPoint extends StatelessWidget {
           initialData: [],
           value: getArtworks.fetchAllArtwork(),
         ),
+
+        StreamProvider<List<ArtworkModel>>.value(
+          initialData: [],
+          value: getArtworks.fetchArtworkById(),
+        ),
       ],
       child: MaterialApp(
         //checks and switches page

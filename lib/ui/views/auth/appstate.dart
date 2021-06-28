@@ -10,11 +10,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 String? currentUserId;
 String? phoneNumber;
-String? name;
-String? photoUrl;
+String? userName;
 String? type;
 String? category;
 String? expLevel;
+String? getUserType;
+String? imageUrl;
+
 //loading key
 final GlobalKey<State> loadingKey = new GlobalKey<State>();
 final DateTime timeStamp = DateTime.now();

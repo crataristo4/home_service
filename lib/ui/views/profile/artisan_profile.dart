@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:home_service/models/users.dart';
+import 'package:home_service/models/artwork.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:provider/provider.dart';
 
 class ArtisanProfile extends StatefulWidget {
-  final String? artisanId;
+  // final String? artisanId;
 
-  const ArtisanProfile({Key? key, this.artisanId}) : super(key: key);
+  const ArtisanProfile({Key? key}) : super(key: key);
   static const routeName = '/artisanProfile';
 
   @override
@@ -14,18 +15,20 @@ class ArtisanProfile extends StatefulWidget {
 }
 
 class _ArtisanProfileState extends State<ArtisanProfile> {
-  Artisans? _seletedArtisan;
+  //ArtworkModel? _seletedArtisan;
 
   @override
   void initState() {
-    final artisans = Provider.of<List<Artisans>>(context, listen: false);
+    /* final artworkList = Provider.of<List<ArtworkModel>>(context, listen: false);
     _seletedArtisan =
-        artisans.firstWhere((artisan) => artisan.id == widget.artisanId);
+        artworkList.firstWhere((artworkList) => artworkList.artisanId == widget.artisanId);*/
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final artworkList = Provider.of<List<ArtworkModel>>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -50,19 +53,19 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                   width: 150,
                   placeholder: (context, url) =>
                       Center(child: CircularProgressIndicator()),
-                  imageUrl: _seletedArtisan!.photoUrl,
+                  imageUrl: imageUrl!,
 
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             SizedBox(height: 20),
-            Text(_seletedArtisan!.artisanName, style: TextStyle(fontSize: 20)),
+            Text(userName!, style: TextStyle(fontSize: 20)),
             SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(_seletedArtisan!.category, style: TextStyle(fontSize: 12)),
+                Text(category!, style: TextStyle(fontSize: 12)),
                 SizedBox(width: 5),
                 Container(
                   width: 6,
@@ -71,14 +74,14 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                       shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
                 ),
                 SizedBox(width: 5),
-                Text(_seletedArtisan!.expLevel, style: TextStyle(fontSize: 12)),
+                Text(expLevel!, style: TextStyle(fontSize: 12)),
               ],
             ),
             SizedBox(height: 20),
             Text('Artwork', style: TextStyle(fontSize: 16)),
             SizedBox(height: 10),
             Expanded(
-              child: _seletedArtisan!.artworkUrl.length == 0
+              child: artworkList.length == 0
                   ? Container(
                       child: Center(child: Text('No Artwork Yet')),
                     )
@@ -87,7 +90,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                       ),
-                      itemCount: _seletedArtisan!.artworkUrl.length,
+                      itemCount: artworkList.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -98,13 +101,13 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
 
                               placeholder: (context, url) =>
                                   Center(child: CircularProgressIndicator()),
-                              imageUrl: _seletedArtisan!.artworkUrl[index],
+                              imageUrl: artworkList[index].artworkImageUrl,
 
                               fit: BoxFit.cover,
                             ),
-                          ),
-                        );
-                      }),
+                      ),
+                    );
+                  }),
             ),
           ],
         ),

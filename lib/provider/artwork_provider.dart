@@ -3,7 +3,6 @@ import 'package:home_service/constants.dart';
 import 'package:home_service/models/artwork.dart';
 import 'package:home_service/service/artwork_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
-import 'package:home_service/ui/views/home/home.dart';
 import 'package:uuid/uuid.dart';
 
 class ArtworkProvider with ChangeNotifier {
