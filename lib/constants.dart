@@ -111,6 +111,7 @@ const save = 'Save';
 const pleaseSelectExp = 'Select experience level';
 const updateExp = 'Update experience level';
 const pleaseWait = 'Please wait...';
+const updatingName = 'Updating name...';
 const customerCare = 'Customer care';
 const register = 'Register';
 const logOut = 'LOG OUT';

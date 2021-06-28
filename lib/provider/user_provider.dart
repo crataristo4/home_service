@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/service/firestore_services.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -75,6 +76,7 @@ class UserProvider with ChangeNotifier {
       await userData.setString("category", category);
       await userData.setString("name", name);
       await userData.setString("photoUrl", photoUrl);
+      await userData.setString("expLevel", expLevel);
 
       //push to db
       userService.createArtisan(newArtisan, context);
@@ -95,6 +97,31 @@ class UserProvider with ChangeNotifier {
 
       //create record in db
       userService.createUser(newUser, context);
+    }
+  }
+
+  updateUser(BuildContext context) async {
+    //store values
+    SharedPreferences updateUserData = await SharedPreferences.getInstance();
+    print('Name from input on update $name');
+
+    if (getUserType == artisan) {
+      //creates a new artisan object
+      await updateUserData.setString("name", name);
+
+      //push to db
+    }
+    if (getUserType == user) {
+      //remove shared prefs value
+      if (updateUserData.containsKey('name')) updateUserData.remove('name');
+
+//update values into shared prefs
+      await updateUserData.setString("name", name);
+
+      // update  user object
+      Users updateUser = Users.userName(userName: name);
+      //create record in db
+      userService.updateUserName(updateUser, context);
     }
   }
 }

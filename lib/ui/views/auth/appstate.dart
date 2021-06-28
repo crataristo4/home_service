@@ -108,7 +108,7 @@ class _AppStateState extends State<AppState> {
                 //if true  ... shared pref keys for user name and photoUrl can be null so get data
                 if (getUserType == user) {
                   userName = documentSnapshot.get(FieldPath(['userName']));
-                } else {
+                } else if (getUserType == artisan) {
                   userName = documentSnapshot.get(FieldPath(['artisanName']));
                   category = documentSnapshot.get(FieldPath(['category']));
                   expLevel = documentSnapshot.get(FieldPath(['expLevel']));
@@ -154,7 +154,9 @@ class _AppStateState extends State<AppState> {
             child: Scaffold(
                 body: currentUserId != null ||
                         imageUrl != null ||
-                        userName != null
+                        userName != null ||
+                        category != null ||
+                        expLevel != null
                     ? Home()
                     : RegistrationPage())),
       ),

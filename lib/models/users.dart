@@ -2,16 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 //todo -- add user coordinates
 class Users {
-  final String userName;
-  final String photoUrl;
-  final String phoneNumber;
-  final String id;
-  final String type;
-  final String dateJoined;
+  String? userName;
+  String? photoUrl;
+  String? phoneNumber;
+  String? id;
+  String? type;
+  String? dateJoined;
   GeoPoint? location;
 
+  Users.userName({this.userName});
+
+  Users.photoUrl({this.photoUrl});
+
+  Users.location({this.location});
+
   Users(
-      {required this.userName,
+      {this.userName,
       required this.photoUrl,
       required this.phoneNumber,
       required this.id,
@@ -23,6 +29,14 @@ class Users {
 
   get getImageUrl => photoUrl;
 
+  set setUserName(String? userName) {
+    this.userName = userName;
+  }
+
+  set setPhotoUrl(String? photoUrl) {
+    this.photoUrl = photoUrl;
+  }
+
   factory Users.fromDocument(DocumentSnapshot documentSnapshot) {
     return Users(
         id: documentSnapshot['id'],
@@ -32,6 +46,24 @@ class Users {
         dateJoined: documentSnapshot['dateJoined'],
         type: documentSnapshot['type'],
         location: documentSnapshot['location']);
+  }
+
+  Map<String, dynamic> updateUserNameToMap() {
+    return {
+      'userName': userName,
+    };
+  }
+
+  Map<String, dynamic> updateUserPhotoToMap() {
+    return {
+      'photoUrl': photoUrl,
+    };
+  }
+
+  Map<String, dynamic> updateUserLocationToMap() {
+    return {
+      'location': location,
+    };
   }
 
   Map<String, dynamic> userToMap() {

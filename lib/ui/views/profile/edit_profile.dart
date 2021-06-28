@@ -3,8 +3,12 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:home_service/provider/user_provider.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/home.dart';
+import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../constants.dart';
 
@@ -24,6 +28,22 @@ class _EditProfileState extends State<EditProfile> {
   final GlobalKey<State> _uploadPhotoKey = new GlobalKey<State>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
+  TextEditingController? _controller = TextEditingController();
+  TextEditingController? _phoneNumberController = TextEditingController();
+  TextEditingController? _categoryController = TextEditingController();
+  String? _selectedExperience;
+
+  @override
+  void initState() {
+    _controller!.text = userName!;
+    _phoneNumberController!.text = phoneNumber!;
+    if (getUserType == artisan) {
+      _categoryController!.text = category!;
+      _selectedExperience = expLevel;
+    }
+
+    super.initState();
+  }
 
   //get image from camera
   Future getImageFromCamera(BuildContext context) async {
@@ -51,11 +71,157 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final userUpdateProvider = Provider.of<UserProvider>(context);
+
+    Widget buildUserName() {
+      return TextFormField(
+          maxLength: 20,
+          controller: _controller,
+          keyboardType: TextInputType.name,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+          validator: (value) {
+            return value!.trim().length < 6 ? fullNameRequired : null;
+          },
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.person,
+              color: Colors.indigoAccent,
+            ),
+            labelText: 'Full name',
+            hintText: userName,
+            fillColor: Color(0xFFF5F5F5),
+            filled: true,
+            contentPadding:
+                EdgeInsets.symmetric(vertical: 0, horizontal: tenDp),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFF5F5F5))),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Color(0xFFF5F5F5))),
+          ));
+    }
+
+    Widget buildPhoneNumber() {
+      return TextFormField(
+          readOnly: true,
+          maxLength: 15,
+          controller: _phoneNumberController,
+          keyboardType: TextInputType.phone,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.phone,
+              color: Colors.green,
+            ),
+            hintText: phoneNumber,
+            labelText: 'Phone number',
+            fillColor: Color(0xFFF5F5F5),
+            filled: true,
+            contentPadding:
+                EdgeInsets.symmetric(vertical: 0, horizontal: tenDp),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFF5F5F5))),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Color(0xFFF5F5F5))),
+          ));
+    }
+
+    Widget buildCategory() {
+      return getUserType == user
+          ? Container()
+          : TextFormField(
+              readOnly: true,
+              controller: _categoryController,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                prefixIcon: Icon(
+                  Icons.info,
+                  color: Colors.black,
+                ),
+                hintText: category,
+                labelText: 'Category',
+                fillColor: Color(0xFFF5F5F5),
+                filled: true,
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: tenDp),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFF5F5F5))),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Color(0xFFF5F5F5))),
+              ));
+    }
+
+    Widget buildArtisanExperience() {
+      return getUserType == user
+          ? Container()
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: eightDp, bottom: fourDp),
+                  child: Text(
+                    updateExp,
+                    style: TextStyle(
+                      fontSize: sixteenDp,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(sixDp),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(eightDp),
+                      border: Border.all(
+                          width: 0.5, color: Colors.grey.withOpacity(0.5))),
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedExperience,
+                    elevation: 1,
+                    isExpanded: true,
+                    style: TextStyle(color: Color(0xFF424242)),
+                    // underline: Container(),
+                    items: [
+                      noExperience,
+                      oneYrs,
+                      twoYrs,
+                      threeYrs,
+                      fourYrs,
+                      fiveYrs,
+                      sixYrs,
+                      sevenYrs,
+                      eightYrs,
+                      nineYrs,
+                      tenPlusYrs
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    hint: Text(
+                      experienceLvl,
+                      style: TextStyle(color: Color(0xFF757575), fontSize: 16),
+                    ),
+                    onChanged: (String? value) {
+                      //update provider
+                      userUpdateProvider.changeArtisanExperience(value);
+                      setState(() {
+                        _selectedExperience = value;
+                      });
+                    },
+                    validator: (value) =>
+                        value == null ? experienceRequired : null,
+                  ),
+                ),
+              ],
+            );
+    }
+
     popBack(context) {
       Navigator.of(context).pop();
     }
 
-    ///choose camera or from gallery
+    //choose camera or from gallery
     void _showPicker(context) {
       showModalBottomSheet(
           context: context,
@@ -138,87 +304,95 @@ class _EditProfileState extends State<EditProfile> {
               children: [
                 Container(
                   padding: EdgeInsets.all(sixteenDp),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ///Contains Users image
-                      Center(
-                        //swap between network image and file image
-                        child: _image != null
-                            ? Container(
-                                height: 120,
-                                width: 120,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: FileImage(_image!),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  shape: BoxShape.circle,
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: Colors.grey.withOpacity(0.3),
-                                        offset: const Offset(2.0, 4.0),
-                                        blurRadius: 8),
-                                  ],
-                                  //color: Colors.black,
-                                ),
-                              )
-                            : GestureDetector(
-                                onTap: () {
-                                  _showPicker(context);
-                                },
-                                child: Container(
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ///Contains Users image
+                        Center(
+                          //swap between network image and file image
+                          child: _image != null
+                              ? Container(
                                   height: 120,
                                   width: 120,
                                   decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                            color: Colors.grey.withOpacity(0.6),
-                                            offset: const Offset(2.0, 4.0),
-                                            blurRadius: 8),
-                                      ],
-                                      image: DecorationImage(
-                                          image: CachedNetworkImageProvider(
-                                              "https://firebasestorage.googleapis.com/v0/b/workit-786bc.appspot.com/o/projects%2Favartar.jpg?alt=media&token=4b45cd92-dfd3-4355-8565-766e53f1f2ab"),
-                                          fit: BoxFit.cover)),
+                                    image: DecorationImage(
+                                      image: FileImage(_image!),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    shape: BoxShape.circle,
+                                    boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                          color: Colors.grey.withOpacity(0.3),
+                                          offset: const Offset(2.0, 4.0),
+                                          blurRadius: 8),
+                                    ],
+                                    //color: Colors.black,
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    _showPicker(context);
+                                  },
+                                  child: Container(
+                                    height: 120,
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.6),
+                                              offset: const Offset(2.0, 4.0),
+                                              blurRadius: 8),
+                                        ],
+                                        image: DecorationImage(
+                                            image: CachedNetworkImageProvider(
+                                                imageUrl!),
+                                            fit: BoxFit.cover)),
+                                  ),
                                 ),
-                              ),
-                      ),
-                      SizedBox(
-                        height: tenDp,
-                      ),
+                        ),
+                        SizedBox(
+                          height: tenDp,
+                        ),
 
-                      ///button to change users image
-                      Center(
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            _showPicker(context);
-                          },
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(eightDp)),
-                              ),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.indigo)),
-                          icon: Icon(
-                            Icons.camera_alt,
-                            color: Colors.white,
-                          ),
-                          label: Text(
-                            changeImage,
-                            style: TextStyle(
-                                fontSize: fourteenDp, color: Colors.white),
+                        ///button to change users image
+                        Center(
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              _showPicker(context);
+                            },
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(eightDp)),
+                                ),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.indigo)),
+                            icon: Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                            ),
+                            label: Text(
+                              changeImage,
+                              style: TextStyle(
+                                  fontSize: fourteenDp, color: Colors.white),
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: sixteenDp,
-                      ),
-                      buildUserName()
-                    ],
+                        SizedBox(
+                          height: sixteenDp,
+                        ),
+                        buildUserName(),
+                        buildPhoneNumber(),
+                        buildCategory(),
+                        buildArtisanExperience()
+                      ],
+                    ),
                   ),
                 ),
 
@@ -236,8 +410,19 @@ class _EditProfileState extends State<EditProfile> {
                             primary: Colors.white,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8))),
-                        onPressed: () =>
-                            Navigator.of(context).pushNamed(Home.routeName),
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+//start the dialog
+                            Dialogs.showLoadingDialog(context, loadingKey,
+                                updatingName, Colors.white70);
+                            if (getUserType == user) {
+                              //first update provider
+                              userUpdateProvider.changeName(_controller!.text);
+                              //then update user
+                              userUpdateProvider.updateUser(context);
+                            } else {}
+                          }
+                        },
                         child: Text(
                           save,
                           style: TextStyle(fontSize: 14),
@@ -252,23 +437,5 @@ class _EditProfileState extends State<EditProfile> {
         ],
       ),
     );
-  }
-
-  Widget buildUserName() {
-    return TextFormField(
-        autofocus: true,
-        maxLength: 20,
-        keyboardType: TextInputType.name,
-        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        decoration: InputDecoration(
-          hintText: "Enter your name",
-          fillColor: Color(0xFFF5F5F5),
-          filled: true,
-          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: tenDp),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFF5F5F5))),
-          border: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFF5F5F5))),
-        ));
   }
 }

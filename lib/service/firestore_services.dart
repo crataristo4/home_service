@@ -38,6 +38,22 @@ class UserService {
     });
   }
 
+  //update name  user
+  Future<void> updateUserName(Users user, BuildContext context) {
+    return firestoreService
+        .collection('Users')
+        .doc(currentUserId)
+        .update(user.updateUserNameToMap())
+        .whenComplete(() async {
+      print('updated name from model ${user.userName}');
+      showSuccess(context);
+    }).catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
+  //update artisan
+
   Stream<DocumentSnapshot> getUserStream() async* {
     yield* firestoreService.doc("Users/$currentUserId").snapshots();
   }
