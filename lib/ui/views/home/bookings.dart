@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/ui/views/home/bookings/confirmed_bookings.dart';
 import 'package:home_service/ui/views/home/bookings/pending_bookings.dart';
 import 'package:home_service/ui/views/home/home.dart';
+import 'package:home_service/ui/widgets/load_home.dart';
 
 class BookingPage extends StatefulWidget {
   static const routeName = '/bookingPage';
@@ -15,6 +18,7 @@ class BookingPage extends StatefulWidget {
 
 class _BookingPageState extends State<BookingPage> {
   int _selectedIndex = 0;
+  bool isLoading = false;
   GlobalKey globalKey = GlobalKey();
   List<Widget> bookingOptions = <Widget>[
     PendingBookings(),
@@ -28,6 +32,29 @@ class _BookingPageState extends State<BookingPage> {
   }
 
   @override
+  void initState() {
+    showLoading();
+    super.initState();
+  }
+
+  //shows a shimmer to wait for stream to fetch
+  showLoading() {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      Timer(Duration(seconds: 3), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
@@ -35,18 +62,20 @@ class _BookingPageState extends State<BookingPage> {
 
         return true;
       },
-      child: Scaffold(
-        body: Center(
-          child: bookingOptions.elementAt(_selectedIndex),
-        ),
-        backgroundColor: Colors.white,
-        bottomNavigationBar: BottomNavigationBar(
-          key: globalKey,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.workspaces_filled,
-                color: _selectedIndex == 0 ? Colors.indigoAccent : Colors.grey,
+      child: isLoading
+          ? LoadHome()
+          : Scaffold(
+              body: Center(
+                child: bookingOptions.elementAt(_selectedIndex),
+              ),
+              backgroundColor: Colors.white,
+              bottomNavigationBar: BottomNavigationBar(
+                key: globalKey,
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.workspaces_filled,
+                      color: _selectedIndex == 0 ? Colors.indigoAccent : Colors.grey,
               ),
               label: pendingBooking,
             ),

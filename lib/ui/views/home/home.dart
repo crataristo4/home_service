@@ -53,7 +53,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         isLoading = true;
       });
 
-      Timer(Duration(seconds: 5), () {
+      Timer(Duration(seconds: 3), () {
         setState(() {
           isLoading = false;
         });

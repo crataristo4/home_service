@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/models/artwork.dart';
+import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 import 'package:url_launcher/url_launcher.dart';
@@ -17,8 +20,31 @@ class ArtworksPage extends StatefulWidget {
 
 class _ArtworksPageState extends State<ArtworksPage> {
   Future<void>? _launched;
-
+  bool isLoading = false;
   bool _favorite = false;
+
+  @override
+  void initState() {
+    showLoading();
+    super.initState();
+  }
+
+  //shows a shimmer to wait for stream to fetch
+  showLoading() {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      Timer(Duration(seconds: 3), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
 
   Future<void> _makePhoneCall(String url) async {
     if (await canLaunch(url)) {
@@ -112,9 +138,9 @@ class _ArtworksPageState extends State<ArtworksPage> {
                 ),
                 ElevatedButton(
                     onPressed: () => setState(() {
-                          _launched = _makePhoneCall(
-                              'tel:${artworkList[index].artisanPhoneNumber}');
-                        }),
+                      _launched = _makePhoneCall(
+                          'tel:${artworkList[index].artisanPhoneNumber}');
+                    }),
                     child: Text('CALL'))
               ],
             ),
@@ -127,20 +153,22 @@ class _ArtworksPageState extends State<ArtworksPage> {
   @override
   Widget build(BuildContext context) {
     final artworkList = Provider.of<List<ArtworkModel>>(context);
-    return Builder(
-      builder: (BuildContext context) {
-        return Container(
-            margin: EdgeInsets.all(24),
-            child: ListView.builder(
-                itemCount: artworkList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Column(
-                    children: [
-                      _buildArtworksCard(artworkList, index),
-                      SizedBox(height: 24)
-                    ],
-                  );
-                }));
+    return isLoading
+        ? LoadHome()
+        : Builder(
+            builder: (BuildContext context) {
+              return Container(
+                  margin: EdgeInsets.all(twentyFourDp),
+                  child: ListView.builder(
+                      itemCount: artworkList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                          children: [
+                            _buildArtworksCard(artworkList, index),
+                            SizedBox(height: twentyFourDp)
+                          ],
+                        );
+                      }));
       },
     );
   }
