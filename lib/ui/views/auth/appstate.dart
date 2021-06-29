@@ -31,6 +31,7 @@ class AppState extends StatefulWidget {
 
 class _AppStateState extends State<AppState> {
   final mAuth = FirebaseAuth.instance;
+  int? tabIndex = 1;
 
   @override
   void initState() {
@@ -160,7 +161,9 @@ class _AppStateState extends State<AppState> {
                         category != null ||
                         expLevel != null
                     ? Home(
-                        tabIndex: 1,
+                  tabIndex: tabIndex! == 0 || tabIndex! == 2
+                            ? tabIndex = 1
+                            : tabIndex = 1,
                       )
                     : RegistrationPage())),
       ),
