@@ -63,7 +63,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
   //method to get number of artisans in a category
   Future<void> getCategoryCount() async {
     QuerySnapshot querySnapshot = await usersDbRef
-        .orderBy("artisanName")
+        .orderBy("name")
         .where("category", isEqualTo: widget.categoryName)
         .get();
     List<DocumentSnapshot> documentSnapshot = querySnapshot.docs;
@@ -234,7 +234,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int index) {
                 //get the details from the receiver
-                receiverName = snapshot.data![index]['artisanName'];
+                receiverName = snapshot.data![index]['name'];
                 receiverId = snapshot.data![index]['id'];
                 receiverPhoneNumber = snapshot.data![index]['phoneNumber'];
                 receiverPhotoUrl = snapshot.data![index]['photoUrl'];
@@ -296,8 +296,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           Text(
-                                            snapshot.data![index]
-                                                ['artisanName'],
+                                            snapshot.data![index]['name'],
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: sixteenDp),

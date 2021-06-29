@@ -30,7 +30,10 @@ class _ArtworksPageState extends State<ArtworksPage> {
 
   Widget _buildArtworksCard(List<ArtworkModel> artworkList, int index) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(ArtisanProfile.routeName),
+      onTap: () => Navigator.of(context).pushNamed(
+        ArtisanProfile.routeName,
+        arguments: artworkList[index].artisanId,
+      ),
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(

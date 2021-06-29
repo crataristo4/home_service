@@ -5,7 +5,7 @@ class FirebaseDataProvider {
   Future<List<DocumentSnapshot>> fetchInitialList(
       CollectionReference collectionReference, String category) async {
     return (await collectionReference
-            .orderBy("artisanName")
+            .orderBy("name")
             .where("category", isEqualTo: category)
             .limit(10)
             .get())
@@ -17,7 +17,7 @@ class FirebaseDataProvider {
       List<DocumentSnapshot> documentList,
       String category) async {
     return (await collectionReference
-            .orderBy("artisanName")
+            .orderBy("name")
             .where("category", isEqualTo: category)
             .startAfterDocument(documentList[documentList.length - 1])
             .limit(10)

@@ -50,8 +50,11 @@ class RouteGenerator {
 
       //edit artisan profile
       case ArtisanProfile.routeName:
-        // final data = settings.arguments as String;
-        return MaterialPageRoute(builder: (_) => ArtisanProfile());
+        final data = settings.arguments as String;
+        return MaterialPageRoute(
+            builder: (_) => ArtisanProfile(
+                  artisanId: data,
+                ));
 
       //default home page for all users
       case Home.routeName:

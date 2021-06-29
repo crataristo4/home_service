@@ -106,8 +106,9 @@ class UserService {
   Stream<List<Artisans>> getInitialArtisanByCategory(String? category) {
     return firestoreService
         .collection('Users')
-        .orderBy("artisanName")
-        .where("type", isEqualTo: category)
+        .orderBy("name")
+        .where("type", isEqualTo: artisan)
+        .where("category", isEqualTo: category)
         .limit(20)
         .snapshots()
         .map((snapshots) => snapshots.docs
@@ -120,8 +121,9 @@ class UserService {
       List<DocumentSnapshot> documentList, String category) {
     return firestoreService
         .collection("Users")
-        .orderBy("artisanName")
-        .where("type", isEqualTo: category)
+        .orderBy("name")
+        .where("type", isEqualTo: artisan)
+        .where("category", isEqualTo: category)
         .limit(20)
         .startAfterDocument(documentList[documentList.length - 1])
         .snapshots()

@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/models/artwork.dart';
-import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/models/users.dart';
 import 'package:provider/provider.dart';
 
 class ArtisanProfile extends StatefulWidget {
-  // final String? artisanId;
+  final String? artisanId;
 
-  const ArtisanProfile({Key? key}) : super(key: key);
+  const ArtisanProfile({Key? key, this.artisanId}) : super(key: key);
   static const routeName = '/artisanProfile';
 
   @override
@@ -15,13 +15,14 @@ class ArtisanProfile extends StatefulWidget {
 }
 
 class _ArtisanProfileState extends State<ArtisanProfile> {
-  //ArtworkModel? _seletedArtisan;
+  Artisans? _selectedArtisan;
 
   @override
   void initState() {
-    /* final artworkList = Provider.of<List<ArtworkModel>>(context, listen: false);
-    _seletedArtisan =
-        artworkList.firstWhere((artworkList) => artworkList.artisanId == widget.artisanId);*/
+    final artisans = Provider.of<List<Artisans>>(context, listen: false);
+
+    _selectedArtisan =
+        artisans.firstWhere((artisans) => artisans.id == widget.artisanId);
     super.initState();
   }
 
@@ -48,24 +49,25 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: CachedNetworkImage(
-                  //artwork image
+                  //artisan image
                   height: 200,
                   width: 150,
                   placeholder: (context, url) =>
                       Center(child: CircularProgressIndicator()),
-                  imageUrl: imageUrl!,
+                  imageUrl: _selectedArtisan!.photoUrl!,
 
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             SizedBox(height: 20),
-            Text(userName!, style: TextStyle(fontSize: 20)),
+            Text(_selectedArtisan!.name!, style: TextStyle(fontSize: 20)),
             SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(category!, style: TextStyle(fontSize: 12)),
+                Text(_selectedArtisan!.category!,
+                    style: TextStyle(fontSize: 12)),
                 SizedBox(width: 5),
                 Container(
                   width: 6,
@@ -74,7 +76,8 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                       shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
                 ),
                 SizedBox(width: 5),
-                Text(expLevel!, style: TextStyle(fontSize: 12)),
+                Text(_selectedArtisan!.expLevel!,
+                    style: TextStyle(fontSize: 12)),
               ],
             ),
             SizedBox(height: 20),
@@ -105,9 +108,9 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
 
                               fit: BoxFit.cover,
                             ),
-                      ),
-                    );
-                  }),
+                          ),
+                        );
+                      }),
             ),
           ],
         ),
