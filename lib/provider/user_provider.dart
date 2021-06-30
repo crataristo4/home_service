@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/service/firestore_services.dart';
-import 'package:home_service/ui/views/home/home.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,11 +44,12 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  changeArtisanPhotoUrl(value) {
+  setPhotoUrl(value) {
     _photoUrl = value;
     notifyListeners();
   }
 
+  //CREATE NEW USER
   createUser(BuildContext context) async {
     _id = FirebaseAuth.instance.currentUser!.uid;
     _dateJoined = dateFormat.format(DateTime.now());
@@ -61,7 +62,7 @@ class UserProvider with ChangeNotifier {
     if (getUserType == artisan) {
       //creates a new artisan object
       Artisans newArtisan = Artisans(
-          artisanName: name,
+          name: name,
           photoUrl: photoUrl,
           phoneNumber: _phoneNumber!,
           id: _id!,
@@ -69,19 +70,19 @@ class UserProvider with ChangeNotifier {
           category: category,
           type: _type!,
           expLevel: expLevel,
-          artworkUrl: [],
           location: new GeoPoint(0, 0));
 
       await userData.setString("category", category);
       await userData.setString("name", name);
       await userData.setString("photoUrl", photoUrl);
+      await userData.setString("expLevel", expLevel);
 
       //push to db
       userService.createArtisan(newArtisan, context);
     } else if (getUserType == user) {
       // create new  user object
       Users newUser = Users(
-          userName: name,
+          name: name,
           photoUrl: photoUrl,
           phoneNumber: _phoneNumber!,
           id: _id!,
@@ -96,5 +97,55 @@ class UserProvider with ChangeNotifier {
       //create record in db
       userService.createUser(newUser, context);
     }
+  }
+
+  //UPDATE USER / artisan name
+  updateUserName(BuildContext context) async {
+    //store values
+    SharedPreferences updateUserData = await SharedPreferences.getInstance();
+    //remove shared prefs value
+    if (updateUserData.containsKey('name')) updateUserData.remove('name');
+
+//update values into shared prefs
+    await updateUserData.setString("name", name);
+
+    // update  user object
+    Users updateUser = Users.name(name: name);
+    //create record in db
+    userService.updateUserName(updateUser, context);
+  }
+
+  //UPDATE Artisan experience
+  updateArtisanExperience(BuildContext context) async {
+    //store values
+    SharedPreferences updateUserData = await SharedPreferences.getInstance();
+    //remove shared prefs value
+    if (updateUserData.containsKey('expLevel'))
+      updateUserData.remove('expLevel');
+
+//update values into shared prefs
+    await updateUserData.setString("expLevel", expLevel);
+
+    // update  user object
+    Artisans updateExpLevel = Artisans.expLevel(expLevel: expLevel);
+    //create record in db
+    userService.updateArtisanExpLevel(updateExpLevel, context);
+  }
+
+  //UPDATE PHOTO
+  updatePhoto(BuildContext context) async {
+    //store values
+    SharedPreferences updateUserData = await SharedPreferences.getInstance();
+    //remove shared prefs value
+    if (updateUserData.containsKey('photoUrl'))
+      updateUserData.remove('photoUrl');
+
+//update values into shared prefs
+    await updateUserData.setString("photoUrl", photoUrl);
+
+    // update  user object
+    Users updateUser = Users.photoUrl(photoUrl: photoUrl);
+    //create record in db
+    userService.updatePhotoUrl(updateUser, context);
   }
 }

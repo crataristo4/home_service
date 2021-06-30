@@ -10,12 +10,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 String? currentUserId;
 String? phoneNumber;
-String? name;
-String? photoUrl;
+String? userName;
 String? type;
 String? category;
 String? expLevel;
+String? getUserType;
+String? imageUrl;
 
+//loading key
+final GlobalKey<State> loadingKey = new GlobalKey<State>();
 final DateTime timeStamp = DateTime.now();
 
 class AppState extends StatefulWidget {
@@ -28,6 +31,7 @@ class AppState extends StatefulWidget {
 
 class _AppStateState extends State<AppState> {
   final mAuth = FirebaseAuth.instance;
+  int? tabIndex = 1;
 
   @override
   void initState() {
@@ -48,11 +52,13 @@ class _AppStateState extends State<AppState> {
       if (currentUserId != null) {
         //check the state of users / artisans if the user exists
 
-        //get data from shared preferences
-        if (prefs.containsKey('name') ||
-            prefs.containsKey('photoUrl') ||
-            prefs.containsKey('category') ||
+        if (getUserType == artisan &&
+            prefs.containsKey('name') &&
+            prefs.containsKey('photoUrl') &&
+            prefs.containsKey('category') &&
             prefs.containsKey('expLevel')) {
+          //get data from shared preferences
+
           userName = prefs.getString('name');
           imageUrl = prefs.getString('photoUrl');
           getUserType = prefs.getString('userType');
@@ -61,6 +67,13 @@ class _AppStateState extends State<AppState> {
 
           print(
               "Username from shared pref is: $userName , type is $getUserType , category is $category , experience level is $expLevel");
+        } else if (getUserType == user &&
+            prefs.containsKey('name') &&
+            prefs.containsKey('photoUrl')) {
+          userName = prefs.getString('name');
+          imageUrl = prefs.getString('photoUrl');
+          print(
+              "Username from shared pref is: $userName , type is $getUserType ");
         } else {
           print(
               "Username from empty Shared pref is: $userName and type is $getUserType");
@@ -97,10 +110,11 @@ class _AppStateState extends State<AppState> {
               } else {
                 //if true  ... shared pref keys for user name and photoUrl can be null so get data
                 if (getUserType == user) {
-                  userName = documentSnapshot.get(FieldPath(['userName']));
-                } else {
-                  userName = documentSnapshot.get(FieldPath(['artisanName']));
+                  userName = documentSnapshot.get(FieldPath(['name']));
+                } else if (getUserType == artisan) {
+                  userName = documentSnapshot.get(FieldPath(['name']));
                   category = documentSnapshot.get(FieldPath(['category']));
+                  expLevel = documentSnapshot.get(FieldPath(['expLevel']));
                 }
 
                 imageUrl = documentSnapshot.get(FieldPath(['photoUrl']));
@@ -143,10 +157,13 @@ class _AppStateState extends State<AppState> {
             child: Scaffold(
                 body: currentUserId != null ||
                         imageUrl != null ||
-                        userName != null
+                        userName != null ||
+                        category != null ||
+                        expLevel != null
                     ? Home(
-                        name: userName,
-                        image: imageUrl,
+                  tabIndex: tabIndex! == 0 || tabIndex! == 2
+                            ? tabIndex = 1
+                            : tabIndex = 1,
                       )
                     : RegistrationPage())),
       ),

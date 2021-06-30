@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/provider/auth_provider.dart';
-import 'package:home_service/ui/views/home/home.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +55,7 @@ class _VerificationPageState extends State<VerificationPage> {
           .verifyOTP(_controller.text.toString())
           .then((_) {
         Navigator.of(context)
-            .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
+            .pushNamedAndRemoveUntil(AppState.routeName, (route) => false);
       }).catchError((e) {
         String errorMsg = cantAuthenticate;
         if (e.toString().contains("ERROR_SESSION_EXPIRED")) {

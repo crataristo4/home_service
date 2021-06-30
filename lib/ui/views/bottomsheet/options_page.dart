@@ -3,17 +3,17 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/help/help_page.dart';
-import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/views/profile/edit_profile.dart';
 import 'package:home_service/ui/widgets/actions.dart';
+import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants.dart';
-import '../home/home.dart';
 import 'add_artwork.dart';
 
 class OptionsPage extends StatefulWidget {
@@ -196,14 +196,27 @@ class _OptionsPageState extends State<OptionsPage> {
               prefs.remove('category');
               prefs.remove('expLevel');
             }
+            //close alert dialog
+            Navigator.pop(context);
 
             //if yes ... sign out from firebase
             await FirebaseAuth.instance.signOut();
 
+            Dialogs.showLoadingDialog(
+                //show dialog and delay
+                context,
+                loadingKey,
+                loggingYouOut,
+                Colors.white70);
+            await Future.delayed(const Duration(seconds: 3));
+
             //close alert dialog
             Navigator.pop(context);
             //navigate to register
-            Navigator.of(context).popAndPushNamed(RegistrationPage.routeName);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                RegistrationPage.routeName, (route) => false);
+
+            print("From shared prefs ?? $userName , $category");
           },
         ));
   }

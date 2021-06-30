@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
-import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 
 import '../constants.dart';
@@ -38,15 +37,63 @@ class UserService {
     });
   }
 
+  //update name
+  Future<void> updateUserName(Users user, BuildContext context) {
+    return firestoreService
+        .collection('Users')
+        .doc(currentUserId)
+        .update(user.updateUserNameToMap())
+        .catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
+  //update PHOTO
+  Future<void> updatePhotoUrl(Users user, BuildContext context) {
+    return firestoreService
+        .collection('Users')
+        .doc(currentUserId)
+        .update(user.updateUserPhotoToMap())
+        .whenComplete(() async {
+      showUpdatingSuccess(context);
+    }).catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
+  //update artisan experience
+  Future<void> updateArtisanExpLevel(Artisans artisan, BuildContext context) {
+    return firestoreService
+        .collection('Users')
+        .doc(currentUserId)
+        .update(artisan.updateExpLevelToMap())
+        .catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
+  //update location
+  Future<void> updateLocation(Users user, BuildContext context) {
+    return firestoreService
+        .collection('Users')
+        .doc(currentUserId)
+        .update(user.updateUserLocationToMap())
+        .whenComplete(() async {})
+        .catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
   Stream<DocumentSnapshot> getUserStream() async* {
     yield* firestoreService.doc("Users/$currentUserId").snapshots();
   }
 
   //get all artisans from db
+  //todo -- remove current artisan from list
   Stream<List<Artisans>> getAllArtisans() {
     return firestoreService
         .collection('Users')
-        .orderBy("artisanName")
+        .orderBy("name")
         .where("type", isEqualTo: artisan)
         .limit(20)
         .snapshots()
@@ -59,8 +106,9 @@ class UserService {
   Stream<List<Artisans>> getInitialArtisanByCategory(String? category) {
     return firestoreService
         .collection('Users')
-        .orderBy("artisanName")
-        .where("type", isEqualTo: category)
+        .orderBy("name")
+        .where("type", isEqualTo: artisan)
+        .where("category", isEqualTo: category)
         .limit(20)
         .snapshots()
         .map((snapshots) => snapshots.docs
@@ -73,8 +121,9 @@ class UserService {
       List<DocumentSnapshot> documentList, String category) {
     return firestoreService
         .collection("Users")
-        .orderBy("artisanName")
-        .where("type", isEqualTo: category)
+        .orderBy("name")
+        .where("type", isEqualTo: artisan)
+        .where("category", isEqualTo: category)
         .limit(20)
         .startAfterDocument(documentList[documentList.length - 1])
         .snapshots()
@@ -156,6 +205,16 @@ class UserService {
     Navigator.of(context, rootNavigator: true).pop();
     Navigator.of(context)
         .pushNamedAndRemoveUntil(AppState.routeName, (route) => false);
+  }
+
+  showUpdatingSuccess(context) async {
+    await Future.delayed(Duration(seconds: 3));
+    ShowAction().showToast(successful, Colors.black); //show complete msg
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+
+  showNameUpdatingSuccess(context) async {
+    ShowAction().showToast(userNameUpdated, Colors.black); //show complete msg
   }
 
   showFailure(context, error) {

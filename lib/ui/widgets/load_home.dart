@@ -28,9 +28,6 @@ class _LoadHomeState extends State<LoadHome> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 60,
-            ),
             Flexible(
               child: buildTopExpect(),
             ),
@@ -47,7 +44,7 @@ class _LoadHomeState extends State<LoadHome> {
           flex: 1,
           child: GridView.builder(
             shrinkWrap: true,
-            itemCount: 10,
+            itemCount: 1000,
             // scrollDirection: Axis.vertical,
             itemBuilder: (BuildContext context, index) {
               return Container(
@@ -66,7 +63,7 @@ class _LoadHomeState extends State<LoadHome> {
               );
             },
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 10,
               crossAxisSpacing: twelveDp,
               mainAxisSpacing: twelveDp,
             ),

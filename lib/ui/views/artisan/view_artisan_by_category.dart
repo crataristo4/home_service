@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_service/provider/bookings_provider.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bloc/artisan_category_list_bloc.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/views/home/home.dart';
@@ -62,7 +63,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
   //method to get number of artisans in a category
   Future<void> getCategoryCount() async {
     QuerySnapshot querySnapshot = await usersDbRef
-        .orderBy("artisanName")
+        .orderBy("name")
         .where("category", isEqualTo: widget.categoryName)
         .get();
     List<DocumentSnapshot> documentSnapshot = querySnapshot.docs;
@@ -233,7 +234,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int index) {
                 //get the details from the receiver
-                receiverName = snapshot.data![index]['artisanName'];
+                receiverName = snapshot.data![index]['name'];
                 receiverId = snapshot.data![index]['id'];
                 receiverPhoneNumber = snapshot.data![index]['phoneNumber'];
                 receiverPhotoUrl = snapshot.data![index]['photoUrl'];
@@ -295,8 +296,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           Text(
-                                            snapshot.data![index]
-                                                ['artisanName'],
+                                            snapshot.data![index]['name'],
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: sixteenDp),
