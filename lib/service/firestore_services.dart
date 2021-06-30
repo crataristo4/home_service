@@ -102,6 +102,8 @@ class UserService {
             .toList(growable: true));
   }
 
+  
+
   //get initial artisans list by category
   Stream<List<Artisans>> getInitialArtisanByCategory(String? category) {
     return firestoreService

@@ -42,6 +42,7 @@ class EntryPoint extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => UserProvider()),
         //get all artisan
         StreamProvider<List<Artisans>>.value(
+          lazy: false,
           initialData: [],
           value: getAllArtisan.getAllArtisans(),
         ),

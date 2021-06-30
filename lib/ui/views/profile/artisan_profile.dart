@@ -16,20 +16,27 @@ class ArtisanProfile extends StatefulWidget {
 
 class _ArtisanProfileState extends State<ArtisanProfile> {
   Artisans? _selectedArtisan;
+  List<ArtworkModel>? artworkList;
+ 
 
   @override
   void initState() {
+    
     final artisans = Provider.of<List<Artisans>>(context, listen: false);
+    final artworkLists =
+        Provider.of<List<ArtworkModel>>(context, listen: false);
 
     _selectedArtisan =
-        artisans.firstWhere((artisans) => artisans.id == widget.artisanId);
+        artisans.firstWhere((Artisans artisan) => artisan.id == widget.artisanId);
+    artworkList = artworkLists
+        .where((ArtworkModel artisanArtwork) =>
+            widget.artisanId == artisanArtwork.artisanId)
+        .toList();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final artworkList = Provider.of<List<ArtworkModel>>(context, listen: false);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -84,7 +91,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
             Text('Artwork', style: TextStyle(fontSize: 16)),
             SizedBox(height: 10),
             Expanded(
-              child: artworkList.length == 0
+              child: artworkList!.length == 0
                   ? Container(
                       child: Center(child: Text('No Artwork Yet')),
                     )
@@ -93,7 +100,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                       ),
-                      itemCount: artworkList.length,
+                      itemCount: artworkList!.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -104,7 +111,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
 
                               placeholder: (context, url) =>
                                   Center(child: CircularProgressIndicator()),
-                              imageUrl: artworkList[index].artworkImageUrl,
+                              imageUrl: artworkList![index].artworkImageUrl,
 
                               fit: BoxFit.cover,
                             ),
