@@ -2,7 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/users.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:provider/provider.dart';
+
+import '../../../constants.dart';
 
 class ArtisanProfile extends StatefulWidget {
   final String? artisanId;
@@ -17,17 +21,15 @@ class ArtisanProfile extends StatefulWidget {
 class _ArtisanProfileState extends State<ArtisanProfile> {
   Artisans? _selectedArtisan;
   List<ArtworkModel>? artworkList;
- 
 
   @override
   void initState() {
-    
     final artisans = Provider.of<List<Artisans>>(context, listen: false);
     final artworkLists =
         Provider.of<List<ArtworkModel>>(context, listen: false);
 
-    _selectedArtisan =
-        artisans.firstWhere((Artisans artisan) => artisan.id == widget.artisanId);
+    _selectedArtisan = artisans
+        .firstWhere((Artisans artisan) => artisan.id == widget.artisanId);
     artworkList = artworkLists
         .where((ArtworkModel artisanArtwork) =>
             widget.artisanId == artisanArtwork.artisanId)
@@ -87,6 +89,44 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                     style: TextStyle(fontSize: 12)),
               ],
             ),
+            SizedBox(height: 20),
+            //Booking
+            currentUserId != _selectedArtisan!.id
+                ? SizedBox(
+                    height: fortyEightDp,
+                    width: MediaQuery.of(context).size.width,
+                    child: Container(
+                        margin: EdgeInsets.only(
+                            left: sixteenDp, right: sixteenDp, bottom: fourDp),
+                        child: TextButton(
+                            // button to open bottom sheet
+                            style: TextButton.styleFrom(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                primary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(eightDp))),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  useRootNavigator: true,
+                                  builder: (context) => AddBooking(
+                                        //bottom sheet to send a short message
+                                        receiverName: _selectedArtisan!.name,
+                                        receiverPhoneNumber:
+                                            _selectedArtisan!.phoneNumber,
+                                        receiverPhotoUrl:
+                                            _selectedArtisan!.photoUrl,
+                                        receiverId: _selectedArtisan!.id,
+                                      ));
+                            },
+                            child: Text(
+                              book,
+                              style: TextStyle(fontSize: fourteenDp),
+                            ))),
+                  )
+                : Container(),
+            //End of Booking
             SizedBox(height: 20),
             Text('Artwork', style: TextStyle(fontSize: 16)),
             SizedBox(height: 10),

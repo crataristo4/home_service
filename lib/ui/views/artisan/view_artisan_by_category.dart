@@ -9,6 +9,7 @@ import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bloc/artisan_category_list_bloc.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/views/home/home.dart';
+import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:home_service/ui/widgets/loadingShimmer.dart';
 
 import '../../../constants.dart';
@@ -248,6 +249,9 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                 bookingProvider.setReceiverPhotoUrl(receiverPhotoUrl);
 
                 return GestureDetector(
+                  onTap: () => Navigator.of(context).pushNamed(
+                      ArtisanProfile.routeName,
+                      arguments: snapshot.data![index]['id']),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 150,
@@ -349,42 +353,46 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                             )
                           ],
                         ),
-                        SizedBox(
-                          height: fortyEightDp,
-                          width: MediaQuery.of(context).size.width,
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                left: sixteenDp,
-                                right: sixteenDp,
-                                bottom: fourDp),
-                            child: TextButton(
-                              // button to open bottom sheet
-                                style: TextButton.styleFrom(
-                                    backgroundColor:
-                                        Theme.of(context).primaryColor,
-                                    primary: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(eightDp))),
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      useRootNavigator: true,
-                                      builder: (context) => AddBooking(
-                                            //bottom sheet to send a short message
-                                            receiverName: receiverName,
-                                            receiverPhoneNumber:
-                                                receiverPhoneNumber,
-                                            receiverPhotoUrl: receiverPhotoUrl,
-                                            receiverId: receiverId,
-                                          ));
-                                },
-                                child: Text(
-                                  book,
-                                  style: TextStyle(fontSize: fourteenDp),
-                                )),
-                          ),
-                        )
+                        currentUserId != snapshot.data![index]['id']
+                            ? SizedBox(
+                                height: fortyEightDp,
+                                width: MediaQuery.of(context).size.width,
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                        left: sixteenDp,
+                                        right: sixteenDp,
+                                        bottom: fourDp),
+                                    child: TextButton(
+                                        // button to open bottom sheet
+                                        style: TextButton.styleFrom(
+                                            backgroundColor:
+                                                Theme.of(context).primaryColor,
+                                            primary: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        eightDp))),
+                                        onPressed: () {
+                                          showModalBottomSheet(
+                                              context: context,
+                                              useRootNavigator: true,
+                                              builder: (context) => AddBooking(
+                                                    //bottom sheet to send a short message
+                                                    receiverName: receiverName,
+                                                    receiverPhoneNumber:
+                                                        receiverPhoneNumber,
+                                                    receiverPhotoUrl:
+                                                        receiverPhotoUrl,
+                                                    receiverId: receiverId,
+                                                  ));
+                                        },
+                                        child: Text(
+                                          book,
+                                          style:
+                                              TextStyle(fontSize: fourteenDp),
+                                        ))),
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
