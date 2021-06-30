@@ -47,18 +47,6 @@ class ArtworkService {
             .toList(growable: true));
   }
 
-  //fetch artwork per artisan
-  Stream<List<ArtworkModel>> fetchArtworkById(String artisanId) {
-    return firestoreService
-        .collection('Artworks')
-        .orderBy("timeStamp", descending: true)
-        .where('artisanId', isEqualTo: artisanId)
-        //.limit(20)
-        .snapshots()
-        .map((snapshots) => snapshots.docs
-            .map((document) => ArtworkModel.fromFirestore(document.data()))
-            .toList(growable: true));
-  }
 
 //delete artwork
   Future<void> deleteArtwork(String id) {
