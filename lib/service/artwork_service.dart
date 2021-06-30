@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/artwork.dart';
-import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 
@@ -49,11 +48,11 @@ class ArtworkService {
   }
 
   //fetch artwork per artisan
-  Stream<List<ArtworkModel>> fetchArtworkById() {
+  Stream<List<ArtworkModel>> fetchArtworkById(String artisanId) {
     return firestoreService
         .collection('Artworks')
         .orderBy("timeStamp", descending: true)
-        .where('artisanId', isEqualTo: currentUserId)
+        .where('artisanId', isEqualTo: artisanId)
         //.limit(20)
         .snapshots()
         .map((snapshots) => snapshots.docs

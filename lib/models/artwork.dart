@@ -9,6 +9,8 @@ class ArtworkModel {
   final artisanId;
   dynamic timeStamp;
 
+  get getArtisanId => artisanId;
+
   ArtworkModel(
       {required this.artworkImageUrl,
       required this.artworkPrice,

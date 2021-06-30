@@ -67,7 +67,7 @@ class EntryPoint extends StatelessWidget {
 
         StreamProvider<List<ArtworkModel>>.value(
           initialData: [],
-          value: getArtworks.fetchArtworkById(),
+          value: getArtworks.fetchArtworkById("Artis"),
         ),
       ],
       child: MaterialApp(

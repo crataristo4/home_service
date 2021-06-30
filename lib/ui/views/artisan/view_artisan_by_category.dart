@@ -64,7 +64,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
   //method to get number of artisans in a category
   Future<void> getCategoryCount() async {
     QuerySnapshot querySnapshot = await usersDbRef
-        .orderBy("name")
+        .where("id", isNotEqualTo: currentUserId)
         .where("category", isEqualTo: widget.categoryName)
         .get();
     List<DocumentSnapshot> documentSnapshot = querySnapshot.docs;
