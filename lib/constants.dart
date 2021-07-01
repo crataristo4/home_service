@@ -25,6 +25,7 @@ const interiorDeco = 'Interior Decorator';
 const mechanic = 'Mechanic';
 const acRepair = 'AC Repairer';
 const fridgeRepair = 'Fridge Repairer';
+const gardener = 'Gardener';
 
 //---------------------------------------------------------------------------------------------------------------
 const iAmUser = 'I\'m a User';

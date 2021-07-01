@@ -83,7 +83,7 @@ class _CategoryPageState extends State<CategoryPage> {
                         Container(
                           margin: EdgeInsets.only(right: eightDp, top: eightDp),
                           child: TextFormField(
-                            //search for a service text field
+                              //search for a service text field
                               keyboardType: TextInputType.text,
                               controller: _searchInput,
                               textAlign: TextAlign.center,
@@ -306,7 +306,17 @@ class _CategoryPageState extends State<CategoryPage> {
                           ),
                         )
                       ],
-                    )
+                    ),
+                    CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 60,
+                      child: ClipOval(
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          child: Image.asset(
+                            getArtisanType[index].image,
+                            fit: BoxFit.cover,
+                          )),
+                    ),
                   ],
                 ),
               ),
