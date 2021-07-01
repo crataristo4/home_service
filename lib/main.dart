@@ -5,6 +5,7 @@ import 'package:home_service/models/booking.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/artwork_provider.dart';
 import 'package:home_service/provider/auth_provider.dart';
+import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/route_generator.dart';
 import 'package:home_service/service/artwork_service.dart';
@@ -47,14 +48,20 @@ class EntryPoint extends StatelessWidget {
           value: getAllArtisan.getAllArtisans(),
         ),
 
+        ChangeNotifierProvider(
+          create: (context) => BookingsProvider(),
+        ),
+
         //get list of pending bookings
         StreamProvider<List<Bookings>>.value(
+          lazy: false,
           initialData: [],
           value: getPendingBookings.getPendingBookings(),
         ),
 
         //fetch list of confirmed bookings
         StreamProvider<List<Bookings>>.value(
+            lazy: false,
             value: getConfirmedBookings.getConfirmedBookings(),
             initialData: []),
 

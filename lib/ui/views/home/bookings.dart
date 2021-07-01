@@ -2,10 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/bookings/confirmed_bookings.dart';
 import 'package:home_service/ui/views/home/bookings/pending_bookings.dart';
+import 'package:home_service/ui/views/home/bookings/user_booking_page/user_pending_bookings.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
+
+import 'bookings/user_booking_page/user_bookings_confirmed.dart';
 
 class BookingPage extends StatefulWidget {
   static const routeName = '/bookingPage';
@@ -20,9 +24,14 @@ class _BookingPageState extends State<BookingPage> {
   int _selectedIndex = 0;
   bool isLoading = false;
   GlobalKey globalKey = GlobalKey();
-  List<Widget> bookingOptions = <Widget>[
+  List<Widget> artisanBookingOptions = <Widget>[
     PendingBookings(),
     ConfirmedBookings(),
+  ];
+
+  List<Widget> userBookingOptions = <Widget>[
+    UserPendingBookings(),
+    UserBookingsConfirmed(),
   ];
 
   _onItemTapped(int index) {
@@ -66,7 +75,9 @@ class _BookingPageState extends State<BookingPage> {
           ? LoadHome()
           : Scaffold(
               body: Center(
-                child: bookingOptions.elementAt(_selectedIndex),
+                child: getUserType == user
+                    ? userBookingOptions.elementAt(_selectedIndex)
+                    : artisanBookingOptions.elementAt(_selectedIndex),
               ),
               backgroundColor: Colors.white,
               bottomNavigationBar: BottomNavigationBar(
@@ -75,27 +86,29 @@ class _BookingPageState extends State<BookingPage> {
                   BottomNavigationBarItem(
                     icon: Icon(
                       Icons.workspaces_filled,
-                      color: _selectedIndex == 0 ? Colors.indigoAccent : Colors.grey,
+                      color: _selectedIndex == 0
+                          ? Colors.indigoAccent
+                          : Colors.grey,
+                    ),
+                    label: getUserType == user ? pendingBooking : 'Sent',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.check,
+                      color: _selectedIndex == 1 ? Colors.green : Colors.grey,
+                    ),
+                    label: getUserType == user ? confirmedBooking : "Received",
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                selectedItemColor: Theme.of(context).primaryColor,
+                backgroundColor: Color(0xFFFFFFFF),
+                unselectedItemColor: Color(0xFFAFAFAF),
+                showUnselectedLabels: true,
+                type: BottomNavigationBarType.fixed,
+                onTap: _onItemTapped,
               ),
-              label: pendingBooking,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.check,
-                color: _selectedIndex == 1 ? Colors.green : Colors.grey,
-              ),
-              label: confirmedBooking,
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Theme.of(context).primaryColor,
-          backgroundColor: Color(0xFFFFFFFF),
-          unselectedItemColor: Color(0xFFAFAFAF),
-          showUnselectedLabels: true,
-          type: BottomNavigationBarType.fixed,
-          onTap: _onItemTapped,
-        ),
-      ),
     );
   }
 }

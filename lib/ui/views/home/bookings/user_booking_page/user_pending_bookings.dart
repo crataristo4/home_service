@@ -4,17 +4,22 @@ import 'package:home_service/models/booking.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../constants.dart';
+import '../../../../../constants.dart';
 
-class PendingBookings extends StatelessWidget {
+class UserPendingBookings extends StatefulWidget {
   static const routeName = '/pendingBookings';
 
-  const PendingBookings({Key? key}) : super(key: key);
+  const UserPendingBookings({Key? key}) : super(key: key);
 
   @override
+  _UserPendingBookingsState createState() => _UserPendingBookingsState();
+}
+
+class _UserPendingBookingsState extends State<UserPendingBookings> {
+  @override
   Widget build(BuildContext context) {
-    final bookingsList = Provider.of<List<Bookings>>(context);
-    print("Data length ${bookingsList.length}");
+    final bookingList = Provider.of<List<Bookings>>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -23,7 +28,6 @@ class PendingBookings extends StatelessWidget {
           builder: (BuildContext context) {
             return ListView.builder(
               itemBuilder: (context, index) {
-                print("Data length ${bookingsList.length}");
                 return Column(
                   children: [
                     Container(
@@ -48,11 +52,11 @@ class PendingBookings extends StatelessWidget {
                             //artisans name
                             getUserType == user
                                 ? Text(
-                                    bookingsList[index].receiverName,
+                                    bookingList[index].receiverName,
                                     style: TextStyle(color: Colors.white),
                                   )
                                 : Text(
-                                    bookingsList[index].senderName,
+                                    bookingList[index].senderName,
                                     style: TextStyle(color: Colors.white),
                                   ),
                           ],
@@ -71,7 +75,7 @@ class PendingBookings extends StatelessWidget {
                                   Flexible(
                                     //
                                     flex: 1,
-                                    child: Text(bookingsList[index].message,
+                                    child: Text(bookingList[index].message,
                                         style: TextStyle(color: Colors.white)),
                                   ),
                                 ],
@@ -79,7 +83,7 @@ class PendingBookings extends StatelessWidget {
                             ),
                             Text(
                               //  experience
-                              bookingsList[index].status,
+                              bookingList[index].status,
                               style: TextStyle(color: Colors.white),
                             )
                           ],
@@ -90,8 +94,8 @@ class PendingBookings extends StatelessWidget {
                             radius: 40,
                             foregroundImage: CachedNetworkImageProvider(
                                 getUserType == user
-                                    ? bookingsList[index].receiverPhotoUrl
-                                    : bookingsList[index].senderPhotoUrl),
+                                    ? bookingList[index].receiverPhotoUrl
+                                    : bookingList[index].senderPhotoUrl),
                             backgroundColor: Colors.indigo,
                           ),
                         ),
@@ -103,7 +107,7 @@ class PendingBookings extends StatelessWidget {
                   ],
                 );
               },
-              itemCount: bookingsList.length,
+              itemCount: bookingList.length,
               shrinkWrap: true,
             );
           },
