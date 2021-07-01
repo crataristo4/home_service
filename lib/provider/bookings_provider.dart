@@ -100,8 +100,8 @@ class BookingsProvider with ChangeNotifier {
     bookingService.createBooking(newBooking, context);
   }
 
-  updateBook() {
-// update price and image only or when user changes profile
+  updateBookingsConfirmed(BuildContext context, String? bookingId) {
+    bookingService.updateBookings(context, bookingId!);
   }
 
   deleteBook(String id) {

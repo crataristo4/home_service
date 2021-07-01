@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
-import 'package:home_service/ui/views/home/bookings/confirmed_bookings.dart';
-import 'package:home_service/ui/views/home/bookings/pending_bookings.dart';
+import 'package:home_service/ui/views/home/bookings/artisan_booking_page/received_bookings.dart';
+import 'package:home_service/ui/views/home/bookings/artisan_booking_page/sent_bookings.dart';
 import 'package:home_service/ui/views/home/bookings/user_booking_page/user_pending_bookings.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
@@ -25,13 +25,13 @@ class _BookingPageState extends State<BookingPage> {
   bool isLoading = false;
   GlobalKey globalKey = GlobalKey();
   List<Widget> artisanBookingOptions = <Widget>[
-    PendingBookings(),
-    ConfirmedBookings(),
+    SentBookings(),
+    ReceivedBookings(),
   ];
 
   List<Widget> userBookingOptions = <Widget>[
     UserPendingBookings(),
-    UserBookingsConfirmed(),
+    // UserBookingsConfirmed(),
   ];
 
   _onItemTapped(int index) {

@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:home_service/models/artisan_type.dart';
 import 'package:home_service/ui/views/artisan/view_all_artisans.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
+import 'package:home_service/ui/views/home/bookings/all_bookings.dart';
 
 import '../../../constants.dart';
 
@@ -130,7 +131,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Top Experts",
@@ -138,22 +139,31 @@ class _CategoryPageState extends State<CategoryPage> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: sixteenDp),
                                     ),
-                                    Container(
-                                      padding: EdgeInsets.all(sixDp),
-                                      margin: EdgeInsets.only(right: sixteenDp),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(fourDp),
-                                          border: Border.all(
-                                              width: 0.3,
-                                              color: Colors.grey
-                                                  .withOpacity(0.3))),
-                                      child: Text(
-                                        viewAll,
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: twelveDp),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AllBookings()));
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.all(sixDp),
+                                        margin:
+                                            EdgeInsets.only(right: sixteenDp),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(fourDp),
+                                            border: Border.all(
+                                                width: 0.3,
+                                                color: Colors.grey
+                                                    .withOpacity(0.3))),
+                                        child: Text(
+                                          viewAll,
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: twelveDp),
+                                        ),
                                       ),
                                     )
                                   ],

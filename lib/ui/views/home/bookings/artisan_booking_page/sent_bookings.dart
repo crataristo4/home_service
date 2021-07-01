@@ -1,16 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:home_service/constants.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../constants.dart';
+class SentBookings extends StatefulWidget {
+  static const routeName = '/sentBookings';
 
-class PendingBookings extends StatelessWidget {
-  static const routeName = '/pendingBookings';
+  const SentBookings({Key? key}) : super(key: key);
 
-  const PendingBookings({Key? key}) : super(key: key);
+  @override
+  _SentBookingsState createState() => _SentBookingsState();
+}
 
+class _SentBookingsState extends State<SentBookings> {
   @override
   Widget build(BuildContext context) {
     final bookingsList = Provider.of<List<Bookings>>(context);
@@ -48,11 +52,11 @@ class PendingBookings extends StatelessWidget {
                             //artisans name
                             getUserType == user
                                 ? Text(
-                                    bookingsList[index].receiverName,
+                                    bookingsList[index].receiverName!,
                                     style: TextStyle(color: Colors.white),
                                   )
                                 : Text(
-                                    bookingsList[index].senderName,
+                                    bookingsList[index].senderName!,
                                     style: TextStyle(color: Colors.white),
                                   ),
                           ],
@@ -71,7 +75,7 @@ class PendingBookings extends StatelessWidget {
                                   Flexible(
                                     //
                                     flex: 1,
-                                    child: Text(bookingsList[index].message,
+                                    child: Text(bookingsList[index].message!,
                                         style: TextStyle(color: Colors.white)),
                                   ),
                                 ],
@@ -79,7 +83,7 @@ class PendingBookings extends StatelessWidget {
                             ),
                             Text(
                               //  experience
-                              bookingsList[index].status,
+                              bookingsList[index].status!,
                               style: TextStyle(color: Colors.white),
                             )
                           ],
@@ -90,8 +94,8 @@ class PendingBookings extends StatelessWidget {
                             radius: 40,
                             foregroundImage: CachedNetworkImageProvider(
                                 getUserType == user
-                                    ? bookingsList[index].receiverPhotoUrl
-                                    : bookingsList[index].senderPhotoUrl),
+                                    ? bookingsList[index].receiverPhotoUrl!
+                                    : bookingsList[index].senderPhotoUrl!),
                             backgroundColor: Colors.indigo,
                           ),
                         ),

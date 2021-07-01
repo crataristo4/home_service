@@ -1,21 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Bookings {
-  final id;
-  final senderName;
-  final receiverName;
-  final senderId;
-  final receiverId;
-  final senderPhoneNumber;
-  final receiverPhoneNumber;
-  final senderPhotoUrl;
-  final receiverPhotoUrl;
-  final status;
-  final dynamic timestamp;
-  final String? bookingDate;
-  final message;
-  final GeoPoint? senderLocation;
-  final GeoPoint? receiverLocation;
+  String? id;
+  String? senderName;
+  String? receiverName;
+  String? senderId;
+  String? receiverId;
+  String? senderPhoneNumber;
+  String? receiverPhoneNumber;
+  String? senderPhotoUrl;
+  String? receiverPhotoUrl;
+  String? status;
+  dynamic timestamp;
+  String? bookingDate;
+  String? message;
+  GeoPoint? senderLocation;
+  GeoPoint? receiverLocation;
 
   Bookings(
       {required this.id,
@@ -33,6 +33,8 @@ class Bookings {
       required this.message,
       required this.senderLocation,
       required this.receiverLocation});
+
+  Bookings.id({required this.id});
 
   factory Bookings.fromFirestore(Map<String, dynamic> data) {
     return Bookings(

@@ -24,11 +24,15 @@ class BookingService {
   }
 
   //update bookings to db
-  Future<void> updateBookings(Bookings bookings) {
+  Future<void> updateBookings(BuildContext context, String bookingId) {
     return firestoreService
         .collection('Bookings')
-        .doc(bookings.id)
-        .update(bookings.bookToMap());
+        .doc(bookingId)
+        .update({"status": confirmed}).whenComplete(() {
+      showSuccess(context);
+    }).catchError((error) {
+      showFailure(context, error);
+    });
   }
 
   //delete booking record
@@ -36,35 +40,86 @@ class BookingService {
     return firestoreService.collection('Bookings').doc(id).delete();
   }
 
+  //get all bookings
+  Stream<List<Bookings>> getAllBookings() {
+    return getUserType == user
+        ? firestoreService
+            .collection('Bookings')
+            .orderBy("timestamp", descending: true)
+            .where("senderId", isEqualTo: currentUserId)
+            // .where("status", isEqualTo: pending)
+            .limit(50)
+            .snapshots()
+            .map((snapshots) => snapshots.docs
+                .map((document) => Bookings.fromFirestore(document.data()))
+                .toList(growable: true))
+            .handleError((error) {
+            print("Error on getting pending bookings ==> $error");
+          })
+        : firestoreService
+            .collection('Bookings')
+            .orderBy("timestamp", descending: true)
+            .where("receiverId", isEqualTo: currentUserId)
+            // .where("status", isEqualTo: pending)
+            .limit(50)
+            .snapshots()
+            .map((snapshots) => snapshots.docs
+                .map((document) => Bookings.fromFirestore(document.data()))
+                .toList(growable: true))
+            .handleError((error) {
+            print("Error on getting pending bookings ==> $error");
+          });
+  }
+
   //get all bookings by status - Pending ,  order by user type
   Stream<List<Bookings>> getPendingBookings() {
-    return firestoreService
-        .collection('Bookings')
-        .orderBy("timeStamp", descending: true)
-        .where("senderId", isEqualTo: currentUserId)
-        .where("status", isEqualTo: pending)
-        .limit(50)
-        .snapshots()
-        .map((snapshots) => snapshots.docs
-            .map((document) => Bookings.fromFirestore(document.data()))
-            .toList(growable: true))
-        .handleError((error) {
-        print("Error on getting pending bookings ==> $error");
-      });
+    return getUserType == user
+        ? firestoreService
+            .collection('Bookings')
+            .orderBy("timestamp", descending: true)
+            .where("senderId", isEqualTo: currentUserId)
+            .where("status", isEqualTo: pending)
+            .limit(50)
+            .snapshots()
+            .map((snapshots) => snapshots.docs
+                .map((document) => Bookings.fromFirestore(document.data()))
+                .toList(growable: true))
+            .handleError((error) {
+            print("Error on getting pending bookings ==> $error");
+          })
+        : firestoreService
+            .collection('Bookings')
+            .orderBy("timestamp", descending: true)
+            .where("receiverId", isEqualTo: currentUserId)
+            .where("status", isEqualTo: pending)
+            .limit(50)
+            .snapshots()
+            .map((snapshots) => snapshots.docs
+                .map((document) => Bookings.fromFirestore(document.data()))
+                .toList(growable: true))
+            .handleError((error) {
+            print("Error on getting pending bookings ==> $error");
+          });
   }
 
   //get all bookings by status - Pending order by user type
   Stream<List<Bookings>> getConfirmedBookings() {
     return firestoreService
         .collection('Bookings')
-        .orderBy("timeStamp", descending: true)
+        .orderBy("timestamp", descending: true)
         .where("senderId", isEqualTo: currentUserId)
-          .where("status", isEqualTo: confirmed)
-          .limit(20)
-          .snapshots()
-          .map((snapshots) => snapshots.docs
-              .map((document) => Bookings.fromFirestore(document.data()))
-              .toList(growable: true));
+        .where("status", isEqualTo: confirmed)
+        .limit(20)
+        .snapshots()
+        .map((snapshots) => snapshots.docs
+            .map((document) => Bookings.fromFirestore(document.data()))
+            .toList(growable: true));
+  }
+
+  showBookingConfirmedSuccess(context) async {
+    await Future.delayed(const Duration(seconds: 3));
+    Navigator.of(context, rootNavigator: true).pop();
+    ShowAction().showToast(successful, Colors.black); //show complete msg
   }
 
   showSuccess(context) async {

@@ -41,6 +41,7 @@ const pendingBooking = 'Pending bookings';
 const pending = 'Pending';
 const confirmedBooking = 'Confirmed bookings';
 const confirmed = 'Confirmed';
+const approve = 'Approve';
 const viewAll = 'View All';
 const allAvailableArtisans = "All available Artisans";
 const chooseAservice = "Choose a service";

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../../../constants.dart';
 
 class UserPendingBookings extends StatefulWidget {
-  static const routeName = '/pendingBookings';
+  static const routeName = '/userPendingBookings';
 
   const UserPendingBookings({Key? key}) : super(key: key);
 
@@ -52,11 +52,11 @@ class _UserPendingBookingsState extends State<UserPendingBookings> {
                             //artisans name
                             getUserType == user
                                 ? Text(
-                                    bookingList[index].receiverName,
+                              bookingList[index].receiverName!,
                                     style: TextStyle(color: Colors.white),
                                   )
                                 : Text(
-                                    bookingList[index].senderName,
+                              bookingList[index].senderName!,
                                     style: TextStyle(color: Colors.white),
                                   ),
                           ],
@@ -75,7 +75,7 @@ class _UserPendingBookingsState extends State<UserPendingBookings> {
                                   Flexible(
                                     //
                                     flex: 1,
-                                    child: Text(bookingList[index].message,
+                                    child: Text(bookingList[index].message!,
                                         style: TextStyle(color: Colors.white)),
                                   ),
                                 ],
@@ -83,7 +83,7 @@ class _UserPendingBookingsState extends State<UserPendingBookings> {
                             ),
                             Text(
                               //  experience
-                              bookingList[index].status,
+                              bookingList[index].status!,
                               style: TextStyle(color: Colors.white),
                             )
                           ],
@@ -94,8 +94,8 @@ class _UserPendingBookingsState extends State<UserPendingBookings> {
                             radius: 40,
                             foregroundImage: CachedNetworkImageProvider(
                                 getUserType == user
-                                    ? bookingList[index].receiverPhotoUrl
-                                    : bookingList[index].senderPhotoUrl),
+                                    ? bookingList[index].receiverPhotoUrl!
+                                    : bookingList[index].senderPhotoUrl!),
                             backgroundColor: Colors.indigo,
                           ),
                         ),

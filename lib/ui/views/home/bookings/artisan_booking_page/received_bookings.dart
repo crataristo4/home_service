@@ -1,23 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:home_service/constants.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/service/booking_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../constants.dart';
 
-class ConfirmedBookings extends StatefulWidget {
-  static const routeName = '/confirmedBookings';
+class ReceivedBookings extends StatefulWidget {
+  static const routeName = '/receivedBookings';
 
-  const ConfirmedBookings({Key? key}) : super(key: key);
+  const ReceivedBookings({Key? key}) : super(key: key);
 
   @override
-  _ConfirmedBookingsState createState() => _ConfirmedBookingsState();
+  _ReceivedBookingsState createState() => _ReceivedBookingsState();
 }
 
-class _ConfirmedBookingsState extends State<ConfirmedBookings> {
+class _ReceivedBookingsState extends State<ReceivedBookings> {
   @override
   Widget build(BuildContext context) {
     final confirmedBookingList = Provider.of<List<Bookings>>(context);
@@ -55,11 +55,11 @@ class _ConfirmedBookingsState extends State<ConfirmedBookings> {
                                 title: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     // name
                                     Text(
-                                      snapshot.data![index].receiverName,
+                                      snapshot.data![index].receiverName!,
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ],
@@ -72,9 +72,9 @@ class _ConfirmedBookingsState extends State<ConfirmedBookings> {
                                           top: sixDp, bottom: sixDp),
                                       child: Row(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: [
                                           Flexible(
                                             //
@@ -83,7 +83,8 @@ class _ConfirmedBookingsState extends State<ConfirmedBookings> {
                                               padding: EdgeInsets.only(
                                                   bottom: eightDp),
                                               child: Text(
-                                                  snapshot.data![index].message,
+                                                  snapshot.data![index]
+                                                      .message!,
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: sixteenDp)),
@@ -94,7 +95,8 @@ class _ConfirmedBookingsState extends State<ConfirmedBookings> {
                                     ),
                                     Text(
                                       //  experience
-                                      "Status : ${snapshot.data![index].status}",
+                                      "Status : ${snapshot.data![index]
+                                          .status}",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: twentyDp),
@@ -108,9 +110,9 @@ class _ConfirmedBookingsState extends State<ConfirmedBookings> {
                                     foregroundImage: CachedNetworkImageProvider(
                                         getUserType == user
                                             ? snapshot
-                                                .data![index].receiverPhotoUrl
+                                            .data![index].receiverPhotoUrl!
                                             : snapshot
-                                                .data![index].senderPhotoUrl),
+                                            .data![index].senderPhotoUrl!),
                                     backgroundColor: Colors.indigo,
                                   ),
                                 ),
