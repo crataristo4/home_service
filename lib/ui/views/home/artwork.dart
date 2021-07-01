@@ -90,7 +90,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
 
                           if (!_likedUsers.contains(currentUserId)) {
                             _likedUsers.add(currentUserId);
-                            print('1');
+                            print('1 ');
                             print(_likedUsers);
                           } else {
                             _likedUsers.remove(currentUserId);

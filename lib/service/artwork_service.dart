@@ -37,7 +37,7 @@ class ArtworkService {
 
   //favorite artwork
   //Stores the ID of Liked Users
-  Future<void> updateLikedUsers(
+  Future<void> updateLikedUsers( 
       String artworkId, List likedUsers, BuildContext context) {
     return firestoreService
         .collection('Artworks')
