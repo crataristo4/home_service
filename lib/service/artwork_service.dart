@@ -35,16 +35,14 @@ class ArtworkService {
     });
   }
 
-
-    //favorite artwork
-  Future<void> favoriteArtwork(ArtworkModel artworkModel, BuildContext context) {
+  //favorite artwork
+  //Stores the ID of Liked Users
+  Future<void> updateLikedUsers(
+      String artworkId, List likedUsers, BuildContext context) {
     return firestoreService
         .collection('Artworks')
-        .doc(artworkModel.artworkId)
-        .update(artworkModel.artworkToMap())
-        .whenComplete(() async {
-      showSuccess(context);
-    }).catchError((onError) {
+        .doc(artworkId)
+        .update({'likedUsers': likedUsers}).catchError((onError) {
       showFailure(context, onError);
     });
   }
@@ -60,7 +58,6 @@ class ArtworkService {
             .map((document) => ArtworkModel.fromFirestore(document.data()))
             .toList(growable: true));
   }
-
 
 //delete artwork
   Future<void> deleteArtwork(String id) {

@@ -86,7 +86,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               keyboardType: TextInputType.text,
                               controller: _searchInput,
                               textAlign: TextAlign.center,
-                              autofocus: true,
+                              //autofocus: true,
                               decoration: InputDecoration(
                                   hintStyle: TextStyle(fontSize: sixteenDp),
                                   suffix: Container(

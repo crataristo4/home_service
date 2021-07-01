@@ -7,8 +7,8 @@ class ArtworkModel {
   final artisanPhotoUrl;
   final artisanPhoneNumber;
   final artisanId;
-  final bool isFavorite;
-  int likes;
+  List likedUsers;
+  bool isFavorite;
   dynamic timeStamp;
 
   get getArtisanId => artisanId;
@@ -22,9 +22,9 @@ class ArtworkModel {
       required this.artisanPhotoUrl,
       required this.artisanPhoneNumber,
       required this.artisanId,
-      this.isFavorite = false,
-      required this.likes,
-      required this.timeStamp});
+      required this.likedUsers,
+      required this.timeStamp,
+      this.isFavorite = false});
 
   //for provider
   factory ArtworkModel.fromFirestore(Map<String, dynamic> data) {
@@ -38,8 +38,7 @@ class ArtworkModel {
         artisanId: data['artisanId'],
         timeStamp: data['timeStamp'],
         artworkPrice: data['artworkPrice'],
-        isFavorite: data['isFavorite'] ?? false,
-        likes: data['likes']?? 0);
+        likedUsers: data['likedUsers'] ?? []);
   }
 
   Map<String, dynamic> artworkToMap() {
@@ -53,8 +52,7 @@ class ArtworkModel {
       'artisanId': artisanId,
       'timeStamp': timeStamp,
       'artworkPrice': artworkPrice,
-      'isFavorite': isFavorite,
-      'likes': likes
+      'likedUsers': likedUsers,
     };
   }
 }
