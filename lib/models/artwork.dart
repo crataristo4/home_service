@@ -1,3 +1,5 @@
+import 'package:home_service/ui/views/auth/appstate.dart';
+
 class ArtworkModel {
   final artworkImageUrl;
   final artworkPrice;
@@ -7,7 +9,7 @@ class ArtworkModel {
   final artisanPhotoUrl;
   final artisanPhoneNumber;
   final artisanId;
-  List likedUsers;
+  List likedUsers = [];
   bool isFavorite;
   dynamic timeStamp;
 
@@ -24,7 +26,12 @@ class ArtworkModel {
       required this.artisanId,
       required this.likedUsers,
       required this.timeStamp,
-      this.isFavorite = false});
+      this.isFavorite= false}){
+        //Check if the current user is part of the liked users
+        if(likedUsers.contains(currentUserId)){
+          this.isFavorite = true;
+        }
+      }
 
   //for provider
   factory ArtworkModel.fromFirestore(Map<String, dynamic> data) {

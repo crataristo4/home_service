@@ -22,7 +22,6 @@ class ArtworksPage extends StatefulWidget {
 
 class _ArtworksPageState extends State<ArtworksPage> {
   Future<void>? _launched;
-  bool isLoading = false;
   List _likedUsers = [];
   List<ArtworkModel>? artworkList;
 
@@ -38,9 +37,9 @@ class _ArtworksPageState extends State<ArtworksPage> {
     final artworkprovider = Provider.of<ArtworkProvider>(context);
     _likedUsers = artworkList![index].likedUsers;
     //Check if the current user is part of the liked users
-    if (_likedUsers.contains(currentUserId)) {
-      artworkList[index].isFavorite = true;
-    }
+    // if (_likedUsers.contains(currentUserId)) {
+    //   artworkList[index].isFavorite = true;
+    // }
     return GestureDetector(
       onTap: () => Navigator.of(context).pushNamed(
         ArtisanProfile.routeName,
@@ -86,24 +85,26 @@ class _ArtworksPageState extends State<ArtworksPage> {
                   children: [
                     Text(artworkList[index].likedUsers.length.toString()),
                     IconButton(
-                        onPressed: () async {
+                        onPressed: () {
                           //ckecks if the current user is already part of the liked users
-                          setState(()  {
-                            if (!_likedUsers.contains(currentUserId)) {
-                              _likedUsers.add(currentUserId);
-                            } else {
-                              _likedUsers.remove(currentUserId);
-                            }
-                          });
-                          await artworkprovider.updateLikedUsers(
-                              artworkList[index].artworkId,
-                              _likedUsers,
-                              context);
 
-                          setState(() {
-                            artworkList[index].isFavorite =
-                                !artworkList[index].isFavorite;
-                          });
+                          if (!_likedUsers.contains(currentUserId)) {
+                            _likedUsers.add(currentUserId);
+                            print('1');
+                            print(_likedUsers);
+                          } else {
+                            _likedUsers.remove(currentUserId);
+                            print('0');
+                            print(_likedUsers);
+                          }
+
+                          artworkprovider
+                              .updateLikedUsers(artworkList[index].artworkId,
+                                  _likedUsers, context)
+                              .then((value) => setState(() {
+                                    artworkList[index].isFavorite =
+                                        !artworkList[index].isFavorite;
+                                  }));
                         },
                         icon: Icon(
                           artworkList[index].isFavorite
