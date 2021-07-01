@@ -61,13 +61,9 @@ class EntryPoint extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ArtworkProvider()),
 
         StreamProvider<List<ArtworkModel>>.value(
+          lazy: false,
           initialData: [],
           value: getArtworks.fetchAllArtwork(),
-        ),
-
-        StreamProvider<List<ArtworkModel>>.value(
-          initialData: [],
-          value: getArtworks.fetchArtworkById(),
         ),
       ],
       child: MaterialApp(

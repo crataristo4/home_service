@@ -17,9 +17,45 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  TextEditingController _searchInput = new TextEditingController();
+
+  bool _isSearch = true;
+  String _searchText = "";
+
+  List<String>? _searchListItems;
+  List<String>? _artisanListItems;
+
   @override
   void initState() {
     super.initState();
+    _artisanListItems = <String>[];
+    _artisanListItems = artisanListItems;
+    _artisanListItems!.sort();
+  }
+
+  _CategoryPageState() {
+    _searchInput.addListener(() {
+      _searchInput.text.isEmpty
+          ? setState(() {
+              _isSearch = true;
+              _searchText = "";
+            })
+          : setState(() {
+              _isSearch = false;
+              _searchText = _searchInput.text;
+            });
+      /*  if (_searchInput.text.isEmpty) {
+        setState(() {
+          _isSearch = true;
+          _searchText = "";
+        });
+      } else {
+        setState(() {
+          _isSearch = false;
+          _searchText = _searchInput.text;
+        });
+      }*/
+    });
   }
 
   @override
@@ -46,28 +82,26 @@ class _CategoryPageState extends State<CategoryPage> {
                         Container(
                           margin: EdgeInsets.only(right: eightDp, top: eightDp),
                           child: TextFormField(
+                            //search for a service text field
                               keyboardType: TextInputType.text,
-                              autofocus: false,
+                              controller: _searchInput,
+                              textAlign: TextAlign.center,
+                              autofocus: true,
                               decoration: InputDecoration(
                                   hintStyle: TextStyle(fontSize: sixteenDp),
-                                  suffix: GestureDetector(
-                                    onTap: () {
-                                      debugPrint("Searching");
-                                    },
-                                    child: Container(
-                                      child: Icon(
-                                        Icons.search,
-                                        color: Colors.white,
-                                      ),
-                                      width: thirtySixDp,
-                                      height: thirtySixDp,
-                                      decoration: BoxDecoration(
-                                        color: Colors.indigo,
-                                        borderRadius:
-                                            BorderRadius.circular(eightDp),
-                                        border: Border.all(
-                                            width: 0.5, color: Colors.white54),
-                                      ),
+                                  suffix: Container(
+                                    child: Icon(
+                                      Icons.search,
+                                      color: Colors.white,
+                                    ),
+                                    width: thirtySixDp,
+                                    height: thirtySixDp,
+                                    decoration: BoxDecoration(
+                                      color: Colors.indigo,
+                                      borderRadius:
+                                          BorderRadius.circular(eightDp),
+                                      border: Border.all(
+                                          width: 0.5, color: Colors.white54),
                                     ),
                                   ),
                                   hintText: searchService,
@@ -96,7 +130,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Top Experts",
@@ -109,7 +143,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                       margin: EdgeInsets.only(right: sixteenDp),
                                       decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(fourDp),
+                                          BorderRadius.circular(fourDp),
                                           border: Border.all(
                                               width: 0.3,
                                               color: Colors.grey
@@ -131,6 +165,9 @@ class _CategoryPageState extends State<CategoryPage> {
                               ],
                             ),
                           ),
+                        ),
+                        SizedBox(
+                          height: sixteenDp,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,7 +204,8 @@ class _CategoryPageState extends State<CategoryPage> {
                         SizedBox(
                           height: sixteenDp,
                         ),
-                        displayArtisanTypes(),
+                        _isSearch ? displayArtisanTypes() : _searchList(),
+                        // switch between searched list and default list
                       ],
                     ),
                   ],
@@ -178,6 +216,20 @@ class _CategoryPageState extends State<CategoryPage> {
         ));
   }
 
+  //method to search category and sort grid list
+  Widget _searchList() {
+    _searchListItems = <String>[];
+    for (int i = 0; i < _artisanListItems!.length; i++) {
+      var item = _artisanListItems![i];
+
+      if (item.toLowerCase().contains(_searchText.toLowerCase())) {
+        _searchListItems!.add(item);
+      }
+    }
+    return displaySearchedArtisanTypes();
+  }
+
+  //initial list of all category of artisans available
   Widget displayArtisanTypes() {
     return Container(
       width: 300,
@@ -193,9 +245,12 @@ class _CategoryPageState extends State<CategoryPage> {
           ),
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              onTap: () => Navigator.of(context).pushNamed(
-                  ViewArtisanByCategoryPage.routeName,
-                  arguments: getArtisanType[index].name),
+              onTap: () {
+                //push to View artisans by category page
+                Navigator.of(context).pushNamed(
+                    ViewArtisanByCategoryPage.routeName,
+                    arguments: getArtisanType[index].name);
+              },
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(twelveDp),
@@ -218,7 +273,83 @@ class _CategoryPageState extends State<CategoryPage> {
                           padding: const EdgeInsets.only(
                               top: fourteenDp, left: fourDp),
                           child: Text(
-                            getArtisanType[index].name,
+                            // getArtisanType[index].name,
+                            _artisanListItems![index],
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: twelveDp),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(right: tenDp, top: tenDp),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(thirtyDp)),
+                          child: Padding(
+                            padding: EdgeInsets.all(eightDp),
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.grey,
+                              size: sixteenDp,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          }),
+    );
+  }
+
+  //display list as user search
+  Widget displaySearchedArtisanTypes() {
+    return Container(
+      width: 300,
+      margin: EdgeInsets.only(right: fourDp, bottom: twelveDp),
+      height: MediaQuery.of(context).size.height / 1.68,
+      child: GridView.builder(
+          shrinkWrap: true,
+          itemCount: _searchListItems!.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: twelveDp,
+            mainAxisSpacing: twelveDp,
+          ),
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              onTap: () {
+                print(_searchListItems![index]);
+                Navigator.of(context).pushNamed(
+                    ViewArtisanByCategoryPage.routeName,
+                    arguments: _searchListItems![index]);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(twelveDp),
+                  gradient: LinearGradient(
+                    colors: [
+                      getArtisanType[index].bgColor[0],
+                      getArtisanType[index].bgColor[1]
+                    ],
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: fourteenDp, left: fourDp),
+                          child: Text(
+                            _searchListItems![index],
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,

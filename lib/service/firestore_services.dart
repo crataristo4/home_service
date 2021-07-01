@@ -89,12 +89,11 @@ class UserService {
   }
 
   //get all artisans from db
-  //todo -- remove current artisan from list
   Stream<List<Artisans>> getAllArtisans() {
     return firestoreService
         .collection('Users')
-        .orderBy("name")
         .where("type", isEqualTo: artisan)
+        .where("id", isNotEqualTo: currentUserId)
         .limit(20)
         .snapshots()
         .map((snapshots) => snapshots.docs
@@ -102,13 +101,11 @@ class UserService {
             .toList(growable: true));
   }
 
-  
-
   //get initial artisans list by category
   Stream<List<Artisans>> getInitialArtisanByCategory(String? category) {
     return firestoreService
         .collection('Users')
-        .orderBy("name")
+        .where("id", isNotEqualTo: currentUserId)
         .where("type", isEqualTo: artisan)
         .where("category", isEqualTo: category)
         .limit(20)
@@ -123,7 +120,7 @@ class UserService {
       List<DocumentSnapshot> documentList, String category) {
     return firestoreService
         .collection("Users")
-        .orderBy("name")
+        .where("id", isNotEqualTo: currentUserId)
         .where("type", isEqualTo: artisan)
         .where("category", isEqualTo: category)
         .limit(20)

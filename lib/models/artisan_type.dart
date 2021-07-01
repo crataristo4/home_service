@@ -9,48 +9,86 @@ class ArtisanType {
   ArtisanType({required this.name, required this.image, required this.bgColor});
 }
 
+List<String> artisanListItems = [
+  acRepair,
+  barber,
+  carpenter,
+  cleaner,
+  electrician,
+  fridgeRepair,
+  hairdresser,
+  laundry,
+  interiorDeco,
+  maison,
+  mechanic,
+  painter,
+  plumber,
+  semstress,
+  tailor,
+  tiler,
+];
+
 List getArtisanType = [
   ArtisanType(
-      name: carpenter, image: "", bgColor: [Colors.blue, Colors.purpleAccent]),
-  ArtisanType(
-      name: maison,
+      name: artisanListItems[0],
       image: "",
-      bgColor: [Colors.green, Colors.lightGreenAccent]),
+      bgColor: [Colors.blue, Colors.blueAccent]),
   ArtisanType(
-      name: plumber, image: "", bgColor: [Colors.orange, Colors.deepOrange]),
-  ArtisanType(name: barber, image: "", bgColor: [Colors.pink, Colors.red]),
+      name: artisanListItems[1], image: "", bgColor: [Colors.pink, Colors.red]),
   ArtisanType(
-      name: electrician, image: "", bgColor: [Colors.red, Colors.orangeAccent]),
-  ArtisanType(
-      name: laundry,
+      name: artisanListItems[2],
       image: "",
-      bgColor: [Colors.purple, Colors.lightBlueAccent]),
+      bgColor: [Colors.blue, Colors.purpleAccent]),
   ArtisanType(
-      name: painter,
+      name: artisanListItems[3],
       image: "",
-      bgColor: [Colors.lightBlueAccent, Colors.deepPurple]),
+      bgColor: [Colors.indigo, Colors.indigoAccent]),
   ArtisanType(
-      name: hairdresser, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
-  ArtisanType(
-      name: tailor, image: "", bgColor: [Colors.red, Colors.pinkAccent]),
-  ArtisanType(
-      name: semstress, image: "", bgColor: [Colors.blue, Colors.indigo]),
-  ArtisanType(
-      name: tiler,
+      name: artisanListItems[4],
       image: "",
-      bgColor: [Colors.deepPurpleAccent, Colors.blueAccent]),
+      bgColor: [Colors.red, Colors.orangeAccent]),
   ArtisanType(
-      name: cleaner, image: "", bgColor: [Colors.indigo, Colors.indigoAccent]),
+      name: artisanListItems[5],
+      image: "",
+      bgColor: [Colors.indigoAccent, Colors.lightBlue]),
   ArtisanType(
-      name: interiorDeco,
+      name: artisanListItems[6],
+      image: "",
+      bgColor: [Colors.blue, Colors.blueAccent]),
+  ArtisanType(
+      name: artisanListItems[7],
       image: "",
       bgColor: [Colors.blueAccent, Colors.blueAccent]),
   ArtisanType(
-      name: mechanic, image: "", bgColor: [Colors.amber, Colors.yellowAccent]),
-  ArtisanType(
-      name: acRepair, image: "", bgColor: [Colors.blue, Colors.blueAccent]),
-  ArtisanType(
-      name: fridgeRepair,
+      name: artisanListItems[8],
       image: "",
-      bgColor: [Colors.indigoAccent, Colors.lightBlue]),
+      bgColor: [Colors.purple, Colors.lightBlueAccent]),
+  ArtisanType(
+      name: artisanListItems[9],
+      image: "",
+      bgColor: [Colors.green, Colors.lightGreenAccent]),
+  ArtisanType(
+      name: artisanListItems[10],
+      image: "",
+      bgColor: [Colors.amber, Colors.yellowAccent]),
+  ArtisanType(
+      name: artisanListItems[11],
+      image: "",
+      bgColor: [Colors.lightBlueAccent, Colors.deepPurple]),
+  ArtisanType(
+      name: artisanListItems[12],
+      image: "",
+      bgColor: [Colors.orange, Colors.deepOrange]),
+  ArtisanType(
+      name: artisanListItems[13],
+      image: "",
+      bgColor: [Colors.blue, Colors.indigo]),
+  ArtisanType(
+      name: artisanListItems[14],
+      image: "",
+      bgColor: [Colors.red, Colors.pinkAccent]),
+  ArtisanType(
+      name: artisanListItems[15],
+      image: "",
+      bgColor: [Colors.deepPurpleAccent, Colors.blueAccent]),
 ];

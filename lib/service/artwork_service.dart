@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/artwork.dart';
-import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 
@@ -62,18 +61,6 @@ class ArtworkService {
             .toList(growable: true));
   }
 
-  //fetch artwork per artisan
-  Stream<List<ArtworkModel>> fetchArtworkById() {
-    return firestoreService
-        .collection('Artworks')
-        .orderBy("timeStamp", descending: true)
-        .where('artisanId', isEqualTo: currentUserId)
-        //.limit(20)
-        .snapshots()
-        .map((snapshots) => snapshots.docs
-            .map((document) => ArtworkModel.fromFirestore(document.data()))
-            .toList(growable: true));
-  }
 
 //delete artwork
   Future<void> deleteArtwork(String id) {

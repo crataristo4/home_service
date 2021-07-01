@@ -11,6 +11,8 @@ class ArtworkModel {
   int likes;
   dynamic timeStamp;
 
+  get getArtisanId => artisanId;
+
   ArtworkModel(
       {required this.artworkImageUrl,
       required this.artworkPrice,
