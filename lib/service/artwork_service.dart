@@ -36,6 +36,20 @@ class ArtworkService {
     });
   }
 
+
+    //favorite artwork
+  Future<void> favoriteArtwork(ArtworkModel artworkModel, BuildContext context) {
+    return firestoreService
+        .collection('Artworks')
+        .doc(artworkModel.artworkId)
+        .update(artworkModel.artworkToMap())
+        .whenComplete(() async {
+      showSuccess(context);
+    }).catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
 //retrieve all artwork
   Stream<List<ArtworkModel>> fetchAllArtwork() {
     return firestoreService

@@ -14,6 +14,8 @@ class ArtworkProvider with ChangeNotifier {
   String? _artisanPhotoUrl;
   String? _artisanPhoneNumber;
   String? _artisanId;
+  bool? _isFavorite;
+  int? _likes;
   dynamic _timeStamp;
   var _uuid = Uuid();
 
@@ -31,6 +33,20 @@ class ArtworkProvider with ChangeNotifier {
 
   setArtworkImageUrl(value) {
     _artworkImageUrl = value;
+    notifyListeners();
+  }
+
+  get artworkIsFavoriteByUser => _isFavorite;
+
+   setArtworkIsFavoriteByUser(value) {
+    _isFavorite = value;
+    notifyListeners();
+  }
+
+  get artworklikes => _likes;
+
+   setArtworklikes(value) {
+    _likes = value;
     notifyListeners();
   }
 
@@ -55,6 +71,8 @@ class ArtworkProvider with ChangeNotifier {
           artisanPhotoUrl: _artisanPhotoUrl,
           artisanPhoneNumber: _artisanPhoneNumber,
           artisanId: _artisanId,
+          isFavorite: artworkIsFavoriteByUser,
+          likes: artworklikes,
           timeStamp: _timeStamp);
 
       artworkService.createNewArtwork(artworkModel, context);
