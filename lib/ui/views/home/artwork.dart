@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/models/artwork.dart';
+import 'package:home_service/provider/artwork_provider.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
@@ -20,31 +22,8 @@ class ArtworksPage extends StatefulWidget {
 
 class _ArtworksPageState extends State<ArtworksPage> {
   Future<void>? _launched;
-  bool isLoading = false;
-  bool _favorite = false;
-
-  @override
-  void initState() {
-    showLoading();
-    super.initState();
-  }
-
-  //shows a shimmer to wait for stream to fetch
-  showLoading() {
-    try {
-      setState(() {
-        isLoading = true;
-      });
-
-      Timer(Duration(seconds: 3), () {
-        setState(() {
-          isLoading = false;
-        });
-      });
-    } catch (error) {
-      print(error);
-    }
-  }
+  List _likedUsers = [];
+  List<ArtworkModel>? artworkList;
 
   Future<void> _makePhoneCall(String url) async {
     if (await canLaunch(url)) {
@@ -54,12 +33,19 @@ class _ArtworksPageState extends State<ArtworksPage> {
     }
   }
 
-  Widget _buildArtworksCard(List<ArtworkModel> artworkList, int index) {
+  Widget _buildArtworksCard(List<ArtworkModel>? artworkList, int index) {
+    final artworkprovider = Provider.of<ArtworkProvider>(context);
+    _likedUsers = artworkList![index].likedUsers;
+    //Check if the current user is part of the liked users
+    // if (_likedUsers.contains(currentUserId)) {
+    //   artworkList[index].isFavorite = true;
+    // }
     return GestureDetector(
       onTap: () => Navigator.of(context).pushNamed(
         ArtisanProfile.routeName,
         arguments: artworkList[index].artisanId,
       ),
+      onLongPress: () => print(artworkList[index].likedUsers),
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -95,16 +81,39 @@ class _ArtworksPageState extends State<ArtworksPage> {
                     )
                   ],
                 ),
-                IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _favorite = !_favorite;
-                      });
-                    },
-                    icon: Icon(
-                      _favorite ? Icons.favorite : Icons.favorite_border,
-                      color: Colors.red,
-                    ))
+                Row(
+                  children: [
+                    Text(artworkList[index].likedUsers.length.toString()),
+                    IconButton(
+                        onPressed: () {
+                          //ckecks if the current user is already part of the liked users
+
+                          if (!_likedUsers.contains(currentUserId)) {
+                            _likedUsers.add(currentUserId);
+                            print('1 ');
+                            print(_likedUsers);
+                          } else {
+                            _likedUsers.remove(currentUserId);
+                            print('0');
+                            print(_likedUsers);
+                          }
+
+                          artworkprovider
+                              .updateLikedUsers(artworkList[index].artworkId,
+                                  _likedUsers, context)
+                              .then((value) => setState(() {
+                                    artworkList[index].isFavorite =
+                                        !artworkList[index].isFavorite;
+                                  }));
+                        },
+                        icon: Icon(
+                          artworkList[index].isFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: Colors.red,
+                        )),
+                  ],
+                )
               ],
             ),
             SizedBox(height: 10),
@@ -138,9 +147,9 @@ class _ArtworksPageState extends State<ArtworksPage> {
                 ),
                 ElevatedButton(
                     onPressed: () => setState(() {
-                      _launched = _makePhoneCall(
-                          'tel:${artworkList[index].artisanPhoneNumber}');
-                    }),
+                          _launched = _makePhoneCall(
+                              'tel:${artworkList[index].artisanPhoneNumber}');
+                        }),
                     child: Text('CALL'))
               ],
             ),
@@ -152,24 +161,30 @@ class _ArtworksPageState extends State<ArtworksPage> {
 
   @override
   Widget build(BuildContext context) {
-    final artworkList = Provider.of<List<ArtworkModel>>(context);
-    return isLoading
+    artworkList = Provider.of<List<ArtworkModel>>(context);
+    return artworkList == null
         ? LoadHome()
         : Builder(
             builder: (BuildContext context) {
-              return Container(
-                  margin: EdgeInsets.all(twentyFourDp),
-                  child: ListView.builder(
-                      itemCount: artworkList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Column(
-                          children: [
-                            _buildArtworksCard(artworkList, index),
-                            SizedBox(height: twentyFourDp)
-                          ],
-                        );
-                      }));
-      },
-    );
+              return artworkList!.length != 0
+                  ? Container(
+                      margin: EdgeInsets.all(twentyFourDp),
+                      child: ListView.builder(
+                          itemCount: artworkList!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Column(
+                              children: [
+                                _buildArtworksCard(artworkList, index),
+                                SizedBox(height: twentyFourDp)
+                              ],
+                            );
+                          }))
+                  : Container(
+                      child: Center(
+                          child: Text('No Artworks Yet',
+                              style: TextStyle(fontSize: 20))),
+                    );
+            },
+          );
   }
 }

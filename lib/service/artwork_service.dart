@@ -35,6 +35,18 @@ class ArtworkService {
     });
   }
 
+  //favorite artwork
+  //Stores the ID of Liked Users
+  Future<void> updateLikedUsers( 
+      String artworkId, List likedUsers, BuildContext context) {
+    return firestoreService
+        .collection('Artworks')
+        .doc(artworkId)
+        .update({'likedUsers': likedUsers}).catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
 //retrieve all artwork
   Stream<List<ArtworkModel>> fetchAllArtwork() {
     return firestoreService
@@ -46,7 +58,6 @@ class ArtworkService {
             .map((document) => ArtworkModel.fromFirestore(document.data()))
             .toList(growable: true));
   }
-
 
 //delete artwork
   Future<void> deleteArtwork(String id) {

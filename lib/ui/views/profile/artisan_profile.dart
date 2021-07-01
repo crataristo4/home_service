@@ -20,7 +20,8 @@ class ArtisanProfile extends StatefulWidget {
 
 class _ArtisanProfileState extends State<ArtisanProfile> {
   Artisans? _selectedArtisan;
-  List<ArtworkModel>? artworkList;
+  List<ArtworkModel>? _artworkList;
+  int _totalNumberOfLikes = 0;
 
   @override
   void initState() {
@@ -30,10 +31,13 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
 
     _selectedArtisan = artisans
         .firstWhere((Artisans artisan) => artisan.id == widget.artisanId);
-    artworkList = artworkLists
+    _artworkList = artworkLists
         .where((ArtworkModel artisanArtwork) =>
             widget.artisanId == artisanArtwork.artisanId)
         .toList();
+         for (var i = 0; i < _artworkList!.length; i++) {
+      _totalNumberOfLikes += _artworkList![i].likedUsers.length;
+    }
     super.initState();
   }
 
@@ -72,8 +76,9 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
             SizedBox(height: 20),
             Text(_selectedArtisan!.name!, style: TextStyle(fontSize: 20)),
             SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
+              direction: Axis.horizontal,
+              alignment: WrapAlignment.center,
               children: [
                 Text(_selectedArtisan!.category!,
                     style: TextStyle(fontSize: 12)),
@@ -86,6 +91,16 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                 ),
                 SizedBox(width: 5),
                 Text(_selectedArtisan!.expLevel!,
+                    style: TextStyle(fontSize: 12)),
+                SizedBox(width: 5),
+                Container(
+                  width: 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                ),
+                SizedBox(width: 5),
+                Text('Likes: $_totalNumberOfLikes',
                     style: TextStyle(fontSize: 12)),
               ],
             ),
@@ -131,7 +146,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
             Text('Artwork', style: TextStyle(fontSize: 16)),
             SizedBox(height: 10),
             Expanded(
-              child: artworkList!.length == 0
+              child: _artworkList!.length == 0
                   ? Container(
                       child: Center(child: Text('No Artwork Yet')),
                     )
@@ -140,7 +155,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                       ),
-                      itemCount: artworkList!.length,
+                      itemCount: _artworkList!.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -151,7 +166,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
 
                               placeholder: (context, url) =>
                                   Center(child: CircularProgressIndicator()),
-                              imageUrl: artworkList![index].artworkImageUrl,
+                              imageUrl: _artworkList![index].artworkImageUrl,
 
                               fit: BoxFit.cover,
                             ),

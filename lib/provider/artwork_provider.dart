@@ -55,10 +55,16 @@ class ArtworkProvider with ChangeNotifier {
           artisanPhotoUrl: _artisanPhotoUrl,
           artisanPhoneNumber: _artisanPhoneNumber,
           artisanId: _artisanId,
+          likedUsers: [],
           timeStamp: _timeStamp);
 
       artworkService.createNewArtwork(artworkModel, context);
     }
+  }
+
+   updateLikedUsers(
+      String artworkId, List likedUsers, BuildContext context) {
+    artworkService.updateLikedUsers(artworkId, likedUsers, context);
   }
 
   deleteArtwork(String id) {
