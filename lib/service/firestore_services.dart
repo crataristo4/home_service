@@ -93,7 +93,6 @@ class UserService {
     return firestoreService
         .collection('Users')
         .where("type", isEqualTo: artisan)
-        .limit(20)
         .snapshots()
         .map((snapshots) => snapshots.docs
             .map((document) => Artisans.fromFirestore(document.data()))

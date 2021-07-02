@@ -31,8 +31,8 @@ class EntryPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final getAllArtisan = UserService();
-    final getPendingBookings = BookingService();
-    final getConfirmedBookings = BookingService();
+    // final getPendingBookings = BookingService();
+    // final getConfirmedBookings = BookingService();
     final getAllBookings = BookingService();
     final getArtworks = ArtworkService();
 
