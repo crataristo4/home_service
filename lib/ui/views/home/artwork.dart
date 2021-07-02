@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:home_service/models/artwork.dart';
 import 'package:home_service/provider/artwork_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
@@ -25,13 +26,6 @@ class _ArtworksPageState extends State<ArtworksPage> {
   List _likedUsers = [];
   List<ArtworkModel>? _artworkList;
 
-  Future<void> _makePhoneCall(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
 
   Widget _buildArtworksCard(List<ArtworkModel>? artworkList, int index) {
     final artworkprovider = Provider.of<ArtworkProvider>(context);
@@ -147,7 +141,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
                 ),
                 ElevatedButton(
                     onPressed: () => setState(() {
-                          _launched = _makePhoneCall(
+                      _launched = ShowAction.makePhoneCall(
                               'tel:${artworkList[index].artisanPhoneNumber}');
                         }),
                     child: Text('CALL'))
