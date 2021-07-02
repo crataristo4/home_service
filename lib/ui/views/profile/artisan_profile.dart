@@ -4,18 +4,15 @@ import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
-<<<<<<< HEAD
-import 'package:intl/intl.dart';
-=======
+
 import 'package:home_service/ui/widgets/actions.dart';
->>>>>>> 1671ee87e84c51eff4dfdf95c78f3126a56a906d
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants.dart';
 
 class ArtisanProfile extends StatefulWidget {
-  final String? artisanId;
+   final String? artisanId;
 
   const ArtisanProfile({Key? key, this.artisanId}) : super(key: key);
   static const routeName = '/artisanProfile';
