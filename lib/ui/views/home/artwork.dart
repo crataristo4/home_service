@@ -23,7 +23,7 @@ class ArtworksPage extends StatefulWidget {
 class _ArtworksPageState extends State<ArtworksPage> {
   Future<void>? _launched;
   List _likedUsers = [];
-  List<ArtworkModel>? artworkList;
+  List<ArtworkModel>? _artworkList;
 
   Future<void> _makePhoneCall(String url) async {
     if (await canLaunch(url)) {
@@ -161,20 +161,20 @@ class _ArtworksPageState extends State<ArtworksPage> {
 
   @override
   Widget build(BuildContext context) {
-    artworkList = Provider.of<List<ArtworkModel>>(context);
-    return artworkList == null
+    _artworkList = Provider.of<List<ArtworkModel>>(context);
+    return _artworkList == null
         ? LoadHome()
         : Builder(
             builder: (BuildContext context) {
-              return artworkList!.length != 0
+              return _artworkList!.length != 0
                   ? Container(
                       margin: EdgeInsets.all(twentyFourDp),
                       child: ListView.builder(
-                          itemCount: artworkList!.length,
+                          itemCount: _artworkList!.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Column(
                               children: [
-                                _buildArtworksCard(artworkList, index),
+                                _buildArtworksCard(_artworkList, index),
                                 SizedBox(height: twentyFourDp)
                               ],
                             );

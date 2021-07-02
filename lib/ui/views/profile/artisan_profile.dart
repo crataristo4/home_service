@@ -4,6 +4,7 @@ import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
@@ -22,6 +23,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
   Artisans? _selectedArtisan;
   List<ArtworkModel>? _artworkList;
   int _totalNumberOfLikes = 0;
+  String? date;
 
   @override
   void initState() {
