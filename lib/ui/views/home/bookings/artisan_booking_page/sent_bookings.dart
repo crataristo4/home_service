@@ -30,12 +30,9 @@ class _SentBookingsState extends State<SentBookings> {
                 print("Data length ${bookingsList.length}");
                 return Column(
                   children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: eightDp),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                              width: 20, color: Colors.indigoAccent)),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                       child: ListTile(
                         onTap: () {
                           //1.pass artisans details
@@ -44,7 +41,7 @@ class _SentBookingsState extends State<SentBookings> {
                         },
                         minVerticalPadding: 10,
                         horizontalTitleGap: 4,
-                        tileColor: Colors.indigoAccent,
+                        tileColor: Colors.grey[100],
                         title: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,11 +50,11 @@ class _SentBookingsState extends State<SentBookings> {
                             getUserType == user
                                 ? Text(
                                     bookingsList[index].receiverName!,
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: Colors.black),
                                   )
                                 : Text(
                                     bookingsList[index].senderName!,
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: Colors.black),
                                   ),
                           ],
                         ),
@@ -76,7 +73,8 @@ class _SentBookingsState extends State<SentBookings> {
                                     //
                                     flex: 1,
                                     child: Text(bookingsList[index].message!,
-                                        style: TextStyle(color: Colors.white)),
+                                        style:
+                                            TextStyle(color: Colors.black87)),
                                   ),
                                 ],
                               ),
@@ -84,7 +82,10 @@ class _SentBookingsState extends State<SentBookings> {
                             Text(
                               //  experience
                               bookingsList[index].status!,
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                  color: bookingsList[index].status == 'Pending'
+                                      ? Colors.blue
+                                      : Colors.green),
                             )
                           ],
                         ),
@@ -97,6 +98,11 @@ class _SentBookingsState extends State<SentBookings> {
                                     ? bookingsList[index].receiverPhotoUrl!
                                     : bookingsList[index].senderPhotoUrl!),
                             backgroundColor: Colors.indigo,
+                          ),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(16),
                           ),
                         ),
                       ),

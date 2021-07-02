@@ -30,12 +30,9 @@ class _ReceivedBookingsState extends State<ReceivedBookings> {
               itemBuilder: (context, index) {
                 return Column(
                   children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: fourDp),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(sixteenDp),
-                          border: Border.all(
-                              width: twentyDp, color: Colors.indigoAccent)),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                       child: ListTile(
                         onTap: () {
                           //1.pass artisans details
@@ -44,7 +41,7 @@ class _ReceivedBookingsState extends State<ReceivedBookings> {
                         },
                         minVerticalPadding: 25,
                         horizontalTitleGap: 1,
-                        tileColor: Colors.indigoAccent,
+                        tileColor: Colors.grey[100],
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -58,7 +55,7 @@ class _ReceivedBookingsState extends State<ReceivedBookings> {
                                   getUserType == user
                                       ? receivedBookingList[index].receiverName!
                                       : receivedBookingList[index].senderName!,
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.black),
                                 ),
                                 receivedBookingList[index].status == confirmed
                                     ? Icon(
@@ -75,14 +72,15 @@ class _ReceivedBookingsState extends State<ReceivedBookings> {
                                   EdgeInsets.only(top: fourDp, bottom: eightDp),
                               child: Row(
                                 children: [
-                                  Icon(Icons.access_time),
+                                  Icon(Icons.access_time,
+                                      color: Colors.black45),
                                   Padding(
                                     padding: EdgeInsets.only(left: eightDp),
                                     child: Text(
                                       timeAgo.format(receivedBookingList[index]
                                           .timestamp
                                           .toDate()),
-                                      style: TextStyle(color: Colors.black),
+                                      style: TextStyle(color: Colors.black45),
                                     ),
                                   ),
                                 ],
@@ -104,7 +102,7 @@ class _ReceivedBookingsState extends State<ReceivedBookings> {
                               padding: EdgeInsets.only(bottom: eightDp),
                               child: Text(receivedBookingList[index].message!,
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black87,
                                       fontSize: sixteenDp)),
                             ),
                             Divider(
@@ -117,7 +115,7 @@ class _ReceivedBookingsState extends State<ReceivedBookings> {
                             Text(
                               "Booking date: ${receivedBookingList[index].bookingDate}",
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.grey,
                                   fontSize: fourteenDp,
                                   fontStyle: FontStyle.italic),
                             ),
@@ -129,7 +127,7 @@ class _ReceivedBookingsState extends State<ReceivedBookings> {
                                 Text(
                                   "Status: ",
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
                                       fontSize: twentyDp,
                                       fontStyle: FontStyle.italic),
                                 ),
@@ -139,8 +137,8 @@ class _ReceivedBookingsState extends State<ReceivedBookings> {
                                       color:
                                           receivedBookingList[index].status ==
                                                   confirmed
-                                              ? Colors.white
-                                              : Colors.black,
+                                              ? Colors.green
+                                              : Colors.blue,
                                       fontSize: twentyDp),
                                 ),
                               ],
@@ -217,6 +215,11 @@ class _ReceivedBookingsState extends State<ReceivedBookings> {
                                     : receivedBookingList[index]
                                         .senderPhotoUrl!),
                             backgroundColor: Colors.indigo,
+                          ),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(16),
                           ),
                         ),
                       ),

@@ -25,7 +25,6 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
   Artisans? _selectedArtisan;
   List<ArtworkModel>? _artworkList;
   int _totalNumberOfLikes = 0;
-  String? date;
 
   @override
   void initState() {
