@@ -8,8 +8,6 @@ import 'package:home_service/ui/views/help/help_page.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
 import 'package:home_service/ui/views/home/bookings/artisan_booking_page/received_bookings.dart';
 import 'package:home_service/ui/views/home/bookings/artisan_booking_page/sent_bookings.dart';
-import 'package:home_service/ui/views/home/bookings/user_booking_page/user_bookings_confirmed.dart';
-import 'package:home_service/ui/views/home/bookings/user_booking_page/user_pending_bookings.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
@@ -79,18 +77,11 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => BookingPage());
 
       //sent bookings - artisan
-      case SentBookings.routeName:
-        return MaterialPageRoute(builder: (_) => SentBookings());
+      case SentBookingsPage.routeName:
+        return MaterialPageRoute(builder: (_) => SentBookingsPage());
       //received bookings artisan
       case ReceivedBookings.routeName:
         return MaterialPageRoute(builder: (_) => ReceivedBookings());
-
-      //sent bookings - user
-      case UserPendingBookings.routeName:
-        return MaterialPageRoute(builder: (_) => UserPendingBookings());
-      //Confirmed bookings USER
-      case UserBookingsConfirmed.routeName:
-        return MaterialPageRoute(builder: (_) => UserBookingsConfirmed());
 
       //view artisans by category
       case ViewArtisanByCategoryPage.routeName:

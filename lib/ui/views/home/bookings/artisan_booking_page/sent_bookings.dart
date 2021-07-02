@@ -1,24 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
-import 'package:home_service/models/booking.dart';
-import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/models/artisan/bookings.dart';
 import 'package:provider/provider.dart';
 
-class SentBookings extends StatefulWidget {
+class SentBookingsPage extends StatefulWidget {
   static const routeName = '/sentBookings';
 
-  const SentBookings({Key? key}) : super(key: key);
+  const SentBookingsPage({Key? key}) : super(key: key);
 
   @override
-  _SentBookingsState createState() => _SentBookingsState();
+  _SentBookingsPageState createState() => _SentBookingsPageState();
 }
 
-class _SentBookingsState extends State<SentBookings> {
+class _SentBookingsPageState extends State<SentBookingsPage> {
   @override
   Widget build(BuildContext context) {
-    final bookingsList = Provider.of<List<Bookings>>(context);
-    print("Data length ${bookingsList.length}");
+    final sentBookingsList = Provider.of<List<SentBookings>>(context);
+    print("Data length ${sentBookingsList.length}");
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -27,7 +26,6 @@ class _SentBookingsState extends State<SentBookings> {
           builder: (BuildContext context) {
             return ListView.builder(
               itemBuilder: (context, index) {
-                print("Data length ${bookingsList.length}");
                 return Column(
                   children: [
                     Container(
@@ -50,15 +48,11 @@ class _SentBookingsState extends State<SentBookings> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             //artisans name
-                            getUserType == user
-                                ? Text(
-                                    bookingsList[index].receiverName!,
-                                    style: TextStyle(color: Colors.white),
-                                  )
-                                : Text(
-                                    bookingsList[index].senderName!,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+
+                            Text(
+                              sentBookingsList[index].receiverName!,
+                              style: TextStyle(color: Colors.white),
+                            )
                           ],
                         ),
                         subtitle: Column(
@@ -75,7 +69,8 @@ class _SentBookingsState extends State<SentBookings> {
                                   Flexible(
                                     //
                                     flex: 1,
-                                    child: Text(bookingsList[index].message!,
+                                    child: Text(
+                                        sentBookingsList[index].message!,
                                         style: TextStyle(color: Colors.white)),
                                   ),
                                 ],
@@ -83,7 +78,7 @@ class _SentBookingsState extends State<SentBookings> {
                             ),
                             Text(
                               //  experience
-                              bookingsList[index].status!,
+                              sentBookingsList[index].status!,
                               style: TextStyle(color: Colors.white),
                             )
                           ],
@@ -93,9 +88,7 @@ class _SentBookingsState extends State<SentBookings> {
                           child: CircleAvatar(
                             radius: 40,
                             foregroundImage: CachedNetworkImageProvider(
-                                getUserType == user
-                                    ? bookingsList[index].receiverPhotoUrl!
-                                    : bookingsList[index].senderPhotoUrl!),
+                                sentBookingsList[index].receiverPhotoUrl!),
                             backgroundColor: Colors.indigo,
                           ),
                         ),
@@ -107,7 +100,7 @@ class _SentBookingsState extends State<SentBookings> {
                   ],
                 );
               },
-              itemCount: bookingsList.length,
+              itemCount: sentBookingsList.length,
               shrinkWrap: true,
             );
           },

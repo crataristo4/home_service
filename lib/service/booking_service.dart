@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:home_service/models/artisan/bookings.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/home.dart';
@@ -40,38 +42,54 @@ class BookingService {
     return firestoreService.collection('Bookings').doc(id).delete();
   }
 
-  //get all bookings
+  //get all bookings : both user and artisan
   Stream<List<Bookings>> getAllBookings() {
     return getUserType == user
         ? firestoreService
             .collection('Bookings')
             .orderBy("timestamp", descending: true)
-            .where("senderId", isEqualTo: currentUserId)
-            // .where("status", isEqualTo: pending)
-            .limit(50)
+            .where("senderId",
+                isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            //.limit(50)
             .snapshots()
             .map((snapshots) => snapshots.docs
                 .map((document) => Bookings.fromFirestore(document.data()))
                 .toList(growable: true))
             .handleError((error) {
-            print("Error on getting pending bookings ==> $error");
+      print("Error on getting bookings from user ==> $error");
           })
         : firestoreService
             .collection('Bookings')
             .orderBy("timestamp", descending: true)
-            .where("receiverId", isEqualTo: currentUserId)
-            // .where("status", isEqualTo: pending)
-            .limit(50)
+            .where("receiverId",
+                isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            // .limit(50)
             .snapshots()
             .map((snapshots) => snapshots.docs
                 .map((document) => Bookings.fromFirestore(document.data()))
                 .toList(growable: true))
             .handleError((error) {
-            print("Error on getting pending bookings ==> $error");
+            print("Error on  getting received bookings to ARTISAN  ==> $error");
           });
   }
 
-  //get all bookings by status - Pending ,  order by user type
+  //get sent bookings made by artisan
+  Stream<List<SentBookings>> getSentBookings() {
+    return firestoreService
+        .collection('Bookings')
+        .orderBy("timestamp", descending: true)
+        .where("senderId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        //  .limit(50)
+        .snapshots()
+        .map((snapshots) => snapshots.docs
+            .map((document) => SentBookings.fromFirestore(document.data()))
+            .toList(growable: true))
+        .handleError((error) {
+      print("Error on getting SENT bookings ==> $error");
+    });
+  }
+
+/*  //get all bookings by status - Pending ,  order by user type
   Stream<List<Bookings>> getPendingBookings() {
     return getUserType == user
         ? firestoreService
@@ -114,7 +132,7 @@ class BookingService {
         .map((snapshots) => snapshots.docs
             .map((document) => Bookings.fromFirestore(document.data()))
             .toList(growable: true));
-  }
+  }*/
 
   showBookingConfirmedSuccess(context) async {
     await Future.delayed(const Duration(seconds: 3));

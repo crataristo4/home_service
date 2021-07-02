@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:home_service/provider/bookings_provider.dart';
-import 'package:home_service/ui/views/profile/artisan_profile.dart';
-import 'package:home_service/ui/widgets/actions.dart';
-import 'package:timeago/timeago.dart' as timeAgo;
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/booking.dart';
+import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/ui/views/profile/artisan_profile.dart';
+import 'package:home_service/ui/widgets/actions.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeAgo;
 
 class UserBookingsPage extends StatefulWidget {
   const UserBookingsPage({Key? key}) : super(key: key);
@@ -25,8 +25,9 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
         backgroundColor: Colors.indigoAccent,
         title: Row(
           children: [
-            Text(allYourBookingAppearHere),
-            Text("  ( ${allBookingList.length} )"),
+            allBookingList.length == 0
+                ? Text(noBookingsMade)
+                : Text("${allBookingList.length} $bookingsMade"),
           ],
         ),
       ),

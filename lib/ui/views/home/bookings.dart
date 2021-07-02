@@ -6,12 +6,10 @@ import 'package:home_service/models/booking.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/bookings/artisan_booking_page/received_bookings.dart';
 import 'package:home_service/ui/views/home/bookings/artisan_booking_page/sent_bookings.dart';
-import 'package:home_service/ui/views/home/bookings/user_booking_page/user_pending_bookings.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:provider/provider.dart';
 
-import 'bookings/user_booking_page/user_bookings_confirmed.dart';
 
 class BookingPage extends StatefulWidget {
   static const routeName = '/bookingPage';
@@ -27,13 +25,8 @@ class _BookingPageState extends State<BookingPage> {
   int _selectedIndex = 0;
   GlobalKey globalKey = GlobalKey();
   List<Widget> artisanBookingOptions = <Widget>[
-    SentBookings(),
+    SentBookingsPage(),
     ReceivedBookings(),
-  ];
-
-  List<Widget> userBookingOptions = <Widget>[
-    UserPendingBookings(),
-    UserBookingsConfirmed(),
   ];
 
   _onItemTapped(int index) {
@@ -58,9 +51,7 @@ class _BookingPageState extends State<BookingPage> {
           ? LoadHome()
           : Scaffold(
               body: Center(
-                child: getUserType == user
-                    ? userBookingOptions.elementAt(_selectedIndex)
-                    : artisanBookingOptions.elementAt(_selectedIndex),
+                child: artisanBookingOptions.elementAt(_selectedIndex),
               ),
               backgroundColor: Colors.white,
               bottomNavigationBar: BottomNavigationBar(

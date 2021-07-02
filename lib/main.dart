@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:home_service/models/artisan/bookings.dart';
 import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/models/users.dart';
@@ -31,8 +32,8 @@ class EntryPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final getAllArtisan = UserService();
-    final getPendingBookings = BookingService();
-    final getConfirmedBookings = BookingService();
+    //  final getPendingBookings = BookingService();
+    final getSentBookings = BookingService();
     final getAllBookings = BookingService();
     final getArtworks = ArtworkService();
 
@@ -58,6 +59,13 @@ class EntryPoint extends StatelessWidget {
             lazy: false,
             value: getAllBookings.getAllBookings(),
             initialData: []),
+
+        //get sent bookings made by artisans
+        StreamProvider<List<SentBookings>>.value(
+          lazy: false,
+          initialData: [],
+          value: getSentBookings.getSentBookings(),
+        ),
 
         /*   //get list of pending bookings
         StreamProvider<List<Bookings>>.value(
