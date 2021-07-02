@@ -5,16 +5,16 @@ import 'package:home_service/models/booking.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:provider/provider.dart';
 
-class SentBookings extends StatefulWidget {
+class SentBookingsPage extends StatefulWidget {
   static const routeName = '/sentBookings';
 
-  const SentBookings({Key? key}) : super(key: key);
+  const SentBookingsPage({Key? key}) : super(key: key);
 
   @override
   _SentBookingsState createState() => _SentBookingsState();
 }
 
-class _SentBookingsState extends State<SentBookings> {
+class _SentBookingsState extends State<SentBookingsPage> {
   @override
   Widget build(BuildContext context) {
     final bookingsList = Provider.of<List<Bookings>>(context);
