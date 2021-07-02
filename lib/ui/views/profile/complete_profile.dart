@@ -217,6 +217,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
                       plumber,
                       barber,
                       electrician,
+                      gardener,
                       laundry,
                       painter,
                       hairdresser,
