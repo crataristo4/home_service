@@ -35,7 +35,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
         .where((ArtworkModel artisanArtwork) =>
             widget.artisanId == artisanArtwork.artisanId)
         .toList();
-         for (var i = 0; i < _artworkList!.length; i++) {
+    for (var i = 0; i < _artworkList!.length; i++) {
       _totalNumberOfLikes += _artworkList![i].likedUsers.length;
     }
     super.initState();
@@ -57,25 +57,45 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
         margin: EdgeInsets.all(24),
         child: Column(
           children: [
-            SizedBox(height: 20),
+            SizedBox(height: fourDp),
             Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: CachedNetworkImage(
-                  //artisan image
-                  height: 200,
-                  width: 150,
-                  placeholder: (context, url) =>
-                      Center(child: CircularProgressIndicator()),
-                  imageUrl: _selectedArtisan!.photoUrl!,
-
-                  fit: BoxFit.cover,
+              child: Container(
+                width: 150,
+                height: 150,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(150),
+                  border: Border.all(width: 0.3, color: Colors.grey),
+                ),
+                child: ClipOval(
+                  child: CachedNetworkImage(
+                    //artisan image
+                    placeholder: (context, url) =>
+                        Center(child: CircularProgressIndicator()),
+                    imageUrl: _selectedArtisan!.photoUrl!,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
             SizedBox(height: 20),
             Text(_selectedArtisan!.name!, style: TextStyle(fontSize: 20)),
             SizedBox(height: 15),
+            Wrap(
+              direction: Axis.horizontal,
+              alignment: WrapAlignment.center,
+              children: [
+                Text("Joined on ", style: TextStyle(fontSize: 14)),
+                Container(
+                  width: 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                ),
+                Text(" ${_selectedArtisan!.dateJoined!}",
+                    style: TextStyle(fontSize: 14)),
+              ],
+            ),
+            SizedBox(height: 10),
             Wrap(
               direction: Axis.horizontal,
               alignment: WrapAlignment.center,
