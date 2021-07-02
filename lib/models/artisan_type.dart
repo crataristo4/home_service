@@ -9,6 +9,7 @@ class ArtisanType {
   ArtisanType({required this.name, required this.image, required this.bgColor});
 }
 
+//list of artisans -- needed to enhance sorting
 List<String> artisanListItems = [
   acRepair,
   barber,
@@ -29,73 +30,94 @@ List<String> artisanListItems = [
   tiler,
 ];
 
+//list of artisans images -- needed to enhance sorting
+List<String> artisanImageListItems = [
+  "assets/images/acrepair.jpg",
+  "assets/images/barber.jpg",
+  "assets/images/capenter.jpg",
+  "assets/images/cleaner.jpg",
+  "assets/images/electrician.jpg",
+  "assets/images/fridgerepairer.jpg",
+  "assets/images/gardener.jpg",
+  "assets/images/hairdresser.jpg",
+  "assets/images/laundry.jpg",
+  "assets/images/interior.jpg",
+  "assets/images/maison.jpg",
+  "assets/images/mechanic.gif",
+  "assets/images/painter.jpg",
+  "assets/images/plumber.gif",
+  "assets/images/semstress.jpg",
+  "assets/images/tailor.jpg",
+  "assets/images/tiler.jpg",
+];
+
 List getArtisanType = [
   ArtisanType(
       name: artisanListItems[0],
-      image: "assets/images/acrepair.jpg",
+      image: artisanImageListItems[0],
       bgColor: [Colors.blue, Colors.blueAccent]),
   ArtisanType(
       name: artisanListItems[1],
-      image: "assets/images/barber.jpg",
+      image: artisanImageListItems[1],
       bgColor: [Colors.pink, Colors.red]),
   ArtisanType(
       name: artisanListItems[2],
-      image: "assets/images/capenter.jpg",
+      image: artisanImageListItems[2],
       bgColor: [Colors.blue, Colors.purpleAccent]),
   ArtisanType(
       name: artisanListItems[3],
-      image: "assets/images/cleaner.jpg",
+      image: artisanImageListItems[3],
       bgColor: [Colors.indigo, Colors.indigoAccent]),
   ArtisanType(
       name: artisanListItems[4],
-      image: "assets/images/electrician.jpg",
+      image: artisanImageListItems[4],
       bgColor: [Colors.red, Colors.orangeAccent]),
   ArtisanType(
       name: artisanListItems[5],
-      image: "assets/images/fridgerepairer.jpg",
+      image: artisanImageListItems[5],
       bgColor: [Colors.indigoAccent, Colors.lightBlue]),
   ArtisanType(
       name: artisanListItems[6],
-      image: "assets/images/moer.jpg",
+      image: artisanImageListItems[6],
       bgColor: [Colors.indigoAccent, Colors.amber]),
   ArtisanType(
       name: artisanListItems[7],
-      image: "assets/images/hairdresser.jpg",
+      image: artisanImageListItems[7],
       bgColor: [Colors.blue, Colors.blueAccent]),
   ArtisanType(
       name: artisanListItems[8],
-      image: "assets/images/interior.jpg",
+      image: artisanImageListItems[8],
       bgColor: [Colors.blueAccent, Colors.blueAccent]),
   ArtisanType(
       name: artisanListItems[9],
-      image: "assets/images/laundry.jpg",
+      image: artisanImageListItems[9],
       bgColor: [Colors.purple, Colors.lightBlueAccent]),
   ArtisanType(
       name: artisanListItems[10],
-      image: "assets/images/maison.jpg",
+      image: artisanImageListItems[10],
       bgColor: [Colors.green, Colors.lightGreenAccent]),
   ArtisanType(
       name: artisanListItems[11],
-      image: "assets/images/mechanic.gif",
+      image: artisanImageListItems[11],
       bgColor: [Colors.amber, Colors.yellowAccent]),
   ArtisanType(
       name: artisanListItems[12],
-      image: "assets/images/painter.jpg",
+      image: artisanImageListItems[12],
       bgColor: [Colors.lightBlueAccent, Colors.deepPurple]),
   ArtisanType(
       name: artisanListItems[13],
-      image: "assets/images/plumber.gif",
+      image: artisanImageListItems[13],
       bgColor: [Colors.orange, Colors.deepOrange]),
   ArtisanType(
       name: artisanListItems[14],
-      image: "assets/images/semstress.jpg",
+      image: artisanImageListItems[14],
       bgColor: [Colors.blue, Colors.indigo]),
   ArtisanType(
       name: artisanListItems[15],
-      image: "assets/images/tailor.jpg",
+      image: artisanImageListItems[15],
       bgColor: [Colors.red, Colors.pinkAccent]),
   ArtisanType(
       name: artisanListItems[16],
-      image: "assets/images/tiler.jpg",
+      image: artisanImageListItems[16],
       bgColor: [Colors.deepPurpleAccent, Colors.blueAccent]),
 ];

@@ -24,14 +24,19 @@ class _CategoryPageState extends State<CategoryPage> {
   String _searchText = "";
 
   List<String>? _searchListItems;
+  List<String>? _imageListItems;
   List<String>? _artisanListItems;
+  List<String>? _artisanImageListItems;
 
   @override
   void initState() {
     super.initState();
     _artisanListItems = <String>[];
     _artisanListItems = artisanListItems;
+    _artisanImageListItems = <String>[];
+    _artisanImageListItems = artisanImageListItems;
     _artisanListItems!.sort();
+    _artisanImageListItems!.sort();
   }
 
   _CategoryPageState() {
@@ -45,17 +50,6 @@ class _CategoryPageState extends State<CategoryPage> {
               _isSearch = false;
               _searchText = _searchInput.text;
             });
-      /*  if (_searchInput.text.isEmpty) {
-        setState(() {
-          _isSearch = true;
-          _searchText = "";
-        });
-      } else {
-        setState(() {
-          _isSearch = false;
-          _searchText = _searchInput.text;
-        });
-      }*/
     });
   }
 
@@ -229,11 +223,14 @@ class _CategoryPageState extends State<CategoryPage> {
   //method to search category and sort grid list
   Widget _searchList() {
     _searchListItems = <String>[];
+    _imageListItems = <String>[];
     for (int i = 0; i < _artisanListItems!.length; i++) {
       var item = _artisanListItems![i];
+      var images = _artisanImageListItems![i];
 
       if (item.toLowerCase().contains(_searchText.toLowerCase())) {
         _searchListItems!.add(item);
+        _imageListItems!.add(images);
       }
     }
     return displaySearchedArtisanTypes();
@@ -391,7 +388,17 @@ class _CategoryPageState extends State<CategoryPage> {
                           ),
                         )
                       ],
-                    )
+                    ),
+                    CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 60,
+                      child: ClipOval(
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          child: Image.asset(
+                            _imageListItems![index],
+                            fit: BoxFit.cover,
+                          )),
+                    ),
                   ],
                 ),
               ),
