@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../constants.dart';
 
 class ArtisanProfile extends StatefulWidget {
-   final String? artisanId;
+  final String? artisanId;
 
   const ArtisanProfile({Key? key, this.artisanId}) : super(key: key);
   static const routeName = '/artisanProfile';
@@ -115,11 +115,14 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
               alignment: WrapAlignment.center,
               children: [
                 Text("Joined on ", style: TextStyle(fontSize: 14)),
-                Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
+                  child: Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                  ),
                 ),
                 Text(" ${_selectedArtisan!.dateJoined!}",
                     style: TextStyle(fontSize: 14)),
@@ -132,22 +135,25 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
               children: [
                 Text(_selectedArtisan!.category!,
                     style: TextStyle(fontSize: 12)),
-                SizedBox(width: 5),
-                Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
+                  child: Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                  ),
                 ),
-                SizedBox(width: 5),
                 Text(_selectedArtisan!.expLevel!,
                     style: TextStyle(fontSize: 12)),
-                SizedBox(width: 5),
-                Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
+                  child: Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                  ),
                 ),
                 SizedBox(width: 5),
                 Text('Likes: $_totalNumberOfLikes',
