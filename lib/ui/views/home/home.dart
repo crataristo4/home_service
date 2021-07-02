@@ -35,35 +35,18 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TabController? _tabController;
-  bool isLoading = false;
   String? message;
 
   @override
   void initState() {
     greetingMessage();
-    showLoading();
     _tabController = TabController(length: 3, vsync: this);
     _tabController!.index = widget.tabIndex!;
 
     super.initState();
   }
 
-  //shows a shimmer to wait for stream to fetch
-  showLoading() {
-    try {
-      setState(() {
-        isLoading = true;
-      });
 
-      Timer(Duration(seconds: 3), () {
-        setState(() {
-          isLoading = false;
-        });
-      });
-    } catch (error) {
-      print(error);
-    }
-  }
 
   //greeting message to user
   greetingMessage() {
@@ -98,9 +81,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? LoadHome()
-        : WillPopScope(
+    return  WillPopScope(
             onWillPop: () async {
               if (_tabController!.index == 0 || _tabController!.index == 2) {
                 _tabController!.index = 1;
@@ -190,7 +171,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               baseColor: Colors.grey,
                               highlightColor: Colors.indigo,
                               child: Text(
-                                "$message $userName",
+                                "$message ${userName ?? ''}",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.w500),
                               ),

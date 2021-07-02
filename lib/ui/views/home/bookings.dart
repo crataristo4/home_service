@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
+import 'package:home_service/models/booking.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/bookings/artisan_booking_page/received_bookings.dart';
 import 'package:home_service/ui/views/home/bookings/artisan_booking_page/sent_bookings.dart';
 import 'package:home_service/ui/views/home/bookings/user_booking_page/user_pending_bookings.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
+import 'package:provider/provider.dart';
 
 import 'bookings/user_booking_page/user_bookings_confirmed.dart';
 
@@ -21,8 +23,8 @@ class BookingPage extends StatefulWidget {
 }
 
 class _BookingPageState extends State<BookingPage> {
+  List<Bookings>? _allBookingList;
   int _selectedIndex = 0;
-  bool isLoading = false;
   GlobalKey globalKey = GlobalKey();
   List<Widget> artisanBookingOptions = <Widget>[
     SentBookings(),
@@ -40,38 +42,19 @@ class _BookingPageState extends State<BookingPage> {
     });
   }
 
-  @override
-  void initState() {
-    showLoading();
-    super.initState();
-  }
-
-  //shows a shimmer to wait for stream to fetch
-  showLoading() {
-    try {
-      setState(() {
-        isLoading = true;
-      });
-
-      Timer(Duration(seconds: 3), () {
-        setState(() {
-          isLoading = false;
-        });
-      });
-    } catch (error) {
-      print(error);
-    }
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
+    _allBookingList = Provider.of<List<Bookings>>(context);
+
     return WillPopScope(
       onWillPop: () async {
         await Navigator.of(context).popAndPushNamed(Home.routeName);
 
         return true;
       },
-      child: isLoading
+      child: _allBookingList == null
           ? LoadHome()
           : Scaffold(
               body: Center(

@@ -24,8 +24,7 @@ class ArtworksPage extends StatefulWidget {
 class _ArtworksPageState extends State<ArtworksPage> {
   Future<void>? _launched;
   List _likedUsers = [];
-  List<ArtworkModel>? artworkList;
-
+  List<ArtworkModel>? _artworkList;
 
   Widget _buildArtworksCard(List<ArtworkModel>? artworkList, int index) {
     final artworkprovider = Provider.of<ArtworkProvider>(context);
@@ -35,10 +34,12 @@ class _ArtworksPageState extends State<ArtworksPage> {
     //   artworkList[index].isFavorite = true;
     // }
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(
-        ArtisanProfile.routeName,
-        arguments: artworkList[index].artisanId,
-      ),
+      onTap: () async {
+        await Navigator.of(context).pushNamed(
+          ArtisanProfile.routeName,
+          arguments: artworkList[index].artisanId,
+        );
+      },
       onLongPress: () => print(artworkList[index].likedUsers),
       child: Container(
         padding: EdgeInsets.all(12),
@@ -141,7 +142,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
                 ),
                 ElevatedButton(
                     onPressed: () => setState(() {
-                      _launched = ShowAction.makePhoneCall(
+                          _launched = ShowAction.makePhoneCall(
                               'tel:${artworkList[index].artisanPhoneNumber}');
                         }),
                     child: Text('CALL'))
@@ -155,20 +156,20 @@ class _ArtworksPageState extends State<ArtworksPage> {
 
   @override
   Widget build(BuildContext context) {
-    artworkList = Provider.of<List<ArtworkModel>>(context);
-    return artworkList == null
+    _artworkList = Provider.of<List<ArtworkModel>>(context);
+    return _artworkList == null
         ? LoadHome()
         : Builder(
             builder: (BuildContext context) {
-              return artworkList!.length != 0
+              return _artworkList!.length != 0
                   ? Container(
                       margin: EdgeInsets.all(twentyFourDp),
                       child: ListView.builder(
-                          itemCount: artworkList!.length,
+                          itemCount: _artworkList!.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Column(
                               children: [
-                                _buildArtworksCard(artworkList, index),
+                                _buildArtworksCard(_artworkList, index),
                                 SizedBox(height: twentyFourDp)
                               ],
                             );

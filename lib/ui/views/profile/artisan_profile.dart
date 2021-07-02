@@ -4,6 +4,7 @@ import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
+
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
   Artisans? _selectedArtisan;
   List<ArtworkModel>? _artworkList;
   int _totalNumberOfLikes = 0;
+  String? date;
 
   @override
   void initState() {
@@ -106,11 +108,14 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
               alignment: WrapAlignment.center,
               children: [
                 Text("Joined on ", style: TextStyle(fontSize: 14)),
-                Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
+                  child: Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                  ),
                 ),
                 Text(" ${_selectedArtisan!.dateJoined!}",
                     style: TextStyle(fontSize: 14)),
@@ -123,22 +128,25 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
               children: [
                 Text(_selectedArtisan!.category!,
                     style: TextStyle(fontSize: 12)),
-                SizedBox(width: 5),
-                Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
+                  child: Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                  ),
                 ),
-                SizedBox(width: 5),
                 Text(_selectedArtisan!.expLevel!,
                     style: TextStyle(fontSize: 12)),
-                SizedBox(width: 5),
-                Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
+                  child: Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
+                  ),
                 ),
                 SizedBox(width: 5),
                 Text('Likes: $_totalNumberOfLikes',

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,33 +19,11 @@ class ViewAllArtisans extends StatefulWidget {
 
 class _ViewAllArtisansState extends State<ViewAllArtisans> {
   bool isLoading = false;
-
-  @override
-  void initState() {
-    showLoading();
-
-    super.initState();
-  }
-
-  showLoading() {
-    try {
-      setState(() {
-        isLoading = true;
-      });
-
-      Timer(Duration(seconds: 5), () {
-        setState(() {
-          isLoading = false;
-        });
-      });
-    } catch (error) {
-      print(error);
-    }
-  }
+  List<Artisans>? _artisanListProvider;
 
   @override
   Widget build(BuildContext context) {
-    final artisanListProvider = Provider.of<List<Artisans>>(context);
+    _artisanListProvider = Provider.of<List<Artisans>>(context);
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -73,7 +49,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
             ),
           ),
           title: Text(
-            "${artisanListProvider.length} $availableArtisans",
+            "${_artisanListProvider!.length} $availableArtisans",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: sixteenDp,
@@ -81,7 +57,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
           ),
         ),
         body: Builder(builder: (BuildContext context) {
-          return isLoading
+          return _artisanListProvider == null
               ? LoadHome()
               : ListView.builder(
                   itemBuilder: (context, index) {
@@ -97,7 +73,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                             onTap: () async {
                               await Navigator.of(context).pushNamed(
                                   ArtisanProfile.routeName,
-                                  arguments: artisanListProvider[index].id);
+                                  arguments: _artisanListProvider![index].id);
                               //1.pass artisans details
                               //todo
                               //2.navigate to artisan's profile
@@ -111,7 +87,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                               children: [
                                 //artisans name
                                 Text(
-                                  artisanListProvider[index].name!,
+                                  _artisanListProvider![index].name!,
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 //todo implement location
@@ -120,29 +96,32 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ],
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: sixDp, bottom: sixDp),
-                            child: Row(
+                            ),
+                            subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Flexible(
-                                  //artisan's category
-                                  flex: 1,
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: sixDp, bottom: sixDp),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(
+                                        //artisan's category
+                                        flex: 1,
                                         child: Text(
-                                            artisanListProvider[index]
+                                            _artisanListProvider![index]
                                                 .category!,
                                             style:
                                                 TextStyle(color: Colors.white)),
                                       ),
-                                Flexible(
-                                  //todo implement rating logic
-                                  child: RatingBar.builder(
-                                    itemPadding: EdgeInsets.only(top: 2),
+                                      Flexible(
+                                        //todo implement rating logic
+                                        child: RatingBar.builder(
+                                          itemPadding: EdgeInsets.only(top: 2),
                                           itemSize: 14,
                                           initialRating: 3,
                                           minRating: 1,
@@ -157,37 +136,37 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                             print(rating);
                                           },
                                         ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          Text(
+                                Text(
                                   // artisan's experience
-                                  artisanListProvider[index].expLevel!,
+                                  _artisanListProvider![index].expLevel!,
                                   style: TextStyle(color: Colors.white),
                                 )
                               ],
-                      ),
-                      leading: Padding(
-                        padding: EdgeInsets.only(top: eightDp),
+                            ),
+                            leading: Padding(
+                              padding: EdgeInsets.only(top: eightDp),
                               child: CircleAvatar(
                                 radius: 40,
                                 foregroundImage: CachedNetworkImageProvider(
-                                    artisanListProvider[index].photoUrl!),
+                                    _artisanListProvider![index].photoUrl!),
                                 backgroundColor: Colors.indigo,
                               ),
                             ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  )
-                ],
-              );
-            },
-            itemCount: artisanListProvider.length,
-            shrinkWrap: true,
-          );
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        )
+                      ],
+                    );
+                  },
+                  itemCount: _artisanListProvider!.length,
+                  shrinkWrap: true,
+                );
         }));
   }
 }
