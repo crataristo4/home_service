@@ -17,7 +17,7 @@ class UserProvider with ChangeNotifier {
       _dateJoined,
       _type,
       _phoneNumber;
-  DateFormat dateFormat = DateFormat("dd-MM-yyyy HH:mm:ss");
+  DateFormat dateFormat = DateFormat().add_yMMMMEEEEd();
 
   get name => _name;
 

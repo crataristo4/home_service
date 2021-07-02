@@ -63,13 +63,15 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: eightDp),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                  width: 20, color: Colors.indigoAccent)),
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                           child: ListTile(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(16),
+                              ),
+                            ),
                             onTap: () async {
                               await Navigator.of(context).pushNamed(
                                   ArtisanProfile.routeName,
@@ -80,7 +82,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                             },
                             minVerticalPadding: 25,
                             horizontalTitleGap: 4,
-                            tileColor: Colors.indigoAccent,
+                            tileColor: Colors.grey[100],
                             title: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -88,12 +90,12 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                 //artisans name
                                 Text(
                                   _artisanListProvider![index].name!,
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.black),
                                 ),
                                 //todo implement location
                                 Text(
                                   "3 km",
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.black),
                                 ),
                               ],
                             ),
@@ -116,7 +118,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                             _artisanListProvider![index]
                                                 .category!,
                                             style:
-                                                TextStyle(color: Colors.white)),
+                                                TextStyle(color: Colors.black)),
                                       ),
                                       Flexible(
                                         //todo implement rating logic
@@ -143,7 +145,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                 Text(
                                   // artisan's experience
                                   _artisanListProvider![index].expLevel!,
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.black),
                                 )
                               ],
                             ),

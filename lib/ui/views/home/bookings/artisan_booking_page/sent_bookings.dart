@@ -1,23 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
-import 'package:home_service/models/artisan/bookings.dart';
+import 'package:home_service/models/booking.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:provider/provider.dart';
 
-class SentBookingsPage extends StatefulWidget {
+class SentBookings extends StatefulWidget {
   static const routeName = '/sentBookings';
 
-  const SentBookingsPage({Key? key}) : super(key: key);
+  const SentBookings({Key? key}) : super(key: key);
 
   @override
-  _SentBookingsPageState createState() => _SentBookingsPageState();
+  _SentBookingsState createState() => _SentBookingsState();
 }
 
-class _SentBookingsPageState extends State<SentBookingsPage> {
+class _SentBookingsState extends State<SentBookings> {
   @override
   Widget build(BuildContext context) {
-    final sentBookingsList = Provider.of<List<SentBookings>>(context);
-    print("Data length ${sentBookingsList.length}");
+    final bookingsList = Provider.of<List<Bookings>>(context);
+    print("Data length ${bookingsList.length}");
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -26,14 +27,12 @@ class _SentBookingsPageState extends State<SentBookingsPage> {
           builder: (BuildContext context) {
             return ListView.builder(
               itemBuilder: (context, index) {
+                print("Data length ${bookingsList.length}");
                 return Column(
                   children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: eightDp),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                              width: 20, color: Colors.indigoAccent)),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                       child: ListTile(
                         onTap: () {
                           //1.pass artisans details
@@ -42,17 +41,21 @@ class _SentBookingsPageState extends State<SentBookingsPage> {
                         },
                         minVerticalPadding: 10,
                         horizontalTitleGap: 4,
-                        tileColor: Colors.indigoAccent,
+                        tileColor: Colors.grey[100],
                         title: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             //artisans name
-
-                            Text(
-                              sentBookingsList[index].receiverName!,
-                              style: TextStyle(color: Colors.white),
-                            )
+                            getUserType == user
+                                ? Text(
+                                    bookingsList[index].receiverName!,
+                                    style: TextStyle(color: Colors.black),
+                                  )
+                                : Text(
+                                    bookingsList[index].senderName!,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                           ],
                         ),
                         subtitle: Column(
@@ -69,17 +72,20 @@ class _SentBookingsPageState extends State<SentBookingsPage> {
                                   Flexible(
                                     //
                                     flex: 1,
-                                    child: Text(
-                                        sentBookingsList[index].message!,
-                                        style: TextStyle(color: Colors.white)),
+                                    child: Text(bookingsList[index].message!,
+                                        style:
+                                            TextStyle(color: Colors.black87)),
                                   ),
                                 ],
                               ),
                             ),
                             Text(
                               //  experience
-                              sentBookingsList[index].status!,
-                              style: TextStyle(color: Colors.white),
+                              bookingsList[index].status!,
+                              style: TextStyle(
+                                  color: bookingsList[index].status == 'Pending'
+                                      ? Colors.blue
+                                      : Colors.green),
                             )
                           ],
                         ),
@@ -88,8 +94,15 @@ class _SentBookingsPageState extends State<SentBookingsPage> {
                           child: CircleAvatar(
                             radius: 40,
                             foregroundImage: CachedNetworkImageProvider(
-                                sentBookingsList[index].receiverPhotoUrl!),
+                                getUserType == user
+                                    ? bookingsList[index].receiverPhotoUrl!
+                                    : bookingsList[index].senderPhotoUrl!),
                             backgroundColor: Colors.indigo,
+                          ),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(16),
                           ),
                         ),
                       ),
@@ -100,7 +113,7 @@ class _SentBookingsPageState extends State<SentBookingsPage> {
                   ],
                 );
               },
-              itemCount: sentBookingsList.length,
+              itemCount: bookingsList.length,
               shrinkWrap: true,
             );
           },
