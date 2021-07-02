@@ -26,7 +26,6 @@ class _ArtworksPageState extends State<ArtworksPage> {
   List _likedUsers = [];
   List<ArtworkModel>? _artworkList;
 
-
   Widget _buildArtworksCard(List<ArtworkModel>? artworkList, int index) {
     final artworkprovider = Provider.of<ArtworkProvider>(context);
     _likedUsers = artworkList![index].likedUsers;
@@ -35,10 +34,12 @@ class _ArtworksPageState extends State<ArtworksPage> {
     //   artworkList[index].isFavorite = true;
     // }
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(
-        ArtisanProfile.routeName,
-        arguments: artworkList[index].artisanId,
-      ),
+      onTap: () async {
+        await Navigator.of(context).pushNamed(
+          ArtisanProfile.routeName,
+          arguments: artworkList[index].artisanId,
+        );
+      },
       onLongPress: () => print(artworkList[index].likedUsers),
       child: Container(
         padding: EdgeInsets.all(12),
@@ -141,7 +142,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
                 ),
                 ElevatedButton(
                     onPressed: () => setState(() {
-                      _launched = ShowAction.makePhoneCall(
+                          _launched = ShowAction.makePhoneCall(
                               'tel:${artworkList[index].artisanPhoneNumber}');
                         }),
                     child: Text('CALL'))
