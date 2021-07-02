@@ -4,7 +4,9 @@ import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
+import 'package:home_service/ui/widgets/actions.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants.dart';
 
@@ -41,6 +43,14 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
     super.initState();
   }
 
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +62,24 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
           'Profile',
           style: TextStyle(color: Colors.black),
         ),
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: twentyFourDp),
+            child: FloatingActionButton(
+              tooltip: 'Call ${_selectedArtisan!.name!}',
+              splashColor: Colors.green,
+              elevation: 0,
+              mini: true,
+              backgroundColor: Colors.indigo,
+              onPressed: () => ShowAction.makePhoneCall(
+                  "tel:${_selectedArtisan!.phoneNumber!}"),
+              child: Icon(
+                Icons.call,
+                color: Colors.white,
+              ),
+            ),
+          )
+        ],
       ),
       body: Container(
         margin: EdgeInsets.all(24),

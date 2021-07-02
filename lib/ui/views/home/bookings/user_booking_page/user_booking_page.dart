@@ -23,7 +23,12 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigoAccent,
-        title: Center(child: Text(allYourBookingAppearHere)),
+        title: Row(
+          children: [
+            Text(allYourBookingAppearHere),
+            Text("  ( ${allBookingList.length} )"),
+          ],
+        ),
       ),
       body: Container(
         child: Builder(

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:home_service/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShowAction {
   void showToast(message, Color color) {
@@ -46,5 +47,13 @@ class ShowAction {
       builder: (_) => alertDialog,
       barrierDismissible: false,
     );
+  }
+
+  static Future<void> makePhoneCall(String? url) async {
+    if (await canLaunch(url!)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
