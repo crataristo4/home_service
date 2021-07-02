@@ -54,22 +54,24 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
           style: TextStyle(color: Colors.black),
         ),
         actions: [
-          Container(
-            margin: EdgeInsets.only(right: twentyFourDp),
-            child: FloatingActionButton(
-              tooltip: 'Call ${_selectedArtisan!.name!}',
-              splashColor: Colors.green,
-              elevation: 0,
-              mini: true,
-              backgroundColor: Colors.indigo,
-              onPressed: () => ShowAction.makePhoneCall(
-                  "tel:${_selectedArtisan!.phoneNumber!}"),
-              child: Icon(
-                Icons.call,
-                color: Colors.white,
-              ),
-            ),
-          )
+          currentUserId != _selectedArtisan!.id
+              ? Container(
+                  margin: EdgeInsets.only(right: twentyFourDp),
+                  child: FloatingActionButton(
+                    tooltip: 'Call ${_selectedArtisan!.name!}',
+                    splashColor: Colors.green,
+                    elevation: 0,
+                    mini: true,
+                    backgroundColor: Colors.indigo,
+                    onPressed: () => ShowAction.makePhoneCall(
+                        "tel:${_selectedArtisan!.phoneNumber!}"),
+                    child: Icon(
+                      Icons.call,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              : Container()
         ],
       ),
       body: Container(
