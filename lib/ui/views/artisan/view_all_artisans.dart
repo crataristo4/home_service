@@ -51,7 +51,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
             ),
           ),
           title: Text(
-            "${artisanListProvider.length} $availableArtisans",
+            "${_artisanListProvider!.length} $availableArtisans",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: sixteenDp,
