@@ -5,12 +5,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/options_page.dart';
 import 'package:home_service/ui/views/home/artwork.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
+import 'package:home_service/ui/views/home/bookings/user_booking_page/user_booking_page.dart';
 import 'package:home_service/ui/views/home/category.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:shimmer/shimmer.dart';
@@ -199,7 +201,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   Expanded(
                     child: TabBarView(
                       controller: _tabController,
-                      children: [ArtworksPage(), CategoryPage(), BookingPage()],
+                      children: [
+                        ArtworksPage(),
+                        CategoryPage(),
+                        getUserType == user ? UserBookingsPage() : BookingPage()
+                      ],
                     ),
                   ),
                 ],

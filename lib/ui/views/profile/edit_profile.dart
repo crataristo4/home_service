@@ -480,7 +480,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
 
-                  /* SizedBox(
+                   SizedBox(
                     height: 60,
                     width: MediaQuery.of(context).size.width,
                     child: Container(
@@ -495,24 +495,14 @@ class _EditProfileState extends State<EditProfile> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8))),
                           onPressed: () {
-                            if (formKey.currentState!.validate()) {
-//start the dialog
-                              Dialogs.showLoadingDialog(context, loadingKey,
-                                  updatingName, Colors.white70);
-                                //first update provider
-                                userUpdateProvider
-                                    .changeName(_controller!.text);
-                                //then update user
-                                // userUpdateProvider!.updateUserName(context);
-
-                            }
+                            ShowAction().showToast(successful, Colors.green);
                           },
                           child: Text(
                             save,
                             style: TextStyle(fontSize: 14),
                           )),
                     ),
-                  ),*/
+                  ),
 
                   // SizedBox(height: 1,)
                 ],

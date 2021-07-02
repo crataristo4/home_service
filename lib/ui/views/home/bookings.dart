@@ -31,7 +31,7 @@ class _BookingPageState extends State<BookingPage> {
 
   List<Widget> userBookingOptions = <Widget>[
     UserPendingBookings(),
-    // UserBookingsConfirmed(),
+    UserBookingsConfirmed(),
   ];
 
   _onItemTapped(int index) {
@@ -98,7 +98,7 @@ class _BookingPageState extends State<BookingPage> {
                       color: _selectedIndex == 1 ? Colors.green : Colors.grey,
                     ),
                     label: getUserType == user ? confirmedBooking : "Received",
-                  ),
+                  )
                 ],
                 currentIndex: _selectedIndex,
                 selectedItemColor: Theme.of(context).primaryColor,

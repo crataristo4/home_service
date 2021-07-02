@@ -148,6 +148,7 @@ const invalidOTP = "Invalid OTP";
 const labelSkip = 'Skip';
 const labelNext = 'Next';
 const labelGetStarted = 'Get started';
+const allYourBookingAppearHere = 'All your bookings appear here';
 const sendingCode = 'Please wait sending code...';
 const loggingYouOut = 'logging you out ...';
 const bookingARequest = 'Booking a request ,please wait...';
