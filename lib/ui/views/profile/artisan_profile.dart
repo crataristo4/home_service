@@ -6,6 +6,7 @@ import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 
 import 'package:home_service/ui/widgets/actions.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
@@ -102,12 +103,14 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
             ),
             SizedBox(height: 20),
             Text(_selectedArtisan!.name!, style: TextStyle(fontSize: 20)),
+
             SizedBox(height: 15),
             Wrap(
               direction: Axis.horizontal,
               alignment: WrapAlignment.center,
               children: [
-                Text("Joined on ", style: TextStyle(fontSize: 14)),
+                Text("Joined on ",
+                    style: TextStyle(fontSize: 12, color: Colors.black87)),
                 Padding(
                   padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
                   child: Container(
@@ -118,16 +121,18 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                   ),
                 ),
                 Text(" ${_selectedArtisan!.dateJoined!}",
-                    style: TextStyle(fontSize: 14)),
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black45,
+                        fontStyle: FontStyle.italic)),
               ],
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 15),
             Wrap(
               direction: Axis.horizontal,
               alignment: WrapAlignment.center,
               children: [
-                Text(_selectedArtisan!.category!,
-                    style: TextStyle(fontSize: 12)),
+                Text(_selectedArtisan!.category!, style: TextStyle()),
                 Padding(
                   padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
                   child: Container(
@@ -137,8 +142,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                         shape: BoxShape.circle, color: Color(0xFFe0f2f1)),
                   ),
                 ),
-                Text(_selectedArtisan!.expLevel!,
-                    style: TextStyle(fontSize: 12)),
+                Text(_selectedArtisan!.expLevel!, style: TextStyle()),
                 Padding(
                   padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
                   child: Container(
@@ -150,7 +154,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                 ),
                 SizedBox(width: 5),
                 Text('Likes: $_totalNumberOfLikes',
-                    style: TextStyle(fontSize: 12)),
+                    style: TextStyle(fontStyle: FontStyle.italic)),
               ],
             ),
             SizedBox(height: 20),
