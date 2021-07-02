@@ -6,7 +6,6 @@ import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants.dart';
 
@@ -41,14 +40,6 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
       _totalNumberOfLikes += _artworkList![i].likedUsers.length;
     }
     super.initState();
-  }
-
-  Future<void> _makePhoneCall(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 
   @override
