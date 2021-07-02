@@ -42,50 +42,52 @@ class BookingService {
     return firestoreService.collection('Bookings').doc(id).delete();
   }
 
-  //get all bookings : both user and artisan
+  //get all sent  user
   Stream<List<Bookings>> getAllBookings() {
-    return getUserType == user
-        ? firestoreService
-            .collection('Bookings')
-            .orderBy("timestamp", descending: true)
-            .where("senderId",
-                isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-            //.limit(50)
-            .snapshots()
-            .map((snapshots) => snapshots.docs
-                .map((document) => Bookings.fromFirestore(document.data()))
-                .toList(growable: true))
-            .handleError((error) {
+    return firestoreService
+        .collection('Bookings')
+        .orderBy("timestamp", descending: true)
+        .where("senderId", isEqualTo: currentUserId)
+        //.limit(50)
+        .snapshots()
+        .map((snapshots) => snapshots.docs
+            .map((document) => Bookings.fromFirestore(document.data()))
+            .toList(growable: true))
+        .handleError((error) {
       print("Error on getting bookings from user ==> $error");
-          })
-        : firestoreService
-            .collection('Bookings')
-            .orderBy("timestamp", descending: true)
-            .where("receiverId",
-                isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-            // .limit(50)
-            .snapshots()
-            .map((snapshots) => snapshots.docs
-                .map((document) => Bookings.fromFirestore(document.data()))
-                .toList(growable: true))
-            .handleError((error) {
-            print("Error on  getting received bookings to ARTISAN  ==> $error");
-          });
+    });
   }
 
-  //get sent bookings made by artisan
+  //get all bookings sent by  artisan
   Stream<List<SentBookings>> getSentBookings() {
     return firestoreService
         .collection('Bookings')
         .orderBy("timestamp", descending: true)
         .where("senderId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        //  .limit(50)
+        //.limit(50)
         .snapshots()
         .map((snapshots) => snapshots.docs
             .map((document) => SentBookings.fromFirestore(document.data()))
             .toList(growable: true))
         .handleError((error) {
-      print("Error on getting SENT bookings ==> $error");
+      print("Error on getting sent bookings from artisan ==> $error");
+    });
+  }
+
+  //get all received bookings made to artisan
+  Stream<List<ReceivedBookings>> getReceivedBookings() {
+    return firestoreService
+        .collection('Bookings')
+        .orderBy("timestamp", descending: true)
+        .where("receiverId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        //.where("receiverName", isEqualTo: userName)
+        //  .limit(50)
+        .snapshots()
+        .map((snapshots) => snapshots.docs
+            .map((document) => ReceivedBookings.db(document.data()))
+            .toList(growable: true))
+        .handleError((error) {
+      print("Error on getting received bookings ==> $error");
     });
   }
 

@@ -7,7 +7,7 @@ import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:uuid/uuid.dart';
 
 class BookingsProvider with ChangeNotifier {
-  String? _id, _bookingDateTime, _message, _status;
+  String? _id, _type, _bookingDateTime, _message, _status;
   String? _senderName, _senderId, _senderPhoneNumber, _senderPhotoUrl;
   GeoPoint? _senderLocation, _receiverLocation;
   String? _receiverName, _receiverId, _receiverPhoneNumber, _receiverPhotoUrl;
@@ -60,6 +60,7 @@ class BookingsProvider with ChangeNotifier {
     String? receiverPhotoUrl,
   ) {
     _id = _uuid.v4();
+    _type = getUserType;
     //sender's details
     _senderName = userName;
     _senderId = currentUserId;
@@ -81,6 +82,7 @@ class BookingsProvider with ChangeNotifier {
 
     Bookings newBooking = Bookings(
         id: _id,
+        type: _type,
         senderName: _senderName,
         receiverName: receiverName,
         senderId: _senderId,

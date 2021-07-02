@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
@@ -26,7 +25,7 @@ class _BookingPageState extends State<BookingPage> {
   GlobalKey globalKey = GlobalKey();
   List<Widget> artisanBookingOptions = <Widget>[
     SentBookingsPage(),
-    ReceivedBookings(),
+    ReceivedBookingsPage(),
   ];
 
   _onItemTapped(int index) {

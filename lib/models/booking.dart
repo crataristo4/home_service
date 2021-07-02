@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Bookings {
   String? id;
+  String? type;
   String? senderName;
   String? receiverName;
   String? senderId;
@@ -19,6 +20,7 @@ class Bookings {
 
   Bookings(
       {required this.id,
+      required this.type,
       required this.senderName,
       required this.receiverName,
       required this.senderId,
@@ -39,6 +41,7 @@ class Bookings {
   factory Bookings.fromFirestore(Map<String, dynamic> data) {
     return Bookings(
         id: data['id'],
+        type: data['type'],
         senderName: data['senderName'],
         receiverName: data['receiverName'],
         senderId: data['senderId'],
@@ -58,6 +61,7 @@ class Bookings {
   Map<String, dynamic> bookToMap() {
     return {
       'id': id,
+      'type': type,
       'senderName': senderName,
       'receiverName': receiverName,
       'senderId': senderId,

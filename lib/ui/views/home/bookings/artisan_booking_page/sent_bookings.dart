@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
-import 'package:home_service/models/booking.dart';
-import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/models/artisan/bookings.dart';
+import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:provider/provider.dart';
 
 class SentBookingsPage extends StatefulWidget {
@@ -17,8 +17,8 @@ class SentBookingsPage extends StatefulWidget {
 class _SentBookingsState extends State<SentBookingsPage> {
   @override
   Widget build(BuildContext context) {
-    final bookingsList = Provider.of<List<Bookings>>(context);
-    print("Data length ${bookingsList.length}");
+    final sentBookingsList = Provider.of<List<SentBookings>>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -27,36 +27,24 @@ class _SentBookingsState extends State<SentBookingsPage> {
           builder: (BuildContext context) {
             return ListView.builder(
               itemBuilder: (context, index) {
-                print("Data length ${bookingsList.length}");
                 return Column(
                   children: [
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                       child: ListTile(
-                        onTap: () {
-                          //1.pass artisans details
-                          //todo
-                          //2.navigate to artisan's profile
+                        onTap: () async {
+                          await Navigator.of(context).pushNamed(
+                            ArtisanProfile.routeName,
+                            arguments: sentBookingsList[index].receiverId,
+                          );
                         },
                         minVerticalPadding: 10,
                         horizontalTitleGap: 4,
                         tileColor: Colors.grey[100],
-                        title: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            //artisans name
-                            getUserType == user
-                                ? Text(
-                                    bookingsList[index].receiverName!,
-                                    style: TextStyle(color: Colors.black),
-                                  )
-                                : Text(
-                                    bookingsList[index].senderName!,
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                          ],
+                        title: Text(
+                          sentBookingsList[index].receiverName!,
+                          style: TextStyle(color: Colors.black),
                         ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +60,8 @@ class _SentBookingsState extends State<SentBookingsPage> {
                                   Flexible(
                                     //
                                     flex: 1,
-                                    child: Text(bookingsList[index].message!,
+                                    child: Text(
+                                        sentBookingsList[index].message!,
                                         style:
                                             TextStyle(color: Colors.black87)),
                                   ),
@@ -81,11 +70,12 @@ class _SentBookingsState extends State<SentBookingsPage> {
                             ),
                             Text(
                               //  experience
-                              bookingsList[index].status!,
+                              sentBookingsList[index].status!,
                               style: TextStyle(
-                                  color: bookingsList[index].status == 'Pending'
-                                      ? Colors.blue
-                                      : Colors.green),
+                                  color:
+                                      sentBookingsList[index].status == pending
+                                          ? Colors.blue
+                                          : Colors.green),
                             )
                           ],
                         ),
@@ -94,9 +84,7 @@ class _SentBookingsState extends State<SentBookingsPage> {
                           child: CircleAvatar(
                             radius: 40,
                             foregroundImage: CachedNetworkImageProvider(
-                                getUserType == user
-                                    ? bookingsList[index].receiverPhotoUrl!
-                                    : bookingsList[index].senderPhotoUrl!),
+                                sentBookingsList[index].receiverPhotoUrl!),
                             backgroundColor: Colors.indigo,
                           ),
                         ),
@@ -113,7 +101,7 @@ class _SentBookingsState extends State<SentBookingsPage> {
                   ],
                 );
               },
-              itemCount: bookingsList.length,
+              itemCount: sentBookingsList.length,
               shrinkWrap: true,
             );
           },

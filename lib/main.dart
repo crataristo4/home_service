@@ -32,7 +32,7 @@ class EntryPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final getAllArtisan = UserService();
-    //  final getPendingBookings = BookingService();
+    final getReceivedBookings = BookingService();
     final getSentBookings = BookingService();
     final getAllBookings = BookingService();
     final getArtworks = ArtworkService();
@@ -54,31 +54,24 @@ class EntryPoint extends StatelessWidget {
           create: (context) => BookingsProvider(),
         ),
 
-        //all bookings
+        //all bookings - user
         StreamProvider<List<Bookings>>.value(
             lazy: false,
             value: getAllBookings.getAllBookings(),
             initialData: []),
 
-        //get sent bookings made by artisans
+        //get received bookings made to artisans (for Artisan page)
+        StreamProvider<List<ReceivedBookings>>.value(
+          lazy: false,
+          initialData: [],
+          value: getReceivedBookings.getReceivedBookings(),
+        ),
+
+        //get sent bookings made .Artisan to artisans (for Artisan page)
         StreamProvider<List<SentBookings>>.value(
-          lazy: false,
-          initialData: [],
-          value: getSentBookings.getSentBookings(),
-        ),
-
-        /*   //get list of pending bookings
-        StreamProvider<List<Bookings>>.value(
-          lazy: false,
-          initialData: [],
-          value: getPendingBookings.getPendingBookings(),
-        ),
-
-        //fetch list of confirmed bookings
-        StreamProvider<List<Bookings>>.value(
             lazy: false,
-            value: getConfirmedBookings.getConfirmedBookings(),
-            initialData: []),*/
+            value: getSentBookings.getSentBookings(),
+            initialData: []),
 
         ChangeNotifierProvider(create: (context) => ArtworkProvider()),
 

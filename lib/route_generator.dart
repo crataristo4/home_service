@@ -80,8 +80,8 @@ class RouteGenerator {
       case SentBookingsPage.routeName:
         return MaterialPageRoute(builder: (_) => SentBookingsPage());
       //received bookings artisan
-      case ReceivedBookings.routeName:
-        return MaterialPageRoute(builder: (_) => ReceivedBookings());
+      case ReceivedBookingsPage.routeName:
+        return MaterialPageRoute(builder: (_) => ReceivedBookingsPage());
 
       //view artisans by category
       case ViewArtisanByCategoryPage.routeName:

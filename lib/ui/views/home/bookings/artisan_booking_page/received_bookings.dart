@@ -1,26 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
-import 'package:home_service/models/booking.dart';
+import 'package:home_service/models/artisan/bookings.dart';
 import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/ui/views/bottomsheet/show_user_profile.dart';
+import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
-class ReceivedBookings extends StatefulWidget {
+class ReceivedBookingsPage extends StatefulWidget {
   static const routeName = '/receivedBookings';
 
-  const ReceivedBookings({Key? key}) : super(key: key);
+  const ReceivedBookingsPage({Key? key}) : super(key: key);
 
   @override
-  _ReceivedBookingsState createState() => _ReceivedBookingsState();
+  _ReceivedBookingsPageState createState() => _ReceivedBookingsPageState();
 }
 
-class _ReceivedBookingsState extends State<ReceivedBookings> {
+class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
   @override
   Widget build(BuildContext context) {
-    final receivedBookingList = Provider.of<List<Bookings>>(context);
+    final receivedBookingList = Provider.of<List<ReceivedBookings>>(context);
     return Scaffold(
       body: Container(
         margin: EdgeInsets.symmetric(vertical: eightDp),
@@ -34,10 +36,16 @@ class _ReceivedBookingsState extends State<ReceivedBookings> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                       child: ListTile(
-                        onTap: () {
-                          //1.pass artisans details
-                          //todo
-                          //2.navigate to artisan's profile
+                        onTap: () async {
+                          receivedBookingList[index].type! == user
+                              ? await showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => ShowUserProfile())
+                              : await Navigator.of(context).pushNamed(
+                                  ArtisanProfile.routeName,
+                                  arguments:
+                                      receivedBookingList[index].senderId,
+                                );
                         },
                         minVerticalPadding: 25,
                         horizontalTitleGap: 1,
@@ -52,9 +60,7 @@ class _ReceivedBookingsState extends State<ReceivedBookings> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  getUserType == user
-                                      ? receivedBookingList[index].receiverName!
-                                      : receivedBookingList[index].senderName!,
+                                  receivedBookingList[index].senderName!,
                                   style: TextStyle(color: Colors.black),
                                 ),
                                 receivedBookingList[index].status == confirmed
@@ -154,54 +160,43 @@ class _ReceivedBookingsState extends State<ReceivedBookings> {
                               height: tenDp,
                             ),
                             //button for artisans to confirm bookings
-                            getUserType == user
-                                ? Container()
-                                : Container(
-                                    height: fortyEightDp,
-                                    width: MediaQuery.of(context).size.width,
-                                    margin: EdgeInsets.symmetric(vertical: 10),
-                                    child: TextButton(
-                                        style:
-                                            TextButton.styleFrom(
-                                                backgroundColor:
-                                                    receivedBookingList[index]
-                                                                .status ==
-                                                            pending
-                                                        ? Theme.of(context)
-                                                            .primaryColor
-                                                        : Colors.green,
-                                                primary: Colors.white,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            eightDp))),
-                                        onPressed: () {
-                                          //else do nothing
-                                          if (receivedBookingList[index]
-                                                  .status ==
-                                              confirmed) {
-                                            //show toast
-                                            ShowAction().showToast(
-                                                "Already confirmed",
-                                                Colors.green);
-                                          } else {
-                                            //update booking
-                                            BookingsProvider()
-                                                .updateBookingsConfirmed(
-                                                    context,
-                                                    receivedBookingList[index]
-                                                        .id!);
-                                          }
-                                        },
-                                        child: Text(
+                            Container(
+                              height: fortyEightDp,
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              child: TextButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor:
                                           receivedBookingList[index].status ==
-                                                  confirmed
-                                              ? confirmed
-                                              : approve,
-                                          style:
-                                              TextStyle(fontSize: fourteenDp),
-                                        )),
-                                  ),
+                                                  pending
+                                              ? Theme.of(context).primaryColor
+                                              : Colors.green,
+                                      primary: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(eightDp))),
+                                  onPressed: () {
+                                    //else do nothing
+                                    if (receivedBookingList[index].status ==
+                                        confirmed) {
+                                      //show toast
+                                      ShowAction().showToast(
+                                          "Already confirmed", Colors.green);
+                                    } else {
+                                      //update booking
+                                      BookingsProvider()
+                                          .updateBookingsConfirmed(context,
+                                              receivedBookingList[index].id!);
+                                    }
+                                  },
+                                  child: Text(
+                                    receivedBookingList[index].status ==
+                                            confirmed
+                                        ? confirmed
+                                        : approve,
+                                    style: TextStyle(fontSize: fourteenDp),
+                                  )),
+                            ),
                           ],
                         ),
                         leading: Padding(
