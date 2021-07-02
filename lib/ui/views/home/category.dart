@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:home_service/models/artisan_type.dart';
 import 'package:home_service/ui/views/artisan/view_all_artisans.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
-import 'package:home_service/ui/views/home/bookings/all_bookings.dart';
 
 import '../../../constants.dart';
 
@@ -62,7 +61,7 @@ class _CategoryPageState extends State<CategoryPage> {
             SliverFillRemaining(
               hasScrollBody: false,
               child: Container(
-                margin: EdgeInsets.only(left: sixteenDp),
+                margin: EdgeInsets.only(left: eightDp, right: eightDp),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,13 +74,61 @@ class _CategoryPageState extends State<CategoryPage> {
                           height: eightDp,
                         ),
                         Container(
+                          margin: EdgeInsets.only(bottom: 10, top: 10),
+                          child: SizedBox(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Top Experts",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: sixteenDp),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(sixDp),
+                                      margin: EdgeInsets.only(right: sixteenDp),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(fourDp),
+                                          border: Border.all(
+                                              width: 0.3,
+                                              color: Colors.grey
+                                                  .withOpacity(0.3))),
+                                      child: Text(
+                                        viewAll,
+                                        style: TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: twelveDp),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Expanded(
+                                  child: buildTopExpect(),
+                                  flex: 1,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: sixteenDp,
+                        ),
+                        Container(
                           margin: EdgeInsets.only(right: eightDp, top: eightDp),
                           child: TextFormField(
                               //search for a service text field
                               keyboardType: TextInputType.text,
                               controller: _searchInput,
                               textAlign: TextAlign.center,
-                              //autofocus: true,
                               decoration: InputDecoration(
                                   hintStyle: TextStyle(fontSize: sixteenDp),
                                   suffix: Container(
@@ -112,64 +159,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                       borderSide: BorderSide(
                                           color: Color(0xFFF5F5F5))))),
                         ),
-                        SizedBox(
-                          height: sixteenDp,
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10, top: 10),
-                          child: SizedBox(
-                            height: 100,
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Top Experts",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: sixteenDp),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AllBookings()));
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(sixDp),
-                                        margin:
-                                            EdgeInsets.only(right: sixteenDp),
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(fourDp),
-                                            border: Border.all(
-                                                width: 0.3,
-                                                color: Colors.grey
-                                                    .withOpacity(0.3))),
-                                        child: Text(
-                                          viewAll,
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: twelveDp),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Expanded(
-                                  child: buildTopExpect(),
-                                  flex: 1,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+
                         SizedBox(
                           height: sixteenDp,
                         ),
@@ -240,7 +230,9 @@ class _CategoryPageState extends State<CategoryPage> {
   Widget displayArtisanTypes() {
     return Container(
       width: 300,
-      margin: EdgeInsets.only(right: fourDp, bottom: twelveDp),
+      margin: EdgeInsets.only(
+        right: fourDp,
+      ),
       height: MediaQuery.of(context).size.height / 1.68,
       child: GridView.builder(
           shrinkWrap: true,
@@ -326,7 +318,9 @@ class _CategoryPageState extends State<CategoryPage> {
   Widget displaySearchedArtisanTypes() {
     return Container(
       width: 300,
-      margin: EdgeInsets.only(right: fourDp, bottom: twelveDp),
+      margin: EdgeInsets.only(
+        right: fourDp,
+      ),
       height: MediaQuery.of(context).size.height / 1.68,
       child: GridView.builder(
           shrinkWrap: true,
