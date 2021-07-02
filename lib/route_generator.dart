@@ -4,6 +4,7 @@ import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/auth/verify.dart';
+import 'package:home_service/ui/views/bottomsheet/show_user_profile.dart';
 import 'package:home_service/ui/views/help/help_page.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
 import 'package:home_service/ui/views/home/bookings/artisan_booking_page/received_bookings.dart';
@@ -44,11 +45,19 @@ class RouteGenerator {
       case CompleteProfile.routeName:
         return MaterialPageRoute(builder: (_) => CompleteProfile());
 
-      //edit user profile
+      //edit user / artisan profile
       case EditProfile.routeName:
         return MaterialPageRoute(builder: (_) => EditProfile());
 
-      //edit artisan profile
+      // user profile
+      case UserProfile.routeName:
+        final data = settings.arguments as String;
+        return MaterialPageRoute(
+            builder: (_) => UserProfile(
+                  userId: data,
+                ));
+
+      // artisan profile
       case ArtisanProfile.routeName:
         final data = settings.arguments as String;
         return MaterialPageRoute(

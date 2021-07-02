@@ -40,7 +40,10 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                           receivedBookingList[index].type! == user
                               ? await showModalBottomSheet(
                                   context: context,
-                                  builder: (context) => ShowUserProfile())
+                                  builder: (context) => UserProfile(
+                                        userId:
+                                            receivedBookingList[index].senderId,
+                                      ))
                               : await Navigator.of(context).pushNamed(
                                   ArtisanProfile.routeName,
                                   arguments:

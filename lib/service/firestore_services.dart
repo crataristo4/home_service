@@ -99,6 +99,17 @@ class UserService {
             .toList(growable: true));
   }
 
+  //get all users from db
+  Stream<List<Users>> getAllUsers() {
+    return firestoreService
+        .collection('Users')
+        .where("type", isEqualTo: user)
+        .snapshots()
+        .map((snapshots) => snapshots.docs
+            .map((document) => Users.fromDb(document.data()))
+            .toList(growable: true));
+  }
+
   //get initial artisans list by category
   Stream<List<Artisans>> getInitialArtisanByCategory(String? category) {
     return firestoreService

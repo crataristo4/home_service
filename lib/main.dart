@@ -32,6 +32,7 @@ class EntryPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final getAllArtisan = UserService();
+    final getAllUsers = UserService();
     final getReceivedBookings = BookingService();
     final getSentBookings = BookingService();
     final getAllBookings = BookingService();
@@ -43,6 +44,13 @@ class EntryPoint extends StatelessWidget {
         ChangeNotifierProvider.value(value: AuthProvider()),
         //user creation
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        //get all users
+        StreamProvider<List<Users>>.value(
+          lazy: false,
+          initialData: [],
+          value: getAllUsers.getAllUsers(),
+        ),
+
         //get all artisan
         StreamProvider<List<Artisans>>.value(
           lazy: false,

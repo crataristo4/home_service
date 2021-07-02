@@ -37,15 +37,15 @@ class Users {
     this.photoUrl = photoUrl;
   }
 
-  factory Users.fromDocument(DocumentSnapshot documentSnapshot) {
+  factory Users.fromDb(Map<String, dynamic> data) {
     return Users(
-        id: documentSnapshot['id'],
-        name: documentSnapshot['name'],
-        phoneNumber: documentSnapshot['phoneNumber'],
-        photoUrl: documentSnapshot['photoUrl'],
-        dateJoined: documentSnapshot['dateJoined'],
-        type: documentSnapshot['type'],
-        location: documentSnapshot['location']);
+        id: data['id'],
+        name: data['name'],
+        phoneNumber: data['phoneNumber'],
+        photoUrl: data['photoUrl'],
+        dateJoined: data['dateJoined'],
+        type: data['type'],
+        location: data['location']);
   }
 
   Map<String, dynamic> updateUserNameToMap() {
