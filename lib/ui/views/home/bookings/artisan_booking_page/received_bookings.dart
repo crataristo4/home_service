@@ -77,10 +77,14 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
 
                             //time sent
                             Padding(
-                              padding:
-                                  EdgeInsets.only(top: fourDp, bottom: eightDp),
+                              padding: EdgeInsets.only(bottom: fourDp),
                               child: Row(
                                 children: [
+                                  Text("Received ",
+                                      style: TextStyle(
+                                        fontSize: fourteenDp,
+                                        color: Colors.black45,
+                                      )),
                                   Icon(Icons.access_time,
                                       color: Colors.black45),
                                   Padding(
@@ -89,7 +93,9 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                                       timeAgo.format(receivedBookingList[index]
                                           .timestamp
                                           .toDate()),
-                                      style: TextStyle(color: Colors.black45),
+                                      style: TextStyle(
+                                          color: Colors.black45,
+                                          fontSize: fourteenDp),
                                     ),
                                   ),
                                 ],
@@ -99,58 +105,87 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                               height: 2,
                               color: Colors.grey,
                             ),
-                            SizedBox(
-                              height: tenDp,
-                            )
                           ],
                         ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(
+                              height: fourDp,
+                            ),
+                            Text("Booking Message",
+                                style: TextStyle(color: Colors.black45)),
                             Padding(
-                              padding: EdgeInsets.only(bottom: eightDp),
-                              child: Text(receivedBookingList[index].message!,
-                                  style: TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: sixteenDp)),
+                              padding: EdgeInsets.only(bottom: eightDp, top: 2),
+                              child: Flexible(
+                                flex: 1,
+                                child: Text(receivedBookingList[index].message!,
+                                    style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: sixteenDp)),
+                              ),
                             ),
                             Divider(
                               height: 2,
                               color: Colors.grey,
                             ),
                             SizedBox(
-                              height: tenDp,
+                              height: fourDp,
                             ),
-                            Text(
-                              "Booking date: ${receivedBookingList[index].bookingDate}",
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: fourteenDp,
-                                  fontStyle: FontStyle.italic),
+                            Text("Booking date "),
+                            SizedBox(
+                              height: fourDp,
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: receivedBookingList[index].status ==
+                                          pending
+                                      ? Colors.blue
+                                      : Colors.green,
+                                ),
+                                SizedBox(
+                                  width: 2,
+                                ),
+                                Text(
+                                  receivedBookingList[index].bookingDate!,
+                                  style: TextStyle(
+                                      color:
+                                          receivedBookingList[index].status ==
+                                                  pending
+                                              ? Colors.blue
+                                              : Colors.green,
+                                      fontSize: fourteenDp,
+                                      fontStyle: FontStyle.italic),
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height: tenDp,
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Status: ",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: twentyDp,
-                                      fontStyle: FontStyle.italic),
-                                ),
-                                Text(
-                                  "${receivedBookingList[index].status}",
-                                  style: TextStyle(
-                                      color:
-                                          receivedBookingList[index].status ==
-                                                  confirmed
-                                              ? Colors.green
-                                              : Colors.blue,
-                                      fontSize: twentyDp),
-                                ),
-                              ],
+                            Divider(
+                              height: 1,
+                              thickness: 0.9,
+                            ),
+                            SizedBox(
+                              height: fourDp,
+                            ),
+                            Text(
+                              "Status: ",
+                              style: TextStyle(
+                                color: Colors.black45,
+                                fontSize: fourteenDp,
+                              ),
+                            ),
+                            Text(
+                              "${receivedBookingList[index].status}",
+                              style: TextStyle(
+                                  color: receivedBookingList[index].status ==
+                                          confirmed
+                                      ? Colors.green
+                                      : Colors.blue,
+                                  fontSize: sixteenDp),
                             ),
                             SizedBox(
                               height: tenDp,

@@ -109,7 +109,10 @@ class _SentBookingsState extends State<SentBookingsPage> {
                               children: [
                                 Icon(
                                   Icons.calendar_today,
-                                  color: Colors.blue,
+                                  color:
+                                      sentBookingsList[index].status == pending
+                                          ? Colors.blue
+                                          : Colors.green,
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: fourDp),
@@ -120,7 +123,8 @@ class _SentBookingsState extends State<SentBookingsPage> {
                                         color: sentBookingsList[index].status ==
                                                 pending
                                             ? Colors.blue
-                                            : Colors.green),
+                                            : Colors.green,
+                                        fontStyle: FontStyle.italic),
                                   ),
                                 ),
                               ],
