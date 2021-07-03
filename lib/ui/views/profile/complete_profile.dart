@@ -130,9 +130,9 @@ class _CompleteProfileState extends State<CompleteProfile> {
           builder: (BuildContext bc) {
             return SafeArea(
               child: Container(
-                child: new Wrap(
+                child: Wrap(
                   children: <Widget>[
-                    new ListTile(
+                    ListTile(
                         leading: Icon(Icons.photo_library),
                         title: Text(photoLibrary),
                         onTap: () {
@@ -140,7 +140,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
                           popBack(context);
                         }),
-                    new ListTile(
+                    ListTile(
                       leading: Icon(Icons.photo_camera),
                       title: Text(camera),
                       onTap: () {

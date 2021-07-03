@@ -106,7 +106,7 @@ class BookingsProvider with ChangeNotifier {
     bookingService.updateBookings(context, bookingId!);
   }
 
-  deleteBook(String id) {
-    bookingService.deleteBookings(id);
+  deleteBook(BuildContext context, String id) {
+    bookingService.deleteBookings(context, id);
   }
 }

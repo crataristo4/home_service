@@ -38,8 +38,18 @@ class BookingService {
   }
 
   //delete booking record
-  Future<void> deleteBookings(String id) {
-    return firestoreService.collection('Bookings').doc(id).delete();
+  Future<void> deleteBookings(context, String id) {
+    return firestoreService
+        .collection('Bookings')
+        .doc(id)
+        .delete()
+        .whenComplete(() {
+      Navigator.of(context, rootNavigator: true).pop();
+      ShowAction().showToast(successful, Colors.green);
+      Navigator.of(context).pop();
+    }).catchError((error) {
+      showFailure(context, error);
+    });
   }
 
   //get all sent  user
@@ -137,13 +147,13 @@ class BookingService {
   }*/
 
   showBookingConfirmedSuccess(context) async {
-    await Future.delayed(const Duration(seconds: 3));
+    // await Future.delayed(const Duration(seconds: 3));
     Navigator.of(context, rootNavigator: true).pop();
     ShowAction().showToast(successful, Colors.black); //show complete msg
   }
 
   showSuccess(context) async {
-    await Future.delayed(const Duration(seconds: 3));
+    //await Future.delayed(const Duration(seconds: 3));
     Navigator.of(context, rootNavigator: true).pop();
     ShowAction().showToast(successful, Colors.black); //show complete msg
     Navigator.of(context).pushNamedAndRemoveUntil(

@@ -2,7 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/artisan/bookings.dart';
+import 'package:home_service/provider/bookings_provider.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
+import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
@@ -19,6 +22,60 @@ class _SentBookingsState extends State<SentBookingsPage> {
   @override
   Widget build(BuildContext context) {
     final sentBookingsList = Provider.of<List<SentBookings>>(context);
+    final bookingProvider = BookingsProvider();
+
+    //options bottom sheet
+    void showOptions(context, index) async {
+      showModalBottomSheet(
+          context: context,
+          builder: (BuildContext bc) {
+            return Container(
+              child: Wrap(
+                children: <Widget>[
+                  ListTile(
+                      leading: Icon(
+                        Icons.edit,
+                        color: Colors.black,
+                      ),
+                      title: Text(editBookings,
+                          style: TextStyle(color: Colors.black)),
+                      onTap: () {}),
+                  ListTile(
+                    leading: Icon(
+                      Icons.remove_red_eye,
+                      color: Colors.indigoAccent,
+                    ),
+                    title: Text(
+                      viewProfile,
+                      style: TextStyle(color: Colors.indigoAccent),
+                    ),
+                    onTap: () async {
+                      await Navigator.of(context).pushNamed(
+                        ArtisanProfile.routeName,
+                        arguments: sentBookingsList[index].receiverId,
+                      );
+                    },
+                  ),
+                  ListTile(
+                      leading: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      title: Text(deleteBookings,
+                          style: TextStyle(color: Colors.red)),
+                      onTap: () {
+                        //delete bookings
+                        Dialogs.showLoadingDialog(context, loadingKey,
+                            deletingBooking, Colors.white70);
+                        //delete bookings
+                        bookingProvider.deleteBook(
+                            context, sentBookingsList[index].id!);
+                      }),
+                ],
+              ),
+            );
+          });
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -35,10 +92,8 @@ class _SentBookingsState extends State<SentBookingsPage> {
                           EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                       child: ListTile(
                         onTap: () async {
-                          await Navigator.of(context).pushNamed(
-                            ArtisanProfile.routeName,
-                            arguments: sentBookingsList[index].receiverId,
-                          );
+                          //shows an option for user to perform an action
+                          showOptions(context, index);
                         },
                         minVerticalPadding: 10,
                         horizontalTitleGap: 4,
@@ -52,7 +107,7 @@ class _SentBookingsState extends State<SentBookingsPage> {
                             ),
                             Row(
                               children: [
-                                Text("Sent ",
+                                Text(sent,
                                     style: TextStyle(
                                       fontSize: fourteenDp,
                                       color: Colors.black45,
@@ -86,7 +141,7 @@ class _SentBookingsState extends State<SentBookingsPage> {
                             SizedBox(
                               height: sixDp,
                             ),
-                            Text("Booking Message",
+                            Text(bookingMessage,
                                 style: TextStyle(color: Colors.black45)),
                             Padding(
                               padding: EdgeInsets.only(top: 2, bottom: sixDp),
@@ -104,7 +159,13 @@ class _SentBookingsState extends State<SentBookingsPage> {
                             SizedBox(
                               height: sixDp,
                             ),
-                            Text("Booking date "),
+                            Row(
+                              children: [
+                                Text(bookingDate),
+                                //show as rescheduled if changes booking time
+                                Text(""),
+                              ],
+                            ),
                             Row(
                               children: [
                                 Icon(
@@ -140,7 +201,7 @@ class _SentBookingsState extends State<SentBookingsPage> {
                               height: sixDp,
                             ),
                             Text(
-                              "Status",
+                              status,
                               style: TextStyle(color: Colors.black45),
                             ),
                             SizedBox(
