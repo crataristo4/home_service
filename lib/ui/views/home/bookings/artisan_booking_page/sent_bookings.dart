@@ -89,21 +89,33 @@ class _SentBookingsState extends State<SentBookingsPage> {
                   children: [
                     Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                          EdgeInsets.symmetric(horizontal: tenDp, vertical: 2),
                       child: ListTile(
                         onTap: () async {
                           //shows an option for user to perform an action
                           showOptions(context, index);
                         },
-                        minVerticalPadding: 10,
+                        minVerticalPadding: tenDp,
                         horizontalTitleGap: 4,
                         tileColor: Colors.grey[100],
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              sentBookingsList[index].receiverName!,
-                              style: TextStyle(color: Colors.black),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  sentBookingsList[index].receiverName!,
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                sentBookingsList[index].status == confirmed
+                                    ? Icon(
+                                        Icons.check_circle_rounded,
+                                        color: Colors.green,
+                                      )
+                                    : Container()
+                              ],
                             ),
                             Row(
                               children: [
@@ -145,12 +157,8 @@ class _SentBookingsState extends State<SentBookingsPage> {
                                 style: TextStyle(color: Colors.black45)),
                             Padding(
                               padding: EdgeInsets.only(top: 2, bottom: sixDp),
-                              child: Flexible(
-                                //
-                                flex: 1,
-                                child: Text(sentBookingsList[index].message!,
-                                    style: TextStyle(color: Colors.black87)),
-                              ),
+                              child: Text(sentBookingsList[index].message!,
+                                  style: TextStyle(color: Colors.black87)),
                             ),
                             Divider(
                               height: 1,

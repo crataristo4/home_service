@@ -80,7 +80,7 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                               padding: EdgeInsets.only(bottom: fourDp),
                               child: Row(
                                 children: [
-                                  Text("Received ",
+                                  Text(received,
                                       style: TextStyle(
                                         fontSize: fourteenDp,
                                         color: Colors.black45,
@@ -113,17 +113,14 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                             SizedBox(
                               height: fourDp,
                             ),
-                            Text("Booking Message",
+                            Text(bookingMessage,
                                 style: TextStyle(color: Colors.black45)),
                             Padding(
                               padding: EdgeInsets.only(bottom: eightDp, top: 2),
-                              child: Flexible(
-                                flex: 1,
-                                child: Text(receivedBookingList[index].message!,
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: sixteenDp)),
-                              ),
+                              child: Text(receivedBookingList[index].message!,
+                                  style: TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: sixteenDp)),
                             ),
                             Divider(
                               height: 2,
@@ -132,7 +129,7 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                             SizedBox(
                               height: fourDp,
                             ),
-                            Text("Booking date "),
+                            Text(bookingDate),
                             SizedBox(
                               height: fourDp,
                             ),
@@ -172,7 +169,7 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                               height: fourDp,
                             ),
                             Text(
-                              "Status: ",
+                              status,
                               style: TextStyle(
                                 color: Colors.black45,
                                 fontSize: fourteenDp,
