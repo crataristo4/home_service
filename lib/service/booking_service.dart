@@ -89,7 +89,7 @@ class BookingService {
     return firestoreService
         .collection('Bookings')
         .orderBy("timestamp", descending: true)
-        .where("senderId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where("senderId", isEqualTo: currentUserId)
         //.limit(50)
         .snapshots()
         .map((snapshots) => snapshots.docs
@@ -105,7 +105,7 @@ class BookingService {
     return firestoreService
         .collection('Bookings')
         .orderBy("timestamp", descending: true)
-        .where("receiverId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where("receiverId", isEqualTo: currentUserId)
         //.where("receiverName", isEqualTo: userName)
         //  .limit(50)
         .snapshots()

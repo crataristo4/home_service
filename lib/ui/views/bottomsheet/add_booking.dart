@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:home_service/models/artisan/bookings.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
@@ -13,6 +14,7 @@ class AddBooking extends StatefulWidget {
 //for getting and passing receiver details to provider
   String? receiverName, receiverPhoneNumber, receiverPhotoUrl, receiverId;
   Bookings? bookings;
+  SentBookings? sentBookings;
 
   AddBooking(
       {Key? key,
@@ -23,6 +25,8 @@ class AddBooking extends StatefulWidget {
       : super(key: key);
 
   AddBooking.reschedule({Key? key, this.bookings});
+
+  AddBooking.rescheduleArtisan({Key? key, this.sentBookings});
 
   @override
   _AddBookingState createState() => _AddBookingState();
@@ -62,9 +66,13 @@ class _AddBookingState extends State<AddBooking> {
 
   @override
   void initState() {
-    if (widget.bookings != null) {
-      _controller.text = widget.bookings!.message!;
-      _controllerDateTime.text = widget.bookings!.bookingDate!;
+    if (widget.bookings != null || widget.sentBookings != null) {
+      getUserType == user
+          ? _controller.text = widget.bookings!.message!
+          : _controller.text = widget.sentBookings!.message!;
+      getUserType == user
+          ? _controllerDateTime.text = widget.bookings!.bookingDate!
+          : _controllerDateTime.text = widget.sentBookings!.bookingDate!;
       setState(() {
         updateButton = rescheduleBookings;
       });
@@ -218,7 +226,8 @@ class _AddBookingState extends State<AddBooking> {
                                         ),
                                       ),
                                       hintText: scheduleDateAndTime,
-                                      helperText: widget.bookings != null
+                                      helperText: widget.bookings != null ||
+                                              widget.sentBookings != null
                                           ? pleaseRescheduleDate
                                           : scheduleDateTimeDes,
                                       helperMaxLines: 2,
@@ -256,18 +265,27 @@ class _AddBookingState extends State<AddBooking> {
                                 //show dialog and delay
                                 context,
                                 loadingKey,
-                                widget.bookings != null
+                                widget.bookings != null ||
+                                        widget.sentBookings != null
                                     ? rescheduling
                                     : bookingARequest,
                                 Colors.white70);
 
-                            if (widget.bookings != null) {
+                            if (widget.bookings != null ||
+                                widget.sentBookings != null) {
                               //reschedule
+                              //todo  check if previous day select is same as new day befoe reschedulling
                               bookingProvider.rescheduleBookings(
                                   context,
-                                  widget.bookings!.id,
-                                  widget.bookings!.message,
-                                  widget.bookings!.bookingDate);
+                                  getUserType == user
+                                      ? widget.bookings!.id
+                                      : widget.sentBookings!.id,
+                                  getUserType == user
+                                      ? widget.bookings!.message
+                                      : widget.sentBookings!.message,
+                                  getUserType == user
+                                      ? widget.bookings!.bookingDate
+                                      : widget.sentBookings!.bookingDate);
                             } else {
                               //create new booking
                               bookingProvider.createNewBookings(

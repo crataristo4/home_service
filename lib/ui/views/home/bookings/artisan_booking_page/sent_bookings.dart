@@ -4,6 +4,7 @@ import 'package:home_service/constants.dart';
 import 'package:home_service/models/artisan/bookings.dart';
 import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,16 @@ class _SentBookingsState extends State<SentBookingsPage> {
                         ),
                         title: Text(rescheduleBookings,
                             style: TextStyle(color: Colors.black)),
-                        onTap: () {}),
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              useRootNavigator: true,
+                              builder: (context) =>
+                                  AddBooking.rescheduleArtisan(
+                                    //bottom sheet reschedule bookings
+                                    sentBookings: sentBookingsList[index],
+                                  ));
+                        }),
                     ListTile(
                       leading: Icon(
                         Icons.remove_red_eye,
@@ -178,10 +188,18 @@ class _SentBookingsState extends State<SentBookingsPage> {
                               height: sixDp,
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(bookingDate),
                                 //show as rescheduled if changes booking time
-                                Text(""),
+                                Text(
+                                  sentBookingsList[index].isReschedule!
+                                      ? rescheduleBookings
+                                      : "",
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
                             Row(
