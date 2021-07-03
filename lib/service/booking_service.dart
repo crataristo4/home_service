@@ -11,6 +11,7 @@ import '../constants.dart';
 
 class BookingService {
   final firestoreService = FirebaseFirestore.instance;
+
 //-------------------------------------------------------------------------------------------------
   //create new booking
   Future<void> createBooking(Bookings bookings, BuildContext context) {
@@ -25,12 +26,26 @@ class BookingService {
     });
   }
 
-  //update bookings to db
+  //confirm bookings to db
   Future<void> updateBookings(BuildContext context, String bookingId) {
     return firestoreService
         .collection('Bookings')
         .doc(bookingId)
         .update({"status": confirmed}).whenComplete(() {
+      showSuccess(context);
+    }).catchError((error) {
+      showFailure(context, error);
+    });
+  }
+
+  //reschedule booking (user / artisan )
+  Future<void> rescheduleBookings(
+      BuildContext context, String bookingsID, message, bookingDate) {
+    return firestoreService.collection('Bookings').doc(bookingsID).update({
+      'bookingDate': bookingDate,
+      'message': message,
+      'isReschedule': true,
+    }).whenComplete(() {
       showSuccess(context);
     }).catchError((error) {
       showFailure(context, error);

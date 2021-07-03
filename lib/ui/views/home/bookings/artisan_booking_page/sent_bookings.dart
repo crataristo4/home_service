@@ -30,48 +30,57 @@ class _SentBookingsState extends State<SentBookingsPage> {
           context: context,
           builder: (BuildContext bc) {
             return Container(
-              child: Wrap(
-                children: <Widget>[
-                  ListTile(
+              color: Color(0xFF757575),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(twentyDp),
+                        topRight: Radius.circular(twentyDp))),
+                child: Wrap(
+                  children: <Widget>[
+                    ListTile(
+                        leading: Icon(
+                          Icons.edit,
+                          color: Colors.black,
+                        ),
+                        title: Text(rescheduleBookings,
+                            style: TextStyle(color: Colors.black)),
+                        onTap: () {}),
+                    ListTile(
                       leading: Icon(
-                        Icons.edit,
-                        color: Colors.black,
+                        Icons.remove_red_eye,
+                        color: Colors.indigoAccent,
                       ),
-                      title: Text(editBookings,
-                          style: TextStyle(color: Colors.black)),
-                      onTap: () {}),
-                  ListTile(
-                    leading: Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.indigoAccent,
-                    ),
-                    title: Text(
-                      viewProfile,
-                      style: TextStyle(color: Colors.indigoAccent),
-                    ),
-                    onTap: () async {
-                      await Navigator.of(context).pushNamed(
-                        ArtisanProfile.routeName,
-                        arguments: sentBookingsList[index].receiverId,
-                      );
-                    },
-                  ),
-                  ListTile(
-                      leading: Icon(
-                        Icons.delete,
-                        color: Colors.red,
+                      title: Text(
+                        viewProfile,
+                        style: TextStyle(color: Colors.indigoAccent),
                       ),
-                      title: Text(deleteBookings,
-                          style: TextStyle(color: Colors.red)),
-                      onTap: () {
-                        //delete bookings
-                        Dialogs.showLoadingDialog(context, loadingKey,
-                            deletingBooking, Colors.white70);
-                        //delete bookings
-                        bookingProvider.deleteBook(
-                            context, sentBookingsList[index].id!);
-                      }),
-                ],
+                      onTap: () async {
+                        await Navigator.of(context).pushNamed(
+                          ArtisanProfile.routeName,
+                          arguments: sentBookingsList[index].receiverId,
+                        );
+                      },
+                    ),
+                    ListTile(
+                        leading: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                        title: Text(deleteBookings,
+                            style: TextStyle(color: Colors.red)),
+                        onTap: () {
+                          //delete bookings
+                          Dialogs.showLoadingDialog(context, loadingKey,
+                              deletingBooking, Colors.white70);
+                          //delete bookings
+                          bookingProvider.deleteBook(
+                              context, sentBookingsList[index].id!);
+                        }),
+                  ],
+                ),
               ),
             );
           });

@@ -4,6 +4,7 @@ import 'package:home_service/constants.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
@@ -29,48 +30,65 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
           context: context,
           builder: (BuildContext bc) {
             return Container(
-              child: Wrap(
-                children: <Widget>[
-                  ListTile(
+              color: Color(0xFF757575),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(twentyDp),
+                        topRight: Radius.circular(twentyDp))),
+                child: Wrap(
+                  children: <Widget>[
+                    ListTile(
+                        leading: Icon(
+                          Icons.edit,
+                          color: Colors.black,
+                        ),
+                        title: Text(rescheduleBookings,
+                            style: TextStyle(color: Colors.black)),
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              useRootNavigator: true,
+                              builder: (context) => AddBooking.reschedule(
+                                    //bottom sheet reschedule bookings
+                                    bookings: userBookingList[index],
+                                  ));
+                        }),
+                    ListTile(
                       leading: Icon(
-                        Icons.edit,
-                        color: Colors.black,
+                        Icons.remove_red_eye,
+                        color: Colors.indigoAccent,
                       ),
-                      title: Text(editBookings,
-                          style: TextStyle(color: Colors.black)),
-                      onTap: () {}),
-                  ListTile(
-                    leading: Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.indigoAccent,
-                    ),
-                    title: Text(
-                      viewProfile,
-                      style: TextStyle(color: Colors.indigoAccent),
-                    ),
-                    onTap: () async {
-                      await Navigator.of(context).pushNamed(
-                        ArtisanProfile.routeName,
-                        arguments: userBookingList[index].receiverId,
-                      );
-                    },
-                  ),
-                  ListTile(
-                      leading: Icon(
-                        Icons.delete,
-                        color: Colors.red,
+                      title: Text(
+                        viewProfile,
+                        style: TextStyle(color: Colors.indigoAccent),
                       ),
-                      title: Text(deleteBookings,
-                          style: TextStyle(color: Colors.red)),
-                      onTap: () {
-                        //delete bookings
-                        Dialogs.showLoadingDialog(context, loadingKey,
-                            deletingBooking, Colors.white70);
-                        //delete bookings
-                        bookingProvider.deleteBook(
-                            context, userBookingList[index].id!);
-                      }),
-                ],
+                      onTap: () async {
+                        await Navigator.of(context).pushNamed(
+                          ArtisanProfile.routeName,
+                          arguments: userBookingList[index].receiverId,
+                        );
+                      },
+                    ),
+                    ListTile(
+                        leading: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                        title: Text(deleteBookings,
+                            style: TextStyle(color: Colors.red)),
+                        onTap: () {
+                          //delete bookings
+                          Dialogs.showLoadingDialog(context, loadingKey,
+                              deletingBooking, Colors.white70);
+                          //delete bookings
+                          bookingProvider.deleteBook(
+                              context, userBookingList[index].id!);
+                        }),
+                  ],
+                ),
               ),
             );
           });
@@ -161,7 +179,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: sixDp,
+                              height: tenDp,
                             ),
                             Text(bookingMessage,
                                 style: TextStyle(color: Colors.black45)),
@@ -177,15 +195,23 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                               thickness: 0.9,
                             ),
                             SizedBox(
-                              height: sixDp,
+                              height: tenDp,
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   bookingDate,
                                 ),
                                 //show as rescheduled if changes booking time
-                                Text(""),
+                                Text(
+                                  userBookingList[index].isReschedule!
+                                      ? rescheduleBookings
+                                      : "",
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
                             Row(
@@ -213,14 +239,14 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                               ],
                             ),
                             SizedBox(
-                              height: sixDp,
+                              height: tenDp,
                             ),
                             Divider(
                               height: 1,
                               thickness: 0.9,
                             ),
                             SizedBox(
-                              height: sixDp,
+                              height: tenDp,
                             ),
                             Text(
                               status,
@@ -239,7 +265,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                                           : Colors.green),
                             ),
                             SizedBox(
-                              height: sixDp,
+                              height: tenDp,
                             ),
                             Divider(
                               height: 1,

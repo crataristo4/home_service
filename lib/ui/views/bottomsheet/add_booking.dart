@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:home_service/models/booking.dart';
 import 'package:home_service/provider/bookings_provider.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:intl/intl.dart';
 
@@ -9,14 +11,18 @@ import '../../../constants.dart';
 
 class AddBooking extends StatefulWidget {
 //for getting and passing receiver details to provider
-  final receiverName, receiverPhoneNumber, receiverPhotoUrl, receiverId;
+  String? receiverName, receiverPhoneNumber, receiverPhotoUrl, receiverId;
+  Bookings? bookings;
 
-  const AddBooking({Key? key,
-    this.receiverName,
-    this.receiverPhoneNumber,
-    this.receiverPhotoUrl,
-    this.receiverId})
+  AddBooking(
+      {Key? key,
+      this.receiverName,
+      this.receiverPhoneNumber,
+      this.receiverPhotoUrl,
+      this.receiverId})
       : super(key: key);
+
+  AddBooking.reschedule({Key? key, this.bookings});
 
   @override
   _AddBookingState createState() => _AddBookingState();
@@ -29,7 +35,14 @@ class _AddBookingState extends State<AddBooking> {
   //date format
   DateFormat _dateFormat = DateFormat.yMMMMd('en_US').add_jm();
   DateTime _dateTime = DateTime.now();
-  String? message, bookingDateTime;
+  String? message, bookingDateTime, updateButton;
+
+  // editing controller
+  TextEditingController _controller = TextEditingController();
+  TextEditingController _controllerDateTime = TextEditingController();
+
+  //object for booking provider
+  final bookingProvider = BookingsProvider();
 
   //get date
   Future<DateTime?> _selectDate(BuildContext context) => showDatePicker(
@@ -47,17 +60,30 @@ class _AddBookingState extends State<AddBooking> {
         initialTime: TimeOfDay(hour: timeNow.hour, minute: timeNow.minute));
   }
 
-  //message editing controller
-  TextEditingController _controller = TextEditingController();
-  TextEditingController _controllerDateTime = TextEditingController();
+  @override
+  void initState() {
+    if (widget.bookings != null) {
+      _controller.text = widget.bookings!.message!;
+      _controllerDateTime.text = widget.bookings!.bookingDate!;
+      setState(() {
+        updateButton = rescheduleBookings;
+      });
+      bookingProvider.changeMessage(_controller.text);
+      bookingProvider.changeBookingDateTime(_controllerDateTime.text);
+    } else {
+      _controller.text = "";
+      _controllerDateTime.text = "";
 
-  //loading key
-  final GlobalKey<State> _loadingKey = new GlobalKey<State>();
+      setState(() {
+        updateButton = submitNow;
+      });
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    //object for booking provider
-    final bookingProvider = BookingsProvider();
     //update provider ,set data
     bookingProvider.setReceiverName(widget.receiverName);
     bookingProvider.setReceiverId(widget.receiverId);
@@ -96,7 +122,6 @@ class _AddBookingState extends State<AddBooking> {
                                   //message
                                   maxLines: 5,
                                   maxLength: 500,
-                                  autofocus: true,
                                   controller: _controller,
                                   validator: (value) {
                                     return value!.length > 20
@@ -193,7 +218,9 @@ class _AddBookingState extends State<AddBooking> {
                                         ),
                                       ),
                                       hintText: scheduleDateAndTime,
-                                      helperText: scheduleDateTimeDes,
+                                      helperText: widget.bookings != null
+                                          ? pleaseRescheduleDate
+                                          : scheduleDateTimeDes,
                                       helperMaxLines: 2,
                                       fillColor: Colors.white70,
                                       filled: true,
@@ -225,25 +252,35 @@ class _AddBookingState extends State<AddBooking> {
                             bookingProvider.changeMessage(_controller.text);
                             bookingProvider.changeBookingDateTime(
                                 _controllerDateTime.text);
-
                             Dialogs.showLoadingDialog(
                                 //show dialog and delay
                                 context,
-                                _loadingKey,
-                                bookingARequest,
+                                loadingKey,
+                                widget.bookings != null
+                                    ? rescheduling
+                                    : bookingARequest,
                                 Colors.white70);
 
-                            //create new booking
-                            bookingProvider.createNewBookings(
-                                context,
-                                widget.receiverName,
-                                widget.receiverId,
-                                widget.receiverPhoneNumber,
-                                widget.receiverPhotoUrl);
+                            if (widget.bookings != null) {
+                              //reschedule
+                              bookingProvider.rescheduleBookings(
+                                  context,
+                                  widget.bookings!.id,
+                                  widget.bookings!.message,
+                                  widget.bookings!.bookingDate);
+                            } else {
+                              //create new booking
+                              bookingProvider.createNewBookings(
+                                  context,
+                                  widget.receiverName,
+                                  widget.receiverId,
+                                  widget.receiverPhoneNumber,
+                                  widget.receiverPhotoUrl);
+                            }
                           }
                         },
                         child: Text(
-                          submitNow,
+                          updateButton!,
                           style: TextStyle(fontSize: fourteenDp),
                         )),
                   )

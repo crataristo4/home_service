@@ -50,7 +50,18 @@ class BookingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  loadBookData(Bookings bookings) {}
+  loadBookingsData(Bookings? bookings) {
+    _message = bookings!.message!;
+    _bookingDateTime = bookings.bookingDate!;
+    _id = bookings.id;
+  }
+
+  rescheduleBookings(BuildContext context, id, message, bookingDate) {
+    message = _message;
+    bookingDate = _bookingDateTime;
+
+    bookingService.rescheduleBookings(context, id, message, bookingDate);
+  }
 
   createNewBookings(
     BuildContext context,
@@ -95,6 +106,7 @@ class BookingsProvider with ChangeNotifier {
         timestamp: timeStamp,
         bookingDate: bookingDateTime,
         message: message,
+        isReschedule: false,
         senderLocation: _senderLocation,
         receiverLocation: _receiverLocation);
 

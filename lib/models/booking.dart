@@ -15,6 +15,7 @@ class Bookings {
   dynamic timestamp;
   String? bookingDate;
   String? message;
+  bool? isReschedule;
   GeoPoint? senderLocation;
   GeoPoint? receiverLocation;
 
@@ -33,10 +34,14 @@ class Bookings {
       required this.timestamp,
       required this.bookingDate,
       required this.message,
+      required this.isReschedule,
       required this.senderLocation,
       required this.receiverLocation});
 
   Bookings.id({required this.id});
+
+  Bookings.reschedule(
+      {required this.message, this.bookingDate, this.isReschedule});
 
   factory Bookings.fromFirestore(Map<String, dynamic> data) {
     return Bookings(
@@ -54,8 +59,18 @@ class Bookings {
         bookingDate: data['bookingDate'],
         timestamp: data['timestamp'],
         message: data['message'],
+        isReschedule: data['isReschedule'],
         senderLocation: data['senderLocation'],
         receiverLocation: data['receiverLocation']);
+  }
+
+  //reschedule
+  Map<String, dynamic> rescheduleBookings() {
+    return {
+      'bookingDate': bookingDate,
+      'message': message,
+      'isReschedule': isReschedule,
+    };
   }
 
   Map<String, dynamic> bookToMap() {
@@ -74,6 +89,7 @@ class Bookings {
       'bookingDate': bookingDate,
       'timestamp': timestamp,
       'message': message,
+      'isReschedule': isReschedule,
       'senderLocation': senderLocation,
       'receiverLocation': receiverLocation,
     };
