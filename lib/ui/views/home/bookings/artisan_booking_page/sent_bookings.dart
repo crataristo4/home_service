@@ -4,6 +4,7 @@ import 'package:home_service/constants.dart';
 import 'package:home_service/models/artisan/bookings.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeAgo;
 
 class SentBookingsPage extends StatefulWidget {
   static const routeName = '/sentBookings';
@@ -42,41 +43,121 @@ class _SentBookingsState extends State<SentBookingsPage> {
                         minVerticalPadding: 10,
                         horizontalTitleGap: 4,
                         tileColor: Colors.grey[100],
-                        title: Text(
-                          sentBookingsList[index].receiverName!,
-                          style: TextStyle(color: Colors.black),
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              sentBookingsList[index].receiverName!,
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            Row(
+                              children: [
+                                Text("Sent ",
+                                    style: TextStyle(
+                                      fontSize: fourteenDp,
+                                      color: Colors.black45,
+                                    )),
+                                Icon(Icons.access_time, color: Colors.black45),
+                                Padding(
+                                  padding: EdgeInsets.only(left: fourDp),
+                                  child: Text(
+                                    timeAgo.format(sentBookingsList[index]
+                                        .timestamp
+                                        .toDate()),
+                                    style: TextStyle(
+                                        color: Colors.black45,
+                                        fontSize: fourteenDp),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: sixDp,
+                            ),
+                            Divider(
+                              height: 1,
+                              thickness: 0.9,
+                            )
+                          ],
                         ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(
+                              height: sixDp,
+                            ),
+                            Text("Booking Message",
+                                style: TextStyle(color: Colors.black45)),
                             Padding(
-                              padding:
-                                  EdgeInsets.only(top: sixDp, bottom: sixDp),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Flexible(
-                                    //
-                                    flex: 1,
-                                    child: Text(
-                                        sentBookingsList[index].message!,
-                                        style:
-                                            TextStyle(color: Colors.black87)),
-                                  ),
-                                ],
+                              padding: EdgeInsets.only(top: 2, bottom: sixDp),
+                              child: Flexible(
+                                //
+                                flex: 1,
+                                child: Text(sentBookingsList[index].message!,
+                                    style: TextStyle(color: Colors.black87)),
                               ),
                             ),
+                            Divider(
+                              height: 1,
+                              thickness: 0.9,
+                            ),
+                            SizedBox(
+                              height: sixDp,
+                            ),
+                            Text("Booking date "),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: Colors.blue,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: fourDp),
+                                  child: Text(
+                                    //  booking date
+                                    sentBookingsList[index].bookingDate!,
+                                    style: TextStyle(
+                                        color: sentBookingsList[index].status ==
+                                                pending
+                                            ? Colors.blue
+                                            : Colors.green),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: sixDp,
+                            ),
+                            Divider(
+                              height: 1,
+                              thickness: 0.9,
+                            ),
+                            SizedBox(
+                              height: sixDp,
+                            ),
                             Text(
-                              //  experience
+                              "Status",
+                              style: TextStyle(color: Colors.black45),
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              //  status
                               sentBookingsList[index].status!,
                               style: TextStyle(
                                   color:
                                       sentBookingsList[index].status == pending
                                           ? Colors.blue
                                           : Colors.green),
-                            )
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Divider(
+                              height: 1,
+                              thickness: 0.9,
+                            ),
                           ],
                         ),
                         leading: Padding(
