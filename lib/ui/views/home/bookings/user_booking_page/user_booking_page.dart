@@ -6,6 +6,7 @@ import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:home_service/ui/widgets/actions.dart';
+import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
@@ -19,15 +20,70 @@ class UserBookingsPage extends StatefulWidget {
 class _UserBookingsPageState extends State<UserBookingsPage> {
   @override
   Widget build(BuildContext context) {
-    final allBookingList = Provider.of<List<Bookings>>(context);
+    final userBookingList = Provider.of<List<Bookings>>(context);
+    final bookingProvider = BookingsProvider();
+
+    //options bottom sheet
+    void showOptions(context, index) async {
+      showModalBottomSheet(
+          context: context,
+          builder: (BuildContext bc) {
+            return Container(
+              child: Wrap(
+                children: <Widget>[
+                  ListTile(
+                      leading: Icon(
+                        Icons.edit,
+                        color: Colors.black,
+                      ),
+                      title: Text(editBookings,
+                          style: TextStyle(color: Colors.black)),
+                      onTap: () {}),
+                  ListTile(
+                    leading: Icon(
+                      Icons.remove_red_eye,
+                      color: Colors.indigoAccent,
+                    ),
+                    title: Text(
+                      viewProfile,
+                      style: TextStyle(color: Colors.indigoAccent),
+                    ),
+                    onTap: () async {
+                      await Navigator.of(context).pushNamed(
+                        ArtisanProfile.routeName,
+                        arguments: userBookingList[index].receiverId,
+                      );
+                    },
+                  ),
+                  ListTile(
+                      leading: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      title: Text(deleteBookings,
+                          style: TextStyle(color: Colors.red)),
+                      onTap: () {
+                        //delete bookings
+                        Dialogs.showLoadingDialog(context, loadingKey,
+                            deletingBooking, Colors.white70);
+                        //delete bookings
+                        bookingProvider.deleteBook(
+                            context, userBookingList[index].id!);
+                      }),
+                ],
+              ),
+            );
+          });
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigoAccent,
         title: Row(
           children: [
-            allBookingList.length == 0
+            userBookingList.length == 0
                 ? Text(noBookingsMade)
-                : Text("${allBookingList.length} $bookingsMade"),
+                : Text("${userBookingList.length} $bookingsMade"),
           ],
         ),
       ),
@@ -47,10 +103,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                               width: twentyDp, color: Colors.indigoAccent)),
                       child: ListTile(
                         onTap: () {
-                          Navigator.of(context).pushNamed(
-                            ArtisanProfile.routeName,
-                            arguments: allBookingList[index].receiverId,
-                          );
+                          showOptions(context, index);
                         },
                         minVerticalPadding: 25,
                         horizontalTitleGap: 1,
@@ -66,11 +119,11 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                               children: [
                                 Text(
                                   getUserType == user
-                                      ? allBookingList[index].receiverName!
-                                      : allBookingList[index].senderName!,
+                                      ? userBookingList[index].receiverName!
+                                      : userBookingList[index].senderName!,
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                allBookingList[index].status == confirmed
+                                userBookingList[index].status == confirmed
                                     ? Icon(
                                         Icons.check_circle_rounded,
                                         color: Colors.green,
@@ -89,7 +142,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                                   Padding(
                                     padding: EdgeInsets.only(left: eightDp),
                                     child: Text(
-                                      timeAgo.format(allBookingList[index]
+                                      timeAgo.format(userBookingList[index]
                                           .timestamp
                                           .toDate()),
                                       style: TextStyle(color: Colors.black),
@@ -112,7 +165,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                           children: [
                             Padding(
                               padding: EdgeInsets.only(bottom: eightDp),
-                              child: Text(allBookingList[index].message!,
+                              child: Text(userBookingList[index].message!,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: sixteenDp)),
@@ -125,7 +178,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                               height: tenDp,
                             ),
                             Text(
-                              "Booking date: ${allBookingList[index].bookingDate}",
+                              "Booking date: ${userBookingList[index].bookingDate}",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: fourteenDp,
@@ -144,9 +197,9 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                                       fontStyle: FontStyle.italic),
                                 ),
                                 Text(
-                                  "${allBookingList[index].status}",
+                                  "${userBookingList[index].status}",
                                   style: TextStyle(
-                                      color: allBookingList[index].status ==
+                                      color: userBookingList[index].status ==
                                               confirmed
                                           ? Colors.white
                                           : Colors.black,
@@ -174,8 +227,8 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                                     child: TextButton(
                                         style: TextButton.styleFrom(
                                             backgroundColor:
-                                                allBookingList[index].status ==
-                                                        pending
+                                            userBookingList[index].status ==
+                                                pending
                                                     ? Theme.of(context)
                                                         .primaryColor
                                                     : Colors.green,
@@ -186,7 +239,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                                                         eightDp))),
                                         onPressed: () {
                                           //else do nothing
-                                          if (allBookingList[index].status ==
+                                          if (userBookingList[index].status ==
                                               confirmed) {
                                             //show toast
                                             ShowAction().showToast(
@@ -197,11 +250,11 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                                             BookingsProvider()
                                                 .updateBookingsConfirmed(
                                                     context,
-                                                    allBookingList[index].id!);
+                                                    userBookingList[index].id!);
                                           }
                                         },
                                         child: Text(
-                                          allBookingList[index].status ==
+                                          userBookingList[index].status ==
                                                   confirmed
                                               ? confirmed
                                               : approve,
@@ -217,8 +270,8 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                             radius: 40,
                             foregroundImage: CachedNetworkImageProvider(
                                 getUserType == user
-                                    ? allBookingList[index].receiverPhotoUrl!
-                                    : allBookingList[index].senderPhotoUrl!),
+                                    ? userBookingList[index].receiverPhotoUrl!
+                                    : userBookingList[index].senderPhotoUrl!),
                             backgroundColor: Colors.indigo,
                           ),
                         ),
@@ -230,7 +283,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                   ],
                 );
               },
-              itemCount: allBookingList.length,
+              itemCount: userBookingList.length,
               shrinkWrap: true,
             );
           },
