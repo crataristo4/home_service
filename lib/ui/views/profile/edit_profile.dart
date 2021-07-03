@@ -101,6 +101,12 @@ class _EditProfileState extends State<EditProfile> {
       }
     }
 
+    final snackBar = SnackBar(
+      content: Text(successful),
+      elevation: 0,
+      duration: Duration(seconds: 2),
+    );
+
     Widget buildUserName() {
       return TextFormField(
           maxLength: 20,
@@ -480,7 +486,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
 
-                   SizedBox(
+                  SizedBox(
                     height: 60,
                     width: MediaQuery.of(context).size.width,
                     child: Container(
@@ -495,7 +501,10 @@ class _EditProfileState extends State<EditProfile> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8))),
                           onPressed: () {
-                            ShowAction().showToast(successful, Colors.green);
+                            // ShowAction().showToast(successful, Colors.green);
+
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                           },
                           child: Text(
                             save,

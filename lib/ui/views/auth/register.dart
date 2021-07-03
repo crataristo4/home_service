@@ -122,6 +122,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     sendingCode,
                     Colors.white70);
                 await Future.delayed(const Duration(seconds: 3));
+                Navigator.of(context, rootNavigator: false).pop(true);
 
                 Navigator.of(context).pushNamed(VerificationPage.routeName,
                     arguments: phoneNumber);

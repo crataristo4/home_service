@@ -42,6 +42,7 @@ class _AppStateState extends State<AppState> {
     super.initState();
   }
 
+  //todo -- check why username and photo does not load on fresh install
   getCurrentUser() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
