@@ -6,7 +6,6 @@ import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
-import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -110,224 +109,244 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
         margin: EdgeInsets.symmetric(vertical: eightDp),
         child: Builder(
           builder: (BuildContext context) {
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: tenDp, vertical: 2),
-                      child: ListTile(
-                        onTap: () {
-                          showOptions(context, index);
-                        },
-                        minVerticalPadding: tenDp,
-                        horizontalTitleGap: 4,
-                        tileColor: Colors.grey[100],
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  //name of receiver
-                                  userBookingList[index].receiverName!,
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                userBookingList[index].status == confirmed
-                                    ? Icon(
-                                        Icons.check_circle_rounded,
-                                        color: Colors.green,
-                                      )
-                                    : Container()
-                              ],
-                            ),
-
-                            //time sent
-                            Row(
-                              children: [
-                                Text(sent,
-                                    style: TextStyle(
-                                      fontSize: fourteenDp,
-                                      color: Colors.black45,
-                                    )),
-                                Icon(Icons.access_time, color: Colors.black45),
-                                Padding(
-                                  padding: EdgeInsets.only(left: fourDp),
-                                  child: Text(
-                                    timeAgo.format(userBookingList[index]
-                                        .timestamp
-                                        .toDate()),
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: fourteenDp),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: sixDp,
-                            ),
-                            Divider(
-                              height: 1,
-                              thickness: 0.9,
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: tenDp,
-                            ),
-                            Text(bookingMessage,
-                                style: TextStyle(color: Colors.black45)),
-                            Padding(
-                              padding: EdgeInsets.only(top: 2, bottom: sixDp),
-                              child: Text(userBookingList[index].message!,
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                  )),
-                            ),
-                            Divider(
-                              height: 1,
-                              thickness: 0.9,
-                            ),
-                            SizedBox(
-                              height: tenDp,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  bookingDate,
-                                ),
-                                //show as rescheduled if changes booking time
-                                Text(
-                                  userBookingList[index].isReschedule!
-                                      ? rescheduleBookings
-                                      : "",
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                userBookingList[index].isReschedule!
-                                    ? Shimmer.fromColors(
-                                        period: Duration(seconds: 5),
-                                        baseColor: Colors.black,
-                                        highlightColor: Colors.red,
-                                        child: Icon(
-                                          Icons.calendar_today,
-                                          color:
-                                              userBookingList[index].status ==
-                                                      pending
-                                                  ? Colors.blue
-                                                  : Colors.green,
-                                        ),
-                                      )
-                                    : Icon(
-                                        Icons.calendar_today,
-                                        color: userBookingList[index].status ==
-                                                pending
-                                            ? Colors.blue
-                                            : Colors.green,
+            return userBookingList.length == 0
+                ? Image.asset(
+                    "assets/images/nobookings.jpg",
+                    fit: BoxFit.cover,
+                  )
+                : ListView.builder(
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: tenDp, vertical: 2),
+                            child: ListTile(
+                              onTap: () {
+                                showOptions(context, index);
+                              },
+                              minVerticalPadding: tenDp,
+                              horizontalTitleGap: 4,
+                              tileColor: Colors.grey[100],
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        //name of receiver
+                                        userBookingList[index].receiverName!,
+                                        style: TextStyle(color: Colors.black),
                                       ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: fourDp),
-                                  child: userBookingList[index].isReschedule!
-                                      ? Shimmer.fromColors(
-                                          period: Duration(seconds: 5),
-                                          baseColor: Colors.black,
-                                          highlightColor: Colors.red,
-                                          child: Text(
-                                            //  booking date
-                                            userBookingList[index].bookingDate!,
-                                            style: TextStyle(
+                                      userBookingList[index].status == confirmed
+                                          ? Icon(
+                                              Icons.check_circle_rounded,
+                                              color: Colors.green,
+                                            )
+                                          : Container()
+                                    ],
+                                  ),
+
+                                  //time sent
+                                  Row(
+                                    children: [
+                                      Text(sent,
+                                          style: TextStyle(
+                                            fontSize: fourteenDp,
+                                            color: Colors.black45,
+                                          )),
+                                      Icon(Icons.access_time,
+                                          color: Colors.black45),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: fourDp),
+                                        child: Text(
+                                          timeAgo.format(userBookingList[index]
+                                              .timestamp
+                                              .toDate()),
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: fourteenDp),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: sixDp,
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    thickness: 0.9,
+                                  )
+                                ],
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: tenDp,
+                                  ),
+                                  Text(bookingMessage,
+                                      style: TextStyle(color: Colors.black45)),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 2, bottom: sixDp),
+                                    child: Text(userBookingList[index].message!,
+                                        style: TextStyle(
+                                          color: Colors.black87,
+                                        )),
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    thickness: 0.9,
+                                  ),
+                                  SizedBox(
+                                    height: tenDp,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        bookingDate,
+                                      ),
+                                      //show as rescheduled if changes booking time
+                                      Text(
+                                        userBookingList[index].isReschedule!
+                                            ? rescheduleBookings
+                                            : "",
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      userBookingList[index].isReschedule!
+                                          ? Shimmer.fromColors(
+                                              period: Duration(seconds: 5),
+                                              baseColor: Colors.black,
+                                              highlightColor: Colors.red,
+                                              child: Icon(
+                                                Icons.calendar_today,
                                                 color: userBookingList[index]
                                                             .status ==
                                                         pending
                                                     ? Colors.blue
                                                     : Colors.green,
-                                                fontStyle: FontStyle.italic),
-                                          ),
-                                        )
-                                      : Text(
-                                          //  booking date
-                                          userBookingList[index].bookingDate!,
-                                          style: TextStyle(
+                                              ),
+                                            )
+                                          : Icon(
+                                              Icons.calendar_today,
                                               color: userBookingList[index]
                                                           .status ==
                                                       pending
                                                   ? Colors.blue
                                                   : Colors.green,
-                                              fontStyle: FontStyle.italic),
-                                        ),
+                                            ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: fourDp),
+                                        child: userBookingList[index]
+                                                .isReschedule!
+                                            ? Shimmer.fromColors(
+                                                period: Duration(seconds: 5),
+                                                baseColor: Colors.black,
+                                                highlightColor: Colors.red,
+                                                child: Text(
+                                                  //  booking date
+                                                  userBookingList[index]
+                                                      .bookingDate!,
+                                                  style: TextStyle(
+                                                      color:
+                                                          userBookingList[index]
+                                                                      .status ==
+                                                                  pending
+                                                              ? Colors.blue
+                                                              : Colors.green,
+                                                      fontStyle:
+                                                          FontStyle.italic),
+                                                ),
+                                              )
+                                            : Text(
+                                                //  booking date
+                                                userBookingList[index]
+                                                    .bookingDate!,
+                                                style: TextStyle(
+                                                    color:
+                                                        userBookingList[index]
+                                                                    .status ==
+                                                                pending
+                                                            ? Colors.blue
+                                                            : Colors.green,
+                                                    fontStyle:
+                                                        FontStyle.italic),
+                                              ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: tenDp,
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    thickness: 0.9,
+                                  ),
+                                  SizedBox(
+                                    height: tenDp,
+                                  ),
+                                  Text(
+                                    status,
+                                    style: TextStyle(color: Colors.black45),
+                                  ),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(
+                                    //  status
+                                    userBookingList[index].status!,
+                                    style: TextStyle(
+                                        color: userBookingList[index].status ==
+                                                pending
+                                            ? Colors.blue
+                                            : Colors.green),
+                                  ),
+                                  SizedBox(
+                                    height: tenDp,
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    thickness: 0.9,
+                                  ),
+                                ],
+                              ),
+                              leading: Padding(
+                                padding: EdgeInsets.only(top: eightDp),
+                                child: CircleAvatar(
+                                  radius: 40,
+                                  foregroundImage: CachedNetworkImageProvider(
+                                      getUserType == user
+                                          ? userBookingList[index]
+                                              .receiverPhotoUrl!
+                                          : userBookingList[index]
+                                              .senderPhotoUrl!),
+                                  backgroundColor: Colors.indigo,
                                 ),
-                              ],
+                              ),
                             ),
-                            SizedBox(
-                              height: tenDp,
-                            ),
-                            Divider(
-                              height: 1,
-                              thickness: 0.9,
-                            ),
-                            SizedBox(
-                              height: tenDp,
-                            ),
-                            Text(
-                              status,
-                              style: TextStyle(color: Colors.black45),
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              //  status
-                              userBookingList[index].status!,
-                              style: TextStyle(
-                                  color:
-                                      userBookingList[index].status == pending
-                                          ? Colors.blue
-                                          : Colors.green),
-                            ),
-                            SizedBox(
-                              height: tenDp,
-                            ),
-                            Divider(
-                              height: 1,
-                              thickness: 0.9,
-                            ),
-                          ],
-                        ),
-                        leading: Padding(
-                          padding: EdgeInsets.only(top: eightDp),
-                          child: CircleAvatar(
-                            radius: 40,
-                            foregroundImage: CachedNetworkImageProvider(
-                                getUserType == user
-                                    ? userBookingList[index].receiverPhotoUrl!
-                                    : userBookingList[index].senderPhotoUrl!),
-                            backgroundColor: Colors.indigo,
                           ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    )
-                  ],
-                );
-              },
-              itemCount: userBookingList.length,
-              shrinkWrap: true,
-            );
+                          SizedBox(
+                            height: 10,
+                          )
+                        ],
+                      );
+                    },
+                    itemCount: userBookingList.length,
+                    shrinkWrap: true,
+                  );
           },
         ),
       ),

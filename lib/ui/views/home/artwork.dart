@@ -9,7 +9,6 @@ import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants.dart';
 import '../profile/artisan_profile.dart';
@@ -175,9 +174,22 @@ class _ArtworksPageState extends State<ArtworksPage> {
                             );
                           }))
                   : Container(
-                      child: Center(
-                          child: Text('No Artworks Yet',
-                              style: TextStyle(fontSize: 20))),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: thirtyDp,
+                          ),
+                          Text(
+                            noArtworksAvailable,
+                            style: TextStyle(fontSize: twentyDp),
+                          ),
+                          Center(
+                              child: Image.asset(
+                            "assets/images/noartwork.jpg",
+                            fit: BoxFit.cover,
+                          )),
+                        ],
+                      ),
                     );
             },
           );

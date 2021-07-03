@@ -57,10 +57,21 @@ class _LoadingShimmerState extends State<LoadingShimmer> {
               },
             ),
           ))
-        : Center(
-            child: Text(
-            "Oops! No ${widget.category} available",
-            style: TextStyle(fontSize: sixteenDp),
-          ));
+        : Column(
+            children: [
+              SizedBox(
+                height: thirtyDp,
+              ),
+              Text(
+                "Oops! No ${widget.category} available",
+                style: TextStyle(fontSize: sixteenDp),
+              ),
+              Center(
+                  child: Image.asset(
+                "assets/images/noartisan.jpg",
+                fit: BoxFit.cover,
+              )),
+            ],
+          );
   }
 }

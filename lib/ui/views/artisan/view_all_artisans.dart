@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
-import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
@@ -49,7 +48,9 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
             ),
           ),
           title: Text(
-            "${_artisanListProvider!.length} $availableArtisans",
+            _artisanListProvider!.length == 0
+                ? "No Artisans available"
+                : "${_artisanListProvider!.length} $availableArtisans",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: sixteenDp,
@@ -57,8 +58,19 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
           ),
         ),
         body: Builder(builder: (BuildContext context) {
-          return _artisanListProvider == null
-              ? LoadHome()
+          return _artisanListProvider!.length == 0
+              ? Column(
+                  children: [
+                    SizedBox(
+                      height: thirtyDp,
+                    ),
+                    Center(
+                        child: Image.asset(
+                      "assets/images/noartisan.jpg",
+                      fit: BoxFit.cover,
+                    )),
+                  ],
+                )
               : ListView.builder(
                   itemBuilder: (context, index) {
                     return Column(

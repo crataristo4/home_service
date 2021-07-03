@@ -28,18 +28,31 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
         margin: EdgeInsets.symmetric(vertical: eightDp),
         child: Builder(
           builder: (BuildContext context) {
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                      child: ListTile(
-                        onTap: () async {
-                          receivedBookingList[index].type! == user
-                              ? await showModalBottomSheet(
-                                  context: context,
+            return receivedBookingList.isEmpty
+                ? Column(
+                    children: [
+                      Text(
+                        noBookingsReceived,
+                        style: TextStyle(fontSize: twentyDp),
+                      ),
+                      Image.asset(
+                        "assets/images/nobookings.jpg",
+                        fit: BoxFit.cover,
+                      ),
+                    ],
+                  )
+                : ListView.builder(
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 2),
+                            child: ListTile(
+                              onTap: () async {
+                                receivedBookingList[index].type! == user
+                                    ? await showModalBottomSheet(
+                                        context: context,
                                   builder: (context) => UserProfile(
                                         userId:
                                             receivedBookingList[index].senderId,
