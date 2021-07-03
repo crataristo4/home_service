@@ -110,6 +110,7 @@ const assistance = 'Home service app: Assistance';
 const telUrlEnoch = 'tel:+233549490581';
 const please = 'Please';
 const finish = 'Finish';
+const received = 'Received ';
 const editBookings = 'Edit bookings';
 const viewProfile = 'View profile';
 const deleteBookings = 'Delete bookings';

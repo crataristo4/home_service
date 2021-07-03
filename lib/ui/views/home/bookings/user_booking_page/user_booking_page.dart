@@ -88,40 +88,34 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
         ),
       ),
       body: Container(
+        margin: EdgeInsets.symmetric(vertical: eightDp),
         child: Builder(
           builder: (BuildContext context) {
             return ListView.builder(
               itemBuilder: (context, index) {
                 return Column(
                   children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal: eightDp, vertical: eightDp),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(sixteenDp),
-                          border: Border.all(
-                              width: twentyDp, color: Colors.indigoAccent)),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: tenDp, vertical: 2),
                       child: ListTile(
                         onTap: () {
                           showOptions(context, index);
                         },
-                        minVerticalPadding: 25,
-                        horizontalTitleGap: 1,
-                        tileColor: Colors.indigoAccent,
+                        minVerticalPadding: tenDp,
+                        horizontalTitleGap: 4,
+                        tileColor: Colors.grey[100],
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            // name
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  getUserType == user
-                                      ? userBookingList[index].receiverName!
-                                      : userBookingList[index].senderName!,
-                                  style: TextStyle(color: Colors.white),
+                                  //name of receiver
+                                  userBookingList[index].receiverName!,
+                                  style: TextStyle(color: Colors.black),
                                 ),
                                 userBookingList[index].status == confirmed
                                     ? Icon(
@@ -133,135 +127,124 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                             ),
 
                             //time sent
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(top: fourDp, bottom: eightDp),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.access_time),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: eightDp),
-                                    child: Text(
-                                      timeAgo.format(userBookingList[index]
-                                          .timestamp
-                                          .toDate()),
-                                      style: TextStyle(color: Colors.black),
-                                    ),
+                            Row(
+                              children: [
+                                Text(sent,
+                                    style: TextStyle(
+                                      fontSize: fourteenDp,
+                                      color: Colors.black45,
+                                    )),
+                                Icon(Icons.access_time, color: Colors.black45),
+                                Padding(
+                                  padding: EdgeInsets.only(left: fourDp),
+                                  child: Text(
+                                    timeAgo.format(userBookingList[index]
+                                        .timestamp
+                                        .toDate()),
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: fourteenDp),
                                   ),
-                                ],
-                              ),
-                            ),
-                            Divider(
-                              height: 2,
-                              color: Colors.grey,
+                                ),
+                              ],
                             ),
                             SizedBox(
-                              height: tenDp,
+                              height: sixDp,
+                            ),
+                            Divider(
+                              height: 1,
+                              thickness: 0.9,
                             )
                           ],
                         ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(
+                              height: sixDp,
+                            ),
+                            Text(bookingMessage,
+                                style: TextStyle(color: Colors.black45)),
                             Padding(
-                              padding: EdgeInsets.only(bottom: eightDp),
+                              padding: EdgeInsets.only(top: 2, bottom: sixDp),
                               child: Text(userBookingList[index].message!,
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: sixteenDp)),
+                                    color: Colors.black87,
+                                  )),
                             ),
                             Divider(
-                              height: 2,
-                              color: Colors.grey,
+                              height: 1,
+                              thickness: 0.9,
                             ),
                             SizedBox(
-                              height: tenDp,
-                            ),
-                            Text(
-                              "Booking date: ${userBookingList[index].bookingDate}",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: fourteenDp,
-                                  fontStyle: FontStyle.italic),
-                            ),
-                            SizedBox(
-                              height: tenDp,
+                              height: sixDp,
                             ),
                             Row(
                               children: [
                                 Text(
-                                  "Status: ",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: twentyDp,
-                                      fontStyle: FontStyle.italic),
+                                  bookingDate,
                                 ),
-                                Text(
-                                  "${userBookingList[index].status}",
-                                  style: TextStyle(
-                                      color: userBookingList[index].status ==
-                                              confirmed
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontSize: twentyDp),
+                                //show as rescheduled if changes booking time
+                                Text(""),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
+                                  color:
+                                      userBookingList[index].status == pending
+                                          ? Colors.blue
+                                          : Colors.green,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: fourDp),
+                                  child: Text(
+                                    //  booking date
+                                    userBookingList[index].bookingDate!,
+                                    style: TextStyle(
+                                        color: userBookingList[index].status ==
+                                                pending
+                                            ? Colors.blue
+                                            : Colors.green,
+                                        fontStyle: FontStyle.italic),
+                                  ),
                                 ),
                               ],
                             ),
                             SizedBox(
-                              height: tenDp,
+                              height: sixDp,
                             ),
                             Divider(
-                              height: 2,
-                              color: Colors.grey,
+                              height: 1,
+                              thickness: 0.9,
                             ),
                             SizedBox(
-                              height: tenDp,
+                              height: sixDp,
                             ),
-                            //button for artisans to confirm bookings
-                            getUserType == user
-                                ? Container()
-                                : Container(
-                                    height: fortyEightDp,
-                                    width: MediaQuery.of(context).size.width,
-                                    margin: EdgeInsets.symmetric(vertical: 10),
-                                    child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            backgroundColor:
-                                            userBookingList[index].status ==
-                                                pending
-                                                    ? Theme.of(context)
-                                                        .primaryColor
-                                                    : Colors.green,
-                                            primary: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        eightDp))),
-                                        onPressed: () {
-                                          //else do nothing
-                                          if (userBookingList[index].status ==
-                                              confirmed) {
-                                            //show toast
-                                            ShowAction().showToast(
-                                                "Already confirmed",
-                                                Colors.green);
-                                          } else {
-                                            //update booking
-                                            BookingsProvider()
-                                                .updateBookingsConfirmed(
-                                                    context,
-                                                    userBookingList[index].id!);
-                                          }
-                                        },
-                                        child: Text(
-                                          userBookingList[index].status ==
-                                                  confirmed
-                                              ? confirmed
-                                              : approve,
-                                          style:
-                                              TextStyle(fontSize: fourteenDp),
-                                        )),
-                                  ),
+                            Text(
+                              status,
+                              style: TextStyle(color: Colors.black45),
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              //  status
+                              userBookingList[index].status!,
+                              style: TextStyle(
+                                  color:
+                                      userBookingList[index].status == pending
+                                          ? Colors.blue
+                                          : Colors.green),
+                            ),
+                            SizedBox(
+                              height: sixDp,
+                            ),
+                            Divider(
+                              height: 1,
+                              thickness: 0.9,
+                            ),
                           ],
                         ),
                         leading: Padding(
