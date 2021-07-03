@@ -9,6 +9,7 @@ import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 class UserBookingsPage extends StatefulWidget {
@@ -216,25 +217,57 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                             ),
                             Row(
                               children: [
-                                Icon(
-                                  Icons.calendar_today,
-                                  color:
-                                      userBookingList[index].status == pending
-                                          ? Colors.blue
-                                          : Colors.green,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: fourDp),
-                                  child: Text(
-                                    //  booking date
-                                    userBookingList[index].bookingDate!,
-                                    style: TextStyle(
+                                userBookingList[index].isReschedule!
+                                    ? Shimmer.fromColors(
+                                        period: Duration(seconds: 5),
+                                        baseColor: Colors.black,
+                                        highlightColor: Colors.red,
+                                        child: Icon(
+                                          Icons.calendar_today,
+                                          color:
+                                              userBookingList[index].status ==
+                                                      pending
+                                                  ? Colors.blue
+                                                  : Colors.green,
+                                        ),
+                                      )
+                                    : Icon(
+                                        Icons.calendar_today,
                                         color: userBookingList[index].status ==
                                                 pending
                                             ? Colors.blue
                                             : Colors.green,
-                                        fontStyle: FontStyle.italic),
-                                  ),
+                                      ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: fourDp),
+                                  child: userBookingList[index].isReschedule!
+                                      ? Shimmer.fromColors(
+                                          period: Duration(seconds: 5),
+                                          baseColor: Colors.black,
+                                          highlightColor: Colors.red,
+                                          child: Text(
+                                            //  booking date
+                                            userBookingList[index].bookingDate!,
+                                            style: TextStyle(
+                                                color: userBookingList[index]
+                                                            .status ==
+                                                        pending
+                                                    ? Colors.blue
+                                                    : Colors.green,
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        )
+                                      : Text(
+                                          //  booking date
+                                          userBookingList[index].bookingDate!,
+                                          style: TextStyle(
+                                              color: userBookingList[index]
+                                                          .status ==
+                                                      pending
+                                                  ? Colors.blue
+                                                  : Colors.green,
+                                              fontStyle: FontStyle.italic),
+                                        ),
                                 ),
                               ],
                             ),

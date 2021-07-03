@@ -18,6 +18,7 @@ class ReceivedBookings {
   dynamic timestamp;
   String? bookingDate;
   String? message;
+  bool? isReschedule;
   GeoPoint? senderLocation;
   GeoPoint? receiverLocation;
 
@@ -36,6 +37,7 @@ class ReceivedBookings {
       required this.timestamp,
       required this.bookingDate,
       required this.message,
+      required this.isReschedule,
       required this.senderLocation,
       required this.receiverLocation});
 
@@ -57,6 +59,7 @@ class ReceivedBookings {
         bookingDate: data['bookingDate'],
         timestamp: data['timestamp'],
         message: data['message'],
+        isReschedule: data['isReschedule'],
         senderLocation: data['senderLocation'],
         receiverLocation: data['receiverLocation']);
   }
@@ -77,6 +80,7 @@ class ReceivedBookings {
       'bookingDate': bookingDate,
       'timestamp': timestamp,
       'message': message,
+      'isReschedule': isReschedule,
       'senderLocation': senderLocation,
       'receiverLocation': receiverLocation,
     };
@@ -97,6 +101,7 @@ class SentBookings {
   dynamic timestamp;
   String? bookingDate;
   String? message;
+  bool? isReschedule;
   GeoPoint? senderLocation;
   GeoPoint? receiverLocation;
 
@@ -114,6 +119,7 @@ class SentBookings {
       required this.timestamp,
       required this.bookingDate,
       required this.message,
+      this.isReschedule,
       required this.senderLocation,
       required this.receiverLocation});
 
@@ -134,6 +140,7 @@ class SentBookings {
         bookingDate: data['bookingDate'],
         timestamp: data['timestamp'],
         message: data['message'],
+        isReschedule: data['isReschedule'],
         senderLocation: data['senderLocation'],
         receiverLocation: data['receiverLocation']);
   }
@@ -153,6 +160,7 @@ class SentBookings {
       'bookingDate': bookingDate,
       'timestamp': timestamp,
       'message': message,
+      'isReschedule': isReschedule,
       'senderLocation': senderLocation,
       'receiverLocation': receiverLocation,
     };
