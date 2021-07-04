@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/artwork.dart';
 import 'package:home_service/provider/artwork_provider.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
@@ -23,10 +26,16 @@ class ArtworksPage extends StatefulWidget {
 class _ArtworksPageState extends State<ArtworksPage> {
   Future<void>? _launched;
   List _likedUsers = [];
-  List<ArtworkModel>? _artworkList;
+  late List<Object>? itemList; // for storing both data and ad
+  late List<ArtworkModel>? _artworkList; // data
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Widget _buildArtworksCard(List<ArtworkModel>? artworkList, int index) {
-    final artworkprovider = Provider.of<ArtworkProvider>(context);
+    final artworkProvider = Provider.of<ArtworkProvider>(context);
     _likedUsers = artworkList![index].likedUsers;
     //Check if the current user is part of the liked users
     // if (_likedUsers.contains(currentUserId)) {
@@ -92,7 +101,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
                             print(_likedUsers);
                           }
 
-                          artworkprovider
+                          artworkProvider
                               .updateLikedUsers(artworkList[index].artworkId,
                                   _likedUsers, context)
                               .then((value) => setState(() {
@@ -156,22 +165,44 @@ class _ArtworksPageState extends State<ArtworksPage> {
   @override
   Widget build(BuildContext context) {
     _artworkList = Provider.of<List<ArtworkModel>>(context);
-    return _artworkList == null
+    //....//
+    itemList = List.from(_artworkList!);
+
+    //loop through item list and insert ad
+
+    for (int i = itemList!.length - 5; i >= 1; i -= 3) {
+      //insert data and ad
+      itemList!.insert(i, AdmobService.createBanner()..load());
+    }
+    return itemList == null
         ? LoadHome()
         : Builder(
             builder: (BuildContext context) {
-              return _artworkList!.length != 0
+              return itemList!.length != 0
                   ? Container(
                       margin: EdgeInsets.all(twentyFourDp),
                       child: ListView.builder(
-                          itemCount: _artworkList!.length,
+                          addAutomaticKeepAlives: true,
+                          itemCount: itemList!.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Column(
-                              children: [
-                                _buildArtworksCard(_artworkList, index),
-                                SizedBox(height: twentyFourDp)
-                              ],
-                            );
+                            if (itemList![index] is ArtworkModel) {
+                              return Column(
+                                children: [
+                                  _buildArtworksCard(_artworkList, index),
+                                  SizedBox(height: twentyFourDp)
+                                ],
+                              );
+                            } else {
+                              final Container adContainer = Container(
+                                height: 50,
+                                child: AdWidget(
+                                  ad: itemList![index] as BannerAd,
+                                  key: UniqueKey(),
+                                ),
+                              );
+
+                              return adContainer;
+                            }
                           }))
                   : Container(
                       child: Column(

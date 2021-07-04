@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/artisan_type.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/artisan/view_all_artisans.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
 
@@ -121,6 +123,13 @@ class _CategoryPageState extends State<CategoryPage> {
                         ),
                         SizedBox(
                           height: sixteenDp,
+                        ),
+                        Container(
+                          height: 50,
+                          child: AdWidget(
+                            ad: AdmobService.createBanner()..load(),
+                            key: UniqueKey(),
+                          ),
                         ),
                         Container(
                           margin: EdgeInsets.only(right: eightDp, top: eightDp),
