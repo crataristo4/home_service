@@ -37,7 +37,7 @@ class ArtworkService {
 
   //favorite artwork
   //Stores the ID of Liked Users
-  Future<void> updateLikedUsers( 
+  Future<void> updateLikedUsers(
       String artworkId, List likedUsers, BuildContext context) {
     return firestoreService
         .collection('Artworks')
@@ -56,16 +56,25 @@ class ArtworkService {
         .snapshots()
         .map((snapshots) => snapshots.docs
             .map((document) => ArtworkModel.fromFirestore(document.data()))
-            .toList(growable: true));
+            .toList(growable: true))
+        .handleError((error) {
+      print(error);
+    });
   }
 
 //delete artwork
   Future<void> deleteArtwork(String id) {
-    return firestoreService.collection('Artworks').doc(id).delete();
+    return firestoreService
+        .collection('Artworks')
+        .doc(id)
+        .delete()
+        .whenComplete(() => {ShowAction().showToast(successful, Colors.black)})
+        .catchError((error) {
+      print(error);
+    });
   }
 
   showSuccess(context) async {
-    await Future.delayed(Duration(seconds: 3));
     ShowAction().showToast(successful, Colors.black); //show complete msg
     Navigator.of(context, rootNavigator: true).pop();
     Navigator.of(context).pushNamedAndRemoveUntil(

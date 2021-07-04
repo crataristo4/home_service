@@ -24,6 +24,7 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
   Widget build(BuildContext context) {
     final receivedBookingList = Provider.of<List<ReceivedBookings>>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Container(
         margin: EdgeInsets.symmetric(vertical: eightDp),
         child: Builder(
@@ -35,33 +36,33 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                         noBookingsReceived,
                         style: TextStyle(fontSize: twentyDp),
                       ),
-                      Image.asset(
-                        "assets/images/nobookings.jpg",
-                        fit: BoxFit.cover,
-                      ),
-                    ],
-                  )
+                Image.asset(
+                  "assets/images/nobookings.jpg",
+                  fit: BoxFit.cover,
+                ),
+              ],
+            )
                 : ListView.builder(
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 2),
-                            child: ListTile(
-                              onTap: () async {
-                                receivedBookingList[index].type! == user
-                                    ? await showModalBottomSheet(
-                                        context: context,
-                                  builder: (context) => UserProfile(
-                                        userId:
-                                            receivedBookingList[index].senderId,
-                                      ))
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 2),
+                      child: ListTile(
+                        onTap: () async {
+                          receivedBookingList[index].type! == user
+                              ? await showModalBottomSheet(
+                              context: context,
+                              builder: (context) => UserProfile(
+                                userId:
+                                receivedBookingList[index].senderId,
+                              ))
                               : await Navigator.of(context).pushNamed(
-                                  ArtisanProfile.routeName,
-                                  arguments:
-                                      receivedBookingList[index].senderId,
-                                );
+                            ArtisanProfile.routeName,
+                            arguments:
+                            receivedBookingList[index].senderId,
+                          );
                         },
                         minVerticalPadding: 25,
                         horizontalTitleGap: 1,
@@ -81,9 +82,9 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                                 ),
                                 receivedBookingList[index].status == confirmed
                                     ? Icon(
-                                        Icons.check_circle_rounded,
-                                        color: Colors.green,
-                                      )
+                                  Icons.check_circle_rounded,
+                                  color: Colors.green,
+                                )
                                     : Container()
                               ],
                             ),
@@ -151,7 +152,7 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                                 Icon(
                                   Icons.calendar_today,
                                   color: receivedBookingList[index].status ==
-                                          pending
+                                      pending
                                       ? Colors.blue
                                       : Colors.green,
                                 ),
@@ -162,10 +163,10 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                                   receivedBookingList[index].bookingDate!,
                                   style: TextStyle(
                                       color:
-                                          receivedBookingList[index].status ==
-                                                  pending
-                                              ? Colors.blue
-                                              : Colors.green,
+                                      receivedBookingList[index].status ==
+                                          pending
+                                          ? Colors.blue
+                                          : Colors.green,
                                       fontSize: fourteenDp,
                                       fontStyle: FontStyle.italic),
                                 ),
@@ -192,7 +193,7 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                               "${receivedBookingList[index].status}",
                               style: TextStyle(
                                   color: receivedBookingList[index].status ==
-                                          confirmed
+                                      confirmed
                                       ? Colors.green
                                       : Colors.blue,
                                   fontSize: sixteenDp),
@@ -215,14 +216,14 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                               child: TextButton(
                                   style: TextButton.styleFrom(
                                       backgroundColor:
-                                          receivedBookingList[index].status ==
-                                                  pending
-                                              ? Theme.of(context).primaryColor
-                                              : Colors.green,
+                                      receivedBookingList[index].status ==
+                                          pending
+                                          ? Theme.of(context).primaryColor
+                                          : Colors.green,
                                       primary: Colors.white,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(eightDp))),
+                                          BorderRadius.circular(eightDp))),
                                   onPressed: () {
                                     //else do nothing
                                     if (receivedBookingList[index].status ==
@@ -234,12 +235,12 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                                       //update booking
                                       BookingsProvider()
                                           .updateBookingsConfirmed(context,
-                                              receivedBookingList[index].id!);
+                                          receivedBookingList[index].id!);
                                     }
                                   },
                                   child: Text(
                                     receivedBookingList[index].status ==
-                                            confirmed
+                                        confirmed
                                         ? confirmed
                                         : approve,
                                     style: TextStyle(fontSize: fourteenDp),
@@ -254,9 +255,9 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                             foregroundImage: CachedNetworkImageProvider(
                                 getUserType == user
                                     ? receivedBookingList[index]
-                                        .receiverPhotoUrl!
+                                    .receiverPhotoUrl!
                                     : receivedBookingList[index]
-                                        .senderPhotoUrl!),
+                                    .senderPhotoUrl!),
                             backgroundColor: Colors.indigo,
                           ),
                         ),

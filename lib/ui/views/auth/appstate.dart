@@ -16,9 +16,6 @@ String? category;
 String? expLevel;
 String? getUserType;
 String? imageUrl;
-//todo --- change to provider
-CollectionReference artworksDbRef =
-    FirebaseFirestore.instance.collection("Artworks");
 
 //loading key
 final GlobalKey<State> loadingKey = new GlobalKey<State>();
@@ -83,7 +80,7 @@ class _AppStateState extends State<AppState> {
               "Username from empty Shared pref is: $userName and type is $getUserType");
 
           //check the database if user has details
-          await usersDbRef
+           usersDbRef
               .doc(currentUserId)
               .get()
               .then((DocumentSnapshot documentSnapshot) async {

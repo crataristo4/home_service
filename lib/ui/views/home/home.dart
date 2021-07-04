@@ -1,11 +1,9 @@
-import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
@@ -14,7 +12,7 @@ import 'package:home_service/ui/views/home/artwork.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
 import 'package:home_service/ui/views/home/bookings/user_booking_page/user_booking_page.dart';
 import 'package:home_service/ui/views/home/category.dart';
-import 'package:home_service/ui/widgets/load_home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 CollectionReference usersDbRef = FirebaseFirestore.instance.collection("Users");
@@ -35,18 +33,23 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TabController? _tabController;
-  String? message;
+  String? message, nameFromPrefs, imageFromPrefs;
 
   @override
   void initState() {
     greetingMessage();
+    getFromSharedPref();
     _tabController = TabController(length: 3, vsync: this);
     _tabController!.index = widget.tabIndex!;
 
     super.initState();
   }
 
-
+  getFromSharedPref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    nameFromPrefs = prefs.getString('name');
+    imageFromPrefs = prefs.getString('photoUrl');
+  }
 
   //greeting message to user
   greetingMessage() {
@@ -97,19 +100,42 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 backgroundColor: Colors.white,
                 elevation: 0,
                 leading: //user profile image
-                    imageUrl == null
-                        ? Container()
-                        : GestureDetector(
-                            onTap: () => showModalBottomSheet(
-                                context: context,
-                                builder: (context) => OptionsPage()),
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              margin:
-                                  EdgeInsets.only(left: eightDp, top: tenDp),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
+                imageUrl == null
+                  ? GestureDetector(
+                      onTap: () => showModalBottomSheet(
+                          context: context,
+                          builder: (context) => OptionsPage()),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        margin: EdgeInsets.only(left: eightDp, top: tenDp),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 0.1,
+                                color: Colors.grey.withOpacity(0.6)),
+                            borderRadius: BorderRadius.circular(30)),
+                        child: ClipRRect(
+                          clipBehavior: Clip.antiAlias,
+                          borderRadius: BorderRadius.circular(30),
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            imageUrl: imageFromPrefs!,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    )
+                  : GestureDetector(
+                      onTap: () => showModalBottomSheet(
+                          context: context,
+                          builder: (context) => OptionsPage()),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        margin: EdgeInsets.only(left: eightDp, top: tenDp),
+                        decoration: BoxDecoration(
+                            border: Border.all(
                                       width: 0.1,
                                       color: Colors.grey.withOpacity(0.6)),
                                   borderRadius: BorderRadius.circular(30)),
@@ -163,18 +189,28 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   Container(
                     margin: EdgeInsets.only(top: eightDp),
                     child: userName == null
-                        ? Container()
-                        : Padding(
-                            padding:
-                                EdgeInsets.only(top: tenDp, left: sixteenDp),
-                            child: Shimmer.fromColors(
-                              baseColor: Colors.grey,
-                              highlightColor: Colors.indigo,
-                              child: Text(
-                                "$message ${userName ?? ''}",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w500),
-                              ),
+                  ? Padding(
+                      padding: EdgeInsets.only(top: tenDp, left: sixteenDp),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey,
+                        highlightColor: Colors.indigo,
+                        child: Text(
+                          "$message ${nameFromPrefs ?? ''}",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(top: tenDp, left: sixteenDp),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey,
+                        highlightColor: Colors.indigo,
+                        child: Text(
+                          "$message ${userName ?? ''}",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500),
+                        ),
                             ),
                           ),
                   ),

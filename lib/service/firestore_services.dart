@@ -96,7 +96,10 @@ class UserService {
         .snapshots()
         .map((snapshots) => snapshots.docs
             .map((document) => Artisans.fromFirestore(document.data()))
-            .toList(growable: true));
+            .toList(growable: true))
+        .handleError((error) {
+      print(error);
+    });
   }
 
   //get all users from db
@@ -107,7 +110,10 @@ class UserService {
         .snapshots()
         .map((snapshots) => snapshots.docs
             .map((document) => Users.fromDb(document.data()))
-            .toList(growable: true));
+            .toList(growable: true))
+        .handleError((error) {
+      print(error);
+    });
   }
 
   //get initial artisans list by category
@@ -121,7 +127,10 @@ class UserService {
         .snapshots()
         .map((snapshots) => snapshots.docs
             .map((document) => Artisans.fromFirestore(document.data()))
-            .toList(growable: true));
+            .toList(growable: true))
+        .handleError((error) {
+      print(error);
+    });
   }
 
   //fetch next list
@@ -137,7 +146,10 @@ class UserService {
         .snapshots()
         .map((snapshots) => snapshots.docs
             .map((document) => Artisans.fromDocument(document))
-            .toList(growable: true));
+            .toList(growable: true))
+        .handleError((error) {
+      print(error);
+    });
   }
 
   //create new booking

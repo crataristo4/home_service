@@ -184,23 +184,18 @@ class _OptionsPageState extends State<OptionsPage> {
           onPressed: () async {
             //clear all shared preference data to avoid getting old data when user changes phone number
             SharedPreferences prefs = await SharedPreferences.getInstance();
-
-            if (getUserType == user) {
-              prefs.remove('name');
-              prefs.remove('photoUrl');
-              prefs.remove('userType');
-            } else if (getUserType == artisan) {
-              prefs.remove('name');
-              prefs.remove('photoUrl');
-              prefs.remove('userType');
-              prefs.remove('category');
-              prefs.remove('expLevel');
-            }
             //close alert dialog
             Navigator.pop(context);
-
             //if yes ... sign out from firebase
             await FirebaseAuth.instance.signOut();
+
+            await prefs.remove('name');
+            await prefs.remove('photoUrl');
+            await prefs.remove('userType');
+            await prefs.remove('category');
+            await prefs.remove('expLevel');
+
+            prefs.clear();
 
             Dialogs.showLoadingDialog(
                 //show dialog and delay
@@ -208,7 +203,7 @@ class _OptionsPageState extends State<OptionsPage> {
                 loadingKey,
                 loggingYouOut,
                 Colors.white70);
-            await Future.delayed(const Duration(seconds: 3));
+            await Future.delayed(const Duration(seconds: 5));
 
             //close alert dialog
             Navigator.pop(context);
@@ -216,7 +211,8 @@ class _OptionsPageState extends State<OptionsPage> {
             Navigator.of(context).pushNamedAndRemoveUntil(
                 RegistrationPage.routeName, (route) => false);
 
-            print("From shared prefs ?? $userName , $category");
+            print(
+                "From shared prefs ?? ${prefs.getString("name")} , ${prefs.getString('photoUrl')}");
           },
         ));
   }

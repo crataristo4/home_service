@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/models/artisan/bookings.dart';
 import 'package:home_service/models/booking.dart';
@@ -85,36 +84,47 @@ class BookingService {
   }
 
   //get all bookings sent by  artisan
-  Stream<List<SentBookings>> getSentBookings() {
-    return firestoreService
-        .collection('Bookings')
-        .orderBy("timestamp", descending: true)
-        .where("senderId", isEqualTo: currentUserId)
-        //.limit(50)
-        .snapshots()
-        .map((snapshots) => snapshots.docs
-            .map((document) => SentBookings.fromFirestore(document.data()))
-            .toList(growable: true))
-        .handleError((error) {
-      print("Error on getting sent bookings from artisan ==> $error");
-    });
+  Stream<List<SentBookings>>? getSentBookings() {
+    if (currentUserId != null) {
+      print("data...");
+      return firestoreService
+          .collection('Bookings')
+          .orderBy("timestamp", descending: true)
+          .where("senderId", isEqualTo: currentUserId)
+          //.limit(50)
+          .snapshots()
+          .map((snapshots) => snapshots.docs
+              .map((document) => SentBookings.fromFirestore(document.data()))
+              .toList(growable: true))
+          .handleError((error) {
+        print("Error on getting sent bookings from artisan ==> $error");
+      });
+    } else {
+      print("Nothign");
+      //return null;
+
+    }
   }
 
   //get all received bookings made to artisan
-  Stream<List<ReceivedBookings>> getReceivedBookings() {
-    return firestoreService
-        .collection('Bookings')
-        .orderBy("timestamp", descending: true)
-        .where("receiverId", isEqualTo: currentUserId)
-        //.where("receiverName", isEqualTo: userName)
-        //  .limit(50)
-        .snapshots()
-        .map((snapshots) => snapshots.docs
-            .map((document) => ReceivedBookings.db(document.data()))
-            .toList(growable: true))
-        .handleError((error) {
-      print("Error on getting received bookings ==> $error");
-    });
+  Stream<List<ReceivedBookings>>? getReceivedBookings() {
+    if (currentUserId != null) {
+      print("data...");
+      return firestoreService
+          .collection('Bookings')
+          .orderBy("timestamp", descending: true)
+          .where("receiverId", isEqualTo: currentUserId)
+          //.where("receiverName", isEqualTo: userName)
+          //  .limit(50)
+          .snapshots()
+          .map((snapshots) => snapshots.docs
+              .map((document) => ReceivedBookings.db(document.data()))
+              .toList(growable: true))
+          .handleError((error) {
+        print("Error on getting received bookings ==> $error");
+      });
+    } else
+      print("Nothig...n");
   }
 
 //----------------------------------------------------------------------------------------------------------
