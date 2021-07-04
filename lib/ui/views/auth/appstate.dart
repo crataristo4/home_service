@@ -16,6 +16,9 @@ String? category;
 String? expLevel;
 String? getUserType;
 String? imageUrl;
+//todo --- change to provider
+CollectionReference artworksDbRef =
+    FirebaseFirestore.instance.collection("Artworks");
 
 //loading key
 final GlobalKey<State> loadingKey = new GlobalKey<State>();
@@ -52,8 +55,64 @@ class _AppStateState extends State<AppState> {
 
       if (currentUserId != null) {
         //check the state of users / artisans if the user exists
+        //check the database if user has details
+        usersDbRef
+            .doc(currentUserId)
+            .get()
+            .then((DocumentSnapshot documentSnapshot) async {
+          if (documentSnapshot.exists) {
+            //delete user details in-case user type changes and complete profile
+            //this could happen if the user re-installs the app and selects a different account type which is different from value in the database
+            type = documentSnapshot.get(FieldPath(['type']));
+            print("Type $type");
+            if (getUserType == user && type == artisan ||
+                getUserType == artisan && type == user) {
+              print("Shared pref value mismatches user record");
+              print(
+                  "type from database is $type And type from shared pref is $getUserType");
+              //delete user record
+              await usersDbRef
+                  .doc(currentUserId)
+                  .delete()
+                  .then((value) {})
+                  .then((value) {
+                //delete image from storage
+                firebase_storage.Reference deleteProfilePhoto = firebase_storage
+                    .FirebaseStorage.instance
+                    .refFromURL(imageUrl!);
+                deleteProfilePhoto.delete();
+              }).whenComplete(() => //then navigate to complete profile
+                      pushToCompleteProfile());
+              print("Deleting user record");
+            } else {
+              //if true  ... shared pref keys for user name and photoUrl can be null so get data
+              if (getUserType == artisan) {
+                category = documentSnapshot.get(FieldPath(['category']));
+                expLevel = documentSnapshot.get(FieldPath(['expLevel']));
+              }
 
-        if (getUserType == artisan &&
+              userName = documentSnapshot.get(FieldPath(['name']));
+              imageUrl = documentSnapshot.get(FieldPath(['photoUrl']));
+
+              //put values into shared pref to avoid null values
+              prefs.setString("name", userName!);
+              prefs.setString("photoUrl", imageUrl!);
+              prefs.setString("category", category!);
+              prefs.setString("expLevel", expLevel!);
+
+              print(
+                  "Username after loading database is: $userName and photo url is $imageUrl");
+            }
+          } else {
+            //if not then navigate to complete profile
+            pushToCompleteProfile();
+          }
+        }).catchError((onError) {
+          debugPrint("Error: $onError");
+        });
+
+//------------------------------------------------------------------------------------------------
+        /*     if (getUserType == artisan &&
             prefs.containsKey('name') &&
             prefs.containsKey('photoUrl') &&
             prefs.containsKey('category') &&
@@ -79,63 +138,8 @@ class _AppStateState extends State<AppState> {
           print(
               "Username from empty Shared pref is: $userName and type is $getUserType");
 
-          //check the database if user has details
-           usersDbRef
-              .doc(currentUserId)
-              .get()
-              .then((DocumentSnapshot documentSnapshot) async {
-            if (documentSnapshot.exists) {
-              //delete user details in-case user type changes and complete profile
-              //this could happen if the user re-installs the app and selects a different account type which is different from value in the database
-              type = documentSnapshot.get(FieldPath(['type']));
-              print("Type $type");
-              if (getUserType == user && type == artisan ||
-                  getUserType == artisan && type == user) {
-                print("Shared pref value mismatches user record");
-                print(
-                    "type from database is $type And type from shared pref is $getUserType");
-                //delete user record
-                await usersDbRef
-                    .doc(currentUserId)
-                    .delete()
-                    .then((value) {})
-                    .then((value) {
-                  //delete image from storage
-                  firebase_storage.Reference deleteProfilePhoto =
-                      firebase_storage.FirebaseStorage.instance
-                          .refFromURL(imageUrl!);
-                  deleteProfilePhoto.delete();
-                }).whenComplete(() => //then navigate to complete profile
-                        pushToCompleteProfile());
-                print("Deleting user record");
-              } else {
-                //if true  ... shared pref keys for user name and photoUrl can be null so get data
-                if (getUserType == user) {
-                  userName = documentSnapshot.get(FieldPath(['name']));
-                } else if (getUserType == artisan) {
-                  userName = documentSnapshot.get(FieldPath(['name']));
-                  category = documentSnapshot.get(FieldPath(['category']));
-                  expLevel = documentSnapshot.get(FieldPath(['expLevel']));
-                }
 
-                imageUrl = documentSnapshot.get(FieldPath(['photoUrl']));
-
-                //put values into shared pref to avoid null values
-                prefs.setString("name", userName!);
-                prefs.setString("photoUrl", imageUrl!);
-                prefs.setString("category", category!);
-                prefs.setString("expLevel", expLevel!);
-
-                print("Username after loading database is: $userName");
-              }
-            } else {
-              //if not then navigate to complete profile
-              pushToCompleteProfile();
-            }
-          }).catchError((onError) {
-            debugPrint("Error: $onError");
-          });
-        }
+        }*/
       }
     } catch (error) {
       print("Error on App state : $error");
@@ -144,7 +148,7 @@ class _AppStateState extends State<AppState> {
 
   pushToCompleteProfile() async {
     await new Future.delayed(Duration(seconds: 0));
-    Navigator.of(context).restorablePushNamed(CompleteProfile.routeName);
+    Navigator.of(context).pushReplacementNamed(CompleteProfile.routeName);
   }
 
   @override

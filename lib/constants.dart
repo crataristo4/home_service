@@ -124,6 +124,7 @@ const rescheduled = "Rescheduled";
 const pleaseSelectExp = 'Select experience level';
 const updateExp = 'Update experience level';
 const pleaseWait = 'Please wait...';
+const completingProfile = 'Completing your profile';
 const addingArtworkPleaseWait = 'Adding Artwork...';
 const updatingProfilePicture = 'Updating profile picture...';
 const deletingBooking = 'Deleting booking request...';

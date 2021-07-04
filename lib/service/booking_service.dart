@@ -68,7 +68,7 @@ class BookingService {
 
 //----------------------------------------------------------------------------------------------
   //get all sent  user
-  Stream<List<Bookings>> getAllBookings() {
+  Stream<List<Bookings>> getUserBookings() {
     return firestoreService
         .collection('Bookings')
         .orderBy("timestamp", descending: true)

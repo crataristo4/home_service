@@ -71,7 +71,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
     }
 
     createUser() async {
-      Dialogs.showLoadingDialog(context, _createUserKey, pleaseWait,
+      Dialogs.showLoadingDialog(context, _createUserKey, completingProfile,
           Colors.white70); //start the dialog
 
       String fileName = path.basename(_image!.path);

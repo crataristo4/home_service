@@ -31,31 +31,25 @@ void main() async {
 class EntryPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final getAllArtisan = UserService();
-    final getAllUsers = UserService();
-    final getReceivedBookings = BookingService();
-    final getSentBookings = BookingService();
-    final getAllBookings = BookingService();
-    final getArtworks = ArtworkService();
-
     return MultiProvider(
       providers: [
         //authentication
         ChangeNotifierProvider.value(value: AuthProvider()),
         //user creation
         ChangeNotifierProvider(create: (context) => UserProvider()),
+
         //get all users
         StreamProvider<List<Users>>.value(
           lazy: false,
           initialData: [],
-          value: getAllUsers.getAllUsers(),
+          value: UserService().getAllUsers(),
         ),
 
         //get all artisan
         StreamProvider<List<Artisans>>.value(
           lazy: false,
           initialData: [],
-          value: getAllArtisan.getAllArtisans(),
+          value: UserService().getAllArtisans(),
         ),
 
         ChangeNotifierProvider(
@@ -65,20 +59,20 @@ class EntryPoint extends StatelessWidget {
         //all bookings - user
         StreamProvider<List<Bookings>>.value(
             lazy: false,
-            value: getAllBookings.getAllBookings(),
+            value: BookingService().getUserBookings(),
             initialData: []),
 
         //get received bookings made to artisans (for Artisan page)
         StreamProvider<List<ReceivedBookings>>.value(
           lazy: false,
           initialData: [],
-          value: getReceivedBookings.getReceivedBookings(),
+          value: BookingService().getReceivedBookings(),
         ),
 
         //get sent bookings made .Artisan to artisans (for Artisan page)
         StreamProvider<List<SentBookings>>.value(
             lazy: false,
-            value: getSentBookings.getSentBookings(),
+            value: BookingService().getSentBookings(),
             initialData: []),
 
         ChangeNotifierProvider(create: (context) => ArtworkProvider()),
@@ -86,7 +80,7 @@ class EntryPoint extends StatelessWidget {
         StreamProvider<List<ArtworkModel>>.value(
           lazy: false,
           initialData: [],
-          value: getArtworks.fetchAllArtwork(),
+          value: ArtworkService().fetchAllArtwork(),
         ),
       ],
       child: MaterialApp(

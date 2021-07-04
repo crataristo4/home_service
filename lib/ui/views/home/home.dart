@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,9 +16,6 @@ import 'package:shimmer/shimmer.dart';
 
 CollectionReference usersDbRef = FirebaseFirestore.instance.collection("Users");
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-
-Users? users;
-Artisans? artisans;
 
 class Home extends StatefulWidget {
   static const routeName = '/homePage';
@@ -47,8 +43,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   getFromSharedPref() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    nameFromPrefs = prefs.getString('name');
-    imageFromPrefs = prefs.getString('photoUrl');
+    if (userName == null || imageUrl == null) {
+      userName = prefs.getString('name');
+      imageUrl = prefs.getString('photoUrl');
+    }
   }
 
   //greeting message to user
@@ -84,24 +82,25 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return  WillPopScope(
-            onWillPop: () async {
-              if (_tabController!.index == 0 || _tabController!.index == 2) {
-                _tabController!.index = 1;
-                return false;
-              } else {
-                if (_tabController!.index == 1) return true;
-                return true;
-              }
-            },
-            child: Scaffold(
-              backgroundColor: Colors.white,
-              appBar: AppBar(
-                backgroundColor: Colors.white,
-                elevation: 0,
-                leading: //user profile image
-                imageUrl == null
-                  ? GestureDetector(
+    return WillPopScope(
+      onWillPop: () async {
+        if (_tabController!.index == 0 || _tabController!.index == 2) {
+          _tabController!.index = 1;
+          return false;
+        } else {
+          if (_tabController!.index == 1) return true;
+          return true;
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: //user profile image
+              imageUrl == null
+                  ? Container()
+                  : GestureDetector(
                       onTap: () => showModalBottomSheet(
                           context: context,
                           builder: (context) => OptionsPage()),
@@ -120,87 +119,51 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           child: CachedNetworkImage(
                             placeholder: (context, url) =>
                                 CircularProgressIndicator(),
-                            imageUrl: imageFromPrefs!,
+                            imageUrl: imageUrl!,
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                    )
-                  : GestureDetector(
-                      onTap: () => showModalBottomSheet(
-                          context: context,
-                          builder: (context) => OptionsPage()),
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        margin: EdgeInsets.only(left: eightDp, top: tenDp),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                      width: 0.1,
-                                      color: Colors.grey.withOpacity(0.6)),
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: ClipRRect(
-                                clipBehavior: Clip.antiAlias,
-                                borderRadius: BorderRadius.circular(30),
-                                child: CachedNetworkImage(
-                                  placeholder: (context, url) =>
-                                      CircularProgressIndicator(),
-                                  imageUrl: imageUrl!,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                title: Container(
-                  margin: EdgeInsets.only(top: tenDp),
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFF5F5F5),
-                    border: Border.all(width: 1, color: Color(0xFFE0E0E0)),
-                    borderRadius: BorderRadius.circular(eightDp),
-                  ),
-                  child: TabBar(
-                    controller: _tabController,
-                    // give the indicator a decoration (color and border radius)
-                    indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(eightDp),
-                      color: Colors.indigo,
                     ),
-                    labelColor: Colors.white,
-                    unselectedLabelColor: Color(0xFF757575),
-                    tabs: [
-                      Tab(
-                        text: Artwork,
-                      ),
-                      Tab(
-                        text: Artisanz,
-                      ),
-                      Tab(
-                        text: Bookingz,
-                      ),
-                    ],
-                  ),
-                ),
+          title: Container(
+            margin: EdgeInsets.only(top: tenDp),
+            height: 45,
+            decoration: BoxDecoration(
+              color: Color(0xFFF5F5F5),
+              border: Border.all(width: 1, color: Color(0xFFE0E0E0)),
+              borderRadius: BorderRadius.circular(eightDp),
+            ),
+            child: TabBar(
+              controller: _tabController,
+              // give the indicator a decoration (color and border radius)
+              indicator: BoxDecoration(
+                borderRadius: BorderRadius.circular(eightDp),
+                color: Colors.indigo,
               ),
-              body: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //display greeting message to user
-                  Container(
-                    margin: EdgeInsets.only(top: eightDp),
-                    child: userName == null
-                  ? Padding(
-                      padding: EdgeInsets.only(top: tenDp, left: sixteenDp),
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey,
-                        highlightColor: Colors.indigo,
-                        child: Text(
-                          "$message ${nameFromPrefs ?? ''}",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    )
+              labelColor: Colors.white,
+              unselectedLabelColor: Color(0xFF757575),
+              tabs: [
+                Tab(
+                  text: Artwork,
+                ),
+                Tab(
+                  text: Artisanz,
+                ),
+                Tab(
+                  text: Bookingz,
+                ),
+              ],
+            ),
+          ),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //display greeting message to user
+            Container(
+              margin: EdgeInsets.only(top: eightDp),
+              child: userName == null
+                  ? Container()
                   : Padding(
                       padding: EdgeInsets.only(top: tenDp, left: sixteenDp),
                       child: Shimmer.fromColors(
@@ -211,23 +174,23 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w500),
                         ),
-                            ),
-                          ),
-                  ),
-
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        ArtworksPage(),
-                        CategoryPage(),
-                        getUserType == user ? UserBookingsPage() : BookingPage()
-                      ],
+                      ),
                     ),
-                  ),
+            ),
+
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  ArtworksPage(),
+                  CategoryPage(),
+                  getUserType == user ? UserBookingsPage() : BookingPage()
                 ],
               ),
             ),
-          );
+          ],
+        ),
+      ),
+    );
   }
 }

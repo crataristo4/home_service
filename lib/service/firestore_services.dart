@@ -128,9 +128,7 @@ class UserService {
         .map((snapshots) => snapshots.docs
             .map((document) => Artisans.fromFirestore(document.data()))
             .toList(growable: true))
-        .handleError((error) {
-      print(error);
-    });
+        .handleError((error) {});
   }
 
   //fetch next list
@@ -146,10 +144,7 @@ class UserService {
         .snapshots()
         .map((snapshots) => snapshots.docs
             .map((document) => Artisans.fromDocument(document))
-            .toList(growable: true))
-        .handleError((error) {
-      print(error);
-    });
+            .toList(growable: true));
   }
 
   //create new booking
@@ -166,7 +161,7 @@ class UserService {
   }
 
   //get all bookings by status - Pending order by user type
-  Stream<List<Bookings>> getPendingBookings() {
+/*  Stream<List<Bookings>> getPendingBookings() {
     if (getUserType == user) {
       return firestoreService
           .collection('Bookings')
@@ -217,7 +212,7 @@ class UserService {
               .map((document) => Bookings.fromFirestore(document.data()))
               .toList(growable: true));
     }
-  }
+  }*/
 
   showSuccess(context) async {
     await Future.delayed(Duration(seconds: 3));
