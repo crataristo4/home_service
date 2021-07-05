@@ -31,8 +31,8 @@ class _ArtworksPageState extends State<ArtworksPage> {
 
   @override
   void initState() {
-    _admobService.createInterstitialAd();
     super.initState();
+    _admobService.createInterstitialAd();
   }
 
   Widget _buildArtworksCard(List<ArtworkModel>? artworkList, int index) {
@@ -44,7 +44,6 @@ class _ArtworksPageState extends State<ArtworksPage> {
     // }
     return GestureDetector(
       onTap: () async {
-        _admobService.showInterstitialAd();
         await Navigator.of(context).pushNamed(
           ArtisanProfile.routeName,
           arguments: artworkList[index].artisanId,
@@ -169,6 +168,10 @@ class _ArtworksPageState extends State<ArtworksPage> {
   @override
   Widget build(BuildContext context) {
     _artworkList = Provider.of<List<ArtworkModel>>(context);
+
+    Timer(Duration(seconds: 20), () {
+      _admobService.showInterstitialAd();
+    });
 
     return _artworkList == null
         ? LoadHome()

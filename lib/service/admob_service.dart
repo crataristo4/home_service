@@ -29,7 +29,10 @@ class AdmobService {
         listener: BannerAdListener(
             onAdLoaded: (Ad ad) => print('Ad loaded'),
             onAdOpened: (Ad ad) => print('Ad opened'),
-            onAdClosed: (Ad ad) => print('Ad closed'),
+            onAdClosed: (Ad ad) {
+              print('Ad closed');
+              ad.dispose();
+            },
             onAdFailedToLoad: (Ad ad, LoadAdError error) {
               ad.dispose();
             }),
@@ -62,6 +65,10 @@ class AdmobService {
     if (interstitialId == null) return;
 
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdWillDismissFullScreenContent: (InterstitialAd ad) {
+        ad.dispose();
+        print('$ad onAdWillDismissFullScreenContent.');
+      },
       onAdShowedFullScreenContent: (InterstitialAd ad) =>
           print('$ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
@@ -71,7 +78,7 @@ class AdmobService {
       onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
         print('$ad onAdFailedToShowFullScreenContent: $error');
         ad.dispose();
-        createInterstitialAd();
+        // createInterstitialAd();
       },
       onAdImpression: (InterstitialAd ad) => print('$ad impression occurred.'),
     );

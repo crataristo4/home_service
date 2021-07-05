@@ -1,11 +1,11 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/constants.dart';
-import 'package:home_service/models/users.dart';
 import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/options_page.dart';
@@ -32,6 +32,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TabController? _tabController;
   String? message, nameFromPrefs, imageFromPrefs;
+  AdmobService _admobService = AdmobService();
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _tabController!.index = widget.tabIndex!;
 
     super.initState();
+    _admobService.createInterstitialAd();
   }
 
   getFromSharedPref() async {
@@ -84,6 +86,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Timer(Duration(seconds: 5), () {
+      _admobService.showInterstitialAd();
+    });
+
     return WillPopScope(
       onWillPop: () async {
         if (_tabController!.index == 0 || _tabController!.index == 2) {
@@ -100,33 +106,33 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           backgroundColor: Colors.white,
           elevation: 0,
           leading: //user profile image
-              imageUrl == null
-                  ? Container()
-                  : GestureDetector(
-                      onTap: () => showModalBottomSheet(
-                          context: context,
-                          builder: (context) => OptionsPage()),
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        margin: EdgeInsets.only(left: eightDp, top: tenDp),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 0.1,
-                                color: Colors.grey.withOpacity(0.6)),
-                            borderRadius: BorderRadius.circular(30)),
-                        child: ClipRRect(
-                          clipBehavior: Clip.antiAlias,
-                          borderRadius: BorderRadius.circular(30),
-                          child: CachedNetworkImage(
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            imageUrl: imageUrl!,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
+          imageUrl == null
+              ? Container()
+              : GestureDetector(
+            onTap: () => showModalBottomSheet(
+                context: context,
+                builder: (context) => OptionsPage()),
+            child: Container(
+              width: 40,
+              height: 40,
+              margin: EdgeInsets.only(left: eightDp, top: tenDp),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                      width: 0.1,
+                      color: Colors.grey.withOpacity(0.6)),
+                  borderRadius: BorderRadius.circular(30)),
+              child: ClipRRect(
+                clipBehavior: Clip.antiAlias,
+                borderRadius: BorderRadius.circular(30),
+                child: CachedNetworkImage(
+                  placeholder: (context, url) =>
+                      CircularProgressIndicator(),
+                  imageUrl: imageUrl!,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
           title: Container(
             margin: EdgeInsets.only(top: tenDp),
             height: 45,
@@ -167,17 +173,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               child: userName == null
                   ? Container()
                   : Padding(
-                      padding: EdgeInsets.only(top: tenDp, left: sixteenDp),
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey,
-                        highlightColor: Colors.indigo,
-                        child: Text(
-                          "$message ${userName ?? ''}",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
+                padding: EdgeInsets.only(top: tenDp, left: sixteenDp),
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey,
+                  highlightColor: Colors.indigo,
+                  child: Text(
+                    "$message ${userName ?? ''}",
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ),
             ),
 
             Expanded(
