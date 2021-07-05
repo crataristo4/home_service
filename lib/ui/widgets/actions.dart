@@ -29,7 +29,7 @@ class ShowAction {
     showDialog(
       context: context,
       builder: (_) => alertDialog,
-      barrierDismissible: false,
+      barrierDismissible: true,
     );
   }
 
@@ -45,7 +45,7 @@ class ShowAction {
     showDialog(
       context: context,
       builder: (_) => alertDialog,
-      barrierDismissible: false,
+      barrierDismissible: true,
     );
   }
 

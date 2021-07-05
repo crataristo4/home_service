@@ -218,7 +218,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                                       //show as rescheduled if changes booking time
                                       Text(
                                         userBookingList[index].isReschedule!
-                                            ? rescheduleBookings
+                                            ? rescheduled
                                             : "",
                                         style: TextStyle(
                                             color: Colors.red,

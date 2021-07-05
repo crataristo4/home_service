@@ -147,6 +147,8 @@ const edit = 'Edit';
 const selectCategory = 'Select Category';
 const categoryRequired = "category is required";
 const selectAccountType = 'Please select an account type';
+const rate = 'Rate';
+const rateNow = 'Rate Now';
 
 const enterPhoneToLogin = "Enter your phone number to Log in";
 const confirmNumber = 'Confirm number';

@@ -220,8 +220,8 @@ class _SentBookingsState extends State<SentBookingsPage> {
                                 //show as rescheduled if changes booking time
                                 Text(
                                   sentBookingsList[index].isReschedule!
-                                      ? rescheduleBookings
-                                      : "",
+                                            ? rescheduled
+                                            : "",
                                   style: TextStyle(
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold),
