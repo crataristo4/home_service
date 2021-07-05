@@ -125,7 +125,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           height: sixteenDp,
                         ),
                         Container(
-                          height: 50,
+                          height: twoFiftyDp,
                           child: AdWidget(
                             ad: AdmobService.createBanner()..load(),
                             key: UniqueKey(),
@@ -305,15 +305,17 @@ class _CategoryPageState extends State<CategoryPage> {
                         )
                       ],
                     ),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 60,
-                      child: ClipOval(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: Image.asset(
-                            getArtisanType[index].image,
-                            fit: BoxFit.cover,
-                          )),
+                    Center(
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 60,
+                        child: ClipOval(
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            child: Image.asset(
+                              getArtisanType[index].image,
+                              fit: BoxFit.cover,
+                            )),
+                      ),
                     ),
                   ],
                 ),

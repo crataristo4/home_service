@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/users.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:provider/provider.dart';
 
@@ -71,7 +73,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                     )),
                   ],
                 )
-              : ListView.builder(
+              : ListView.separated(
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
@@ -180,6 +182,19 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                   },
                   itemCount: _artisanListProvider!.length,
                   shrinkWrap: true,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return index % 3 == 0
+                        ? Container(
+                            margin: EdgeInsets.only(bottom: sixDp),
+                            height: twoFiftyDp,
+                            child: AdWidget(
+                              ad: AdmobService.createBanner()..load(),
+                              key: UniqueKey(),
+                            ),
+                          )
+                        : Container();
+                  },
+                  addAutomaticKeepAlives: true,
                 );
         }));
   }

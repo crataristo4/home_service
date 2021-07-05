@@ -47,7 +47,7 @@ class _BookingPageState extends State<BookingPage> {
   Widget build(BuildContext context) {
     _allBookingList = Provider.of<List<Bookings>>(context);
 
-    Timer(Duration(seconds: 30), () {
+    Timer(Duration(seconds: 120), () {
       _admobService.showInterstitialAd();
     });
 

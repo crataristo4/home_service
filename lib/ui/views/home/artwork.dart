@@ -169,7 +169,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
   Widget build(BuildContext context) {
     _artworkList = Provider.of<List<ArtworkModel>>(context);
 
-    Timer(Duration(seconds: 20), () {
+    Timer(Duration(seconds: 60), () {
       _admobService.showInterstitialAd();
     });
 
@@ -206,8 +206,8 @@ class _ArtworksPageState extends State<ArtworksPage> {
                         separatorBuilder: (BuildContext context, int index) {
                           return index % 3 == 0
                               ? Container(
-                                  margin: EdgeInsets.only(bottom: sixDp),
-                                  height: hundredDp,
+                            margin: EdgeInsets.only(bottom: sixDp),
+                                  height: twoFiftyDp,
                                   child: AdWidget(
                                     ad: AdmobService.createBanner()..load(),
                                     key: UniqueKey(),

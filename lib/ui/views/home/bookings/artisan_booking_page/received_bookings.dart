@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/artisan/bookings.dart';
 import 'package:home_service/provider/bookings_provider.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/show_user_profile.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
@@ -42,7 +44,7 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                       ),
                     ],
                   )
-                : ListView.builder(
+                : ListView.separated(
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
@@ -273,18 +275,31 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                           borderRadius: const BorderRadius.all(
                             Radius.circular(16),
                           ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    )
-                  ],
-                );
-              },
-              itemCount: receivedBookingList.length,
-              shrinkWrap: true,
-            );
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 4,
+                          )
+                        ],
+                      );
+                    },
+                    itemCount: receivedBookingList.length,
+                    addAutomaticKeepAlives: true,
+                    shrinkWrap: true,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return index % 3 == 0
+                          ? Container(
+                              margin: EdgeInsets.only(bottom: sixDp),
+                              height: twoFiftyDp,
+                              child: AdWidget(
+                                ad: AdmobService.createBanner()..load(),
+                                key: UniqueKey(),
+                              ),
+                            )
+                          : Container();
+                    },
+                  );
           },
         ),
       ),

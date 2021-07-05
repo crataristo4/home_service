@@ -17,14 +17,12 @@ class AdmobService {
   int numOfAttempts = 0;
 
   static initialMobileAds() {
-    if (MobileAds.instance == null) {
-      MobileAds.instance.initialize();
-    }
+    MobileAds.instance.initialize();
   }
 
   static BannerAd createBanner() {
     BannerAd bannerAd = BannerAd(
-        size: AdSize.largeBanner,
+        size: AdSize.mediumRectangle,
         adUnitId: bannerUnitId,
         listener: BannerAdListener(
             onAdLoaded: (Ad ad) => print('Ad loaded'),
@@ -62,7 +60,7 @@ class AdmobService {
   }
 
   void showInterstitialAd() {
-    if (interstitialId == null) return;
+    // if (interstitialId == null) return;
 
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdWillDismissFullScreenContent: (InterstitialAd ad) {
@@ -83,6 +81,6 @@ class AdmobService {
       onAdImpression: (InterstitialAd ad) => print('$ad impression occurred.'),
     );
 
-    _interstitialAd!.show();
+    _interstitialAd?.show();
   }
 }

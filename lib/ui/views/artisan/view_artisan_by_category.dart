@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/provider/bookings_provider.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bloc/artisan_category_list_bloc.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
@@ -229,7 +231,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
             );
           } else {
             //retrieve data into a list
-            return ListView.builder(
+            return ListView.separated(
               shrinkWrap: true,
               itemCount: snapshot.data!.length,
               scrollDirection: Axis.vertical,
@@ -398,6 +400,19 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                   ),
                 );
               },
+              separatorBuilder: (BuildContext context, int index) {
+                return index % 3 == 0
+                    ? Container(
+                        margin: EdgeInsets.only(bottom: sixDp),
+                        height: twoFiftyDp,
+                        child: AdWidget(
+                          ad: AdmobService.createBanner()..load(),
+                          key: UniqueKey(),
+                        ),
+                      )
+                    : Container();
+              },
+              addAutomaticKeepAlives: true,
             );
           }
         });
