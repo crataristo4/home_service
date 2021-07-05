@@ -27,8 +27,11 @@ class _ArtworksPageState extends State<ArtworksPage> {
   List _likedUsers = [];
   late List<ArtworkModel>? _artworkList; // data
 
+  AdmobService _admobService = AdmobService();
+
   @override
   void initState() {
+    _admobService.createInterstitialAd();
     super.initState();
   }
 
@@ -41,12 +44,15 @@ class _ArtworksPageState extends State<ArtworksPage> {
     // }
     return GestureDetector(
       onTap: () async {
+        _admobService.showInterstitialAd();
         await Navigator.of(context).pushNamed(
           ArtisanProfile.routeName,
           arguments: artworkList[index].artisanId,
         );
       },
-      onLongPress: () => print(artworkList[index].likedUsers),
+      onLongPress: () {
+        print(artworkList[index].likedUsers);
+      },
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
