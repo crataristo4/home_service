@@ -192,13 +192,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ),
           ],
         ),
-        bottomNavigationBar: Container(
-          height: 50,
-          child: AdWidget(
-            ad: AdmobService.createBanner()..load(),
-            key: UniqueKey(),
-          ),
-        ),
       ),
     );
   }

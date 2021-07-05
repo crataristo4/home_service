@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,6 @@ class ArtworksPage extends StatefulWidget {
 class _ArtworksPageState extends State<ArtworksPage> {
   Future<void>? _launched;
   List _likedUsers = [];
-  late List<Object>? itemList; // for storing both data and ad
   late List<ArtworkModel>? _artworkList; // data
 
   @override
@@ -165,45 +163,50 @@ class _ArtworksPageState extends State<ArtworksPage> {
   @override
   Widget build(BuildContext context) {
     _artworkList = Provider.of<List<ArtworkModel>>(context);
-    //....//
-    itemList = List.from(_artworkList!);
 
-    //loop through item list and insert ad
-
-    for (int i = itemList!.length - 5; i >= 1; i -= 3) {
-      //insert data and ad
-      itemList!.insert(i, AdmobService.createBanner()..load());
-    }
-    return itemList == null
+    return _artworkList == null
         ? LoadHome()
         : Builder(
             builder: (BuildContext context) {
-              return itemList!.length != 0
+              return _artworkList!.length != 0
                   ? Container(
                       margin: EdgeInsets.all(twentyFourDp),
-                      child: ListView.builder(
-                          addAutomaticKeepAlives: true,
-                          itemCount: itemList!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (itemList![index] is ArtworkModel) {
-                              return Column(
-                                children: [
-                                  _buildArtworksCard(_artworkList, index),
-                                  SizedBox(height: twentyFourDp)
-                                ],
-                              );
-                            } else {
-                              final Container adContainer = Container(
-                                height: 50,
-                                child: AdWidget(
-                                  ad: itemList![index] as BannerAd,
-                                  key: UniqueKey(),
-                                ),
-                              );
+                      child: ListView.separated(
+                        addAutomaticKeepAlives: true,
+                        itemCount: _artworkList!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (_artworkList![index] is ArtworkModel) {
+                            return Column(
+                              children: [
+                                _buildArtworksCard(_artworkList, index),
+                                SizedBox(height: twentyFourDp)
+                              ],
+                            );
+                          } else {
+                            final Container adContainer = Container(
+                              height: 50,
+                              child: AdWidget(
+                                ad: _artworkList![index] as BannerAd,
+                                key: UniqueKey(),
+                              ),
+                            );
 
-                              return adContainer;
-                            }
-                          }))
+                            return adContainer;
+                          }
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return index % 3 == 0
+                              ? Container(
+                                  margin: EdgeInsets.only(bottom: sixDp),
+                                  height: hundredDp,
+                                  child: AdWidget(
+                                    ad: AdmobService.createBanner()..load(),
+                                    key: UniqueKey(),
+                                  ),
+                                )
+                              : Container();
+                        },
+                      ))
                   : Container(
                       child: Column(
                         children: [
