@@ -46,7 +46,6 @@ class ArtisanCategoryListBloc {
       listItemController!.sink
           .addError(SocketException("No Internet Connection"));
     } catch (e) {
-      print(e.toString());
       listItemController!.sink.addError(e);
     }
   }
@@ -61,7 +60,7 @@ class ArtisanCategoryListBloc {
           .fetchNextList(collectionReference, documentList!, category);
       documentList!.addAll(newDocumentList);
       listItemController!.sink.add(documentList!);
-      print("Fetching next list");
+
       try {
         if (documentList!.length == 0) {
           listItemController!.sink.addError("No Data Available");
@@ -76,7 +75,6 @@ class ArtisanCategoryListBloc {
       updateIndicator(false);
     } catch (e) {
       updateIndicator(false);
-      print(e.toString());
       listItemController!.sink.addError(e);
     }
   }

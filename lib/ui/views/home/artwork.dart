@@ -47,9 +47,6 @@ class _ArtworksPageState extends State<ArtworksPage> {
           arguments: artworkList[index].artisanId,
         );
       },
-      onLongPress: () {
-        print(artworkList[index].likedUsers);
-      },
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(

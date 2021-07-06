@@ -86,9 +86,7 @@ class ArtworkService {
         .doc(id)
         .delete()
         .whenComplete(() => {ShowAction().showToast(successful, Colors.black)})
-        .catchError((error) {
-      print(error);
-    });
+        .catchError((error) {});
   }
 
   showSuccess(context) async {

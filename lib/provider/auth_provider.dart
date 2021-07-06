@@ -22,9 +22,7 @@ class AuthProvider with ChangeNotifier {
           timeout: const Duration(
             seconds: 120,
           ),
-          verificationCompleted: (AuthCredential phoneAuthCredential) {
-            print(phoneAuthCredential);
-          },
+          verificationCompleted: (AuthCredential phoneAuthCredential) {},
           verificationFailed: (FirebaseAuthException exception) {
             throw exception;
           });
@@ -42,9 +40,7 @@ class AuthProvider with ChangeNotifier {
       final user = await _firebaseAuth.signInWithCredential(credential);
       final User? currentUser = _firebaseAuth.currentUser;
 
-      if (currentUser!.uid != "") {
-        print(currentUser.uid);
-      }
+      if (currentUser!.uid != "") {}
     } catch (e) {
       throw e;
     }

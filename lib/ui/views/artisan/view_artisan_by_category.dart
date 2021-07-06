@@ -257,7 +257,6 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                 //rating
                 rating =
                     Artisans.ratingApproach(snapshot.data![index]['rating']);
-                print("rating $rating");
 
                 return GestureDetector(
                   onTap: () => Navigator.of(context).pushNamed(
@@ -631,9 +630,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                             Icons.star,
                                             color: Colors.amber,
                                           ),
-                                          onRatingUpdate: (rating) {
-                                            print(rating);
-                                          },
+                                          onRatingUpdate: (rating) {},
                                         ),
                                       ],
                                     ),

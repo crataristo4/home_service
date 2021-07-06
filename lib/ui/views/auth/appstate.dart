@@ -64,12 +64,9 @@ class _AppStateState extends State<AppState> {
             //delete user details in-case user type changes and complete profile
             //this could happen if the user re-installs the app and selects a different account type which is different from value in the database
             type = documentSnapshot.get(FieldPath(['type']));
-            print("Type $type");
+
             if (getUserType == user && type == artisan ||
                 getUserType == artisan && type == user) {
-              print("Shared pref value mismatches user record");
-              print(
-                  "type from database is $type And type from shared pref is $getUserType");
               //delete user record
               await usersDbRef
                   .doc(currentUserId)
@@ -83,7 +80,6 @@ class _AppStateState extends State<AppState> {
                 deleteProfilePhoto.delete();
               }).whenComplete(() => //then navigate to complete profile
                       pushToCompleteProfile());
-              print("Deleting user record");
             } else {
               //if true  ... shared pref keys for user name and photoUrl can be null so get data
               if (getUserType == artisan) {
@@ -99,9 +95,6 @@ class _AppStateState extends State<AppState> {
               prefs.setString("photoUrl", imageUrl!);
               prefs.setString("category", category!);
               prefs.setString("expLevel", expLevel!);
-
-              print(
-                  "Username after loading database is: $userName and photo url is $imageUrl");
             }
           } else {
             //if not then navigate to complete profile

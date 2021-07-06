@@ -344,7 +344,6 @@ class _CategoryPageState extends State<CategoryPage> {
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
-                print(_searchListItems![index]);
                 Navigator.of(context).pushNamed(
                     ViewArtisanByCategoryPage.routeName,
                     arguments: _searchListItems![index]);

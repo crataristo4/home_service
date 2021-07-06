@@ -47,7 +47,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
       }
 
       prefs.setString("userType", userInfo!);
-      print('User type FROM SHARED pref $userInfo');
     });
   }
 

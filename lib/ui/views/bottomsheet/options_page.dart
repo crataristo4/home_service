@@ -211,8 +211,6 @@ class _OptionsPageState extends State<OptionsPage> {
             Navigator.of(context).pushNamedAndRemoveUntil(
                 RegistrationPage.routeName, (route) => false);
 
-            print(
-                "From shared prefs ?? ${prefs.getString("name")} , ${prefs.getString('photoUrl')}");
           },
         ));
   }

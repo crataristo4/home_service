@@ -78,15 +78,12 @@ class BookingService {
         .map((snapshots) => snapshots.docs
             .map((document) => Bookings.fromFirestore(document.data()))
             .toList(growable: true))
-        .handleError((error) {
-      print("Error on getting bookings from user ==> $error");
-    });
+        .handleError((error) {});
   }
 
   //get all bookings sent by  artisan
   Stream<List<SentBookings>>? getSentBookings() {
     if (currentUserId != null) {
-      print("data...");
       return firestoreService
           .collection('Bookings')
           .orderBy("timestamp", descending: true)
@@ -100,7 +97,7 @@ class BookingService {
         print("Error on getting sent bookings from artisan ==> $error");
       });
     } else {
-      print("Nothign");
+      print("No data loaded");
       //return null;
 
     }
@@ -109,7 +106,6 @@ class BookingService {
   //get all received bookings made to artisan
   Stream<List<ReceivedBookings>>? getReceivedBookings() {
     if (currentUserId != null) {
-      print("data...");
       return firestoreService
           .collection('Bookings')
           .orderBy("timestamp", descending: true)

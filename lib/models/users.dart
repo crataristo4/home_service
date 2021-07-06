@@ -193,34 +193,24 @@ class Artisans {
     double? ratingPoints;
     if (ratedValue! <= 500) {
       ratingPoints = 0.5;
-      // print("$ratingPoints star");
     } else if (ratedValue > 600 && ratedValue <= 1000) {
       ratingPoints = 1;
-      // print("$ratingPoints star");
     } else if (ratedValue > 1000 && ratedValue <= 1499) {
       ratingPoints = 1.5;
-      // print("$ratingPoints star");
     } else if (ratedValue > 1500 && ratedValue <= 2499) {
       ratingPoints = 2;
-      // print("$ratingPoints star");
     } else if (ratedValue > 2499 && ratedValue < 3000) {
       ratingPoints = 2.5;
-      // print("$ratingPoints star");
     } else if (ratedValue >= 3000 && ratedValue <= 3499) {
       ratingPoints = 3;
-      // print("$ratingPoints star");
     } else if (ratedValue >= 3500 && ratedValue <= 4000) {
       ratingPoints = 3.5;
-      print("$ratingPoints star");
     } else if (ratedValue > 4000 && ratedValue <= 4499) {
       ratingPoints = 4;
-      // print("$ratingPoints star");
     } else if (ratedValue >= 4500 && ratedValue < 5000) {
       ratingPoints = 4.5;
-      // print("4.5 star");
     } else if (ratedValue >= 5000) {
       ratingPoints = 5;
-      //  print("5 star");
     }
 
     return ratingPoints;

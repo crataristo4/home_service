@@ -142,7 +142,6 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                                     color: Colors.amber,
                                   ),
                                   onRatingUpdate: (rating) {
-                                    print(rating);
                                     isRatingTapped = true;
                                     ratingNumber = rating;
                                   },
