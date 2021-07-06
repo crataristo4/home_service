@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:home_service/ui/views/auth/appstate.dart';
 
 //todo -- add user coordinates
 class Users {
@@ -107,12 +106,7 @@ class Artisans {
       required this.location,
       this.ratedUsers,
       required this.rating,
-      this.isRated = false}) {
-//Check if the current user is part of the rated users
-    if (ratedUsers!.contains(currentUserId)) {
-      this.isRated = true;
-    }
-  }
+      this.isRated});
 
   Artisans.expLevel({this.expLevel});
 
