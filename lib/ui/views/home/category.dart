@@ -447,7 +447,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
                   border: Border.all(
-                      color: Colors.grey, width: 0.7, style: BorderStyle.none),
+                      color: Colors.grey, width: 0.7, style: BorderStyle.solid),
                   borderRadius: BorderRadius.circular(tenDp),
                 ),
                 child: ClipRRect(
