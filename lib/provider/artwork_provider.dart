@@ -66,14 +66,17 @@ class ArtworkProvider with ChangeNotifier {
     artworkService.updateLikedUsers(artworkId, likedUsers, context);
   }
 
+  //update likes
   updateLikes(String artworkId, BuildContext context) {
     artworkService.updateLikes(artworkId, context);
   }
 
+//remove likes
   removeLikes(String artworkId, BuildContext context) {
     artworkService.removeLikes(artworkId, context);
   }
 
+//delete artwork
   deleteArtwork(String id) {
     artworkService.deleteArtwork(id);
   }

@@ -35,7 +35,6 @@ class _CompleteProfileState extends State<CompleteProfile> {
   String? imageUrl;
   File? _image;
   final picker = ImagePicker();
-  final GlobalKey<State> _createUserKey = new GlobalKey<State>();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
@@ -83,7 +82,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
     }
 
     createUser() async {
-      Dialogs.showLoadingDialog(context, _createUserKey, completingProfile,
+      Dialogs.showLoadingDialog(context, loadingKey, completingProfile,
           Colors.white70); //start the dialog
 
       String fileName = path.basename(_image!.path);

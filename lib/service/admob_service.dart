@@ -60,7 +60,7 @@ class AdmobService {
   }
 
   void showInterstitialAd() {
-    // if (interstitialId == null) return;
+    if (interstitialId == null) throw NullThrownError;
 
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdWillDismissFullScreenContent: (InterstitialAd ad) {

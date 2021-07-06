@@ -69,6 +69,7 @@ class UserProvider with ChangeNotifier {
           dateJoined: _dateJoined!,
           category: category,
           type: _type!,
+          rating: 0.0,
           expLevel: expLevel,
           location: new GeoPoint(0, 0));
 
@@ -147,5 +148,10 @@ class UserProvider with ChangeNotifier {
     Users updateUser = Users.photoUrl(photoUrl: photoUrl);
     //create record in db
     userService.updatePhotoUrl(updateUser, context);
+  }
+
+  // rate artisan
+  rateUser(String? artisanId, double? rating, BuildContext context) {
+    userService.rateArtisan(artisanId!, rating!, context);
   }
 }

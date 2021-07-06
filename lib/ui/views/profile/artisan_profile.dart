@@ -7,10 +7,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/users.dart';
+import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/widgets/actions.dart';
+import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
@@ -29,9 +31,16 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
   Artisans? _selectedArtisan;
   List<ArtworkModel>? _artworkList;
   int _totalNumberOfLikes = 0;
-  bool isRatingTapped = false;
-  double ratingNumber = 0;
-  AdmobService _admobService = AdmobService();
+  bool isRatingTapped = false; // checks if user has tapped rating
+  bool isRated = false; // checks if user has tapped rating
+  double ratingNumber = 0; //initial rating is zero
+  AdmobService _admobService = AdmobService(); // ADS
+  double?
+      artisanRating; // gets rating from artisan and adds up to what other users will rate
+  double? totalRating; //total rating
+  double? rating; // rating
+  UserProvider rateUser = UserProvider();
+  List ratedUsers = [];
 
   @override
   void initState() {
@@ -41,6 +50,12 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
 
     _selectedArtisan = artisans
         .firstWhere((Artisans artisan) => artisan.id == widget.artisanId);
+
+    rating = _selectedArtisan!.rating!; // from db
+
+    //rating logic
+    artisanRating = Artisans.ratingApproach(rating);
+
     _artworkList = artworkLists
         .where((ArtworkModel artisanArtwork) =>
             widget.artisanId == artisanArtwork.artisanId)
@@ -54,8 +69,6 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
 
   @override
   void dispose() {
-    isRatingTapped = false;
-    ratingNumber = 0;
     super.dispose();
   }
 
@@ -64,6 +77,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
     Timer(Duration(minutes: 7), () {
       _admobService.showInterstitialAd();
     });
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -76,98 +90,114 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
         actions: [
           currentUserId != _selectedArtisan!.id
               ? Container(
-            // margin: EdgeInsets.only(right: twentyFourDp),
-            child: FloatingActionButton(
-              tooltip: 'Call ${_selectedArtisan!.name!}',
-              splashColor: Colors.green,
-              elevation: 0,
-              mini: true,
-              backgroundColor: Colors.indigo,
-              onPressed: () => ShowAction.makePhoneCall(
-                  "tel:${_selectedArtisan!.phoneNumber!}"),
-              child: Icon(
-                Icons.call,
-                color: Colors.white,
-              ),
-            ),
-          )
+                  // margin: EdgeInsets.only(right: twentyFourDp),
+                  child: FloatingActionButton(
+                    tooltip: 'Call ${_selectedArtisan!.name!}',
+                    splashColor: Colors.green,
+                    elevation: 0,
+                    mini: true,
+                    backgroundColor: Colors.indigo,
+                    onPressed: () => ShowAction.makePhoneCall(
+                        "tel:${_selectedArtisan!.phoneNumber!}"),
+                    child: Icon(
+                      Icons.call,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
               : Container(),
           currentUserId != _selectedArtisan!.id
               ? GestureDetector(
-            onTap: () {
-              ShowAction.showDetails(
-                  rate,
-                  "You can only rate ${_selectedArtisan!.name} once",
-                  context,
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          ratingNumber = 0;
-                          isRatingTapped = false;
-                        },
-                        child: Text(cancel),
-                        style: ElevatedButton.styleFrom(
-                            elevation: 0, primary: Colors.red),
-                      ),
-                      Flexible(
-                        //todo implement rating logic
-                        child: RatingBar.builder(
-                          itemPadding: EdgeInsets.only(top: 2),
-                          itemSize: 25,
-                          initialRating: 0,
-                          minRating: 0.5,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemBuilder: (context, _) => Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                          ),
-                          onRatingUpdate: (rating) {
-                            print(rating);
-                            isRatingTapped = true;
-                            ratingNumber = rating;
-                          },
-                        ),
-                      ),
-                      ElevatedButton(
-                          onPressed: () {
-                            if (isRatingTapped) {
-                              print("Rated $ratingNumber");
-                            } else {
-                              print("rate user now");
-                              ShowAction().showToast(
-                                  "Please select at least one rating",
-                                  Colors.red);
-                            }
-                          },
-                          child: Text(rateNow)),
-                    ],
-                  ));
-            },
-            child: Container(
-              height: fortyEightDp,
-              width: sixtyDp,
-              margin: EdgeInsets.only(
-                  top: tenDp,
-                  right: twentyDp,
-                  left: tenDp,
-                  bottom: tenDp),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(eightDp),
-                  border:
-                  Border.all(width: 0.3, color: Colors.indigoAccent)),
-              child: Center(
-                  child: Text(
-                    rate,
-                    style: TextStyle(color: Colors.indigoAccent),
-                  )),
-            ),
-          )
+                  onTap: () {
+                    if (_selectedArtisan!.isRated!) {
+                      ShowAction().showToast("Already rated", Colors.red);
+                    } else if (!_selectedArtisan!.isRated!) {
+                      ShowAction.showDetails(
+                          rate,
+                          "You can only rate ${_selectedArtisan!.name} once",
+                          context,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  ratingNumber = 0;
+                                  isRatingTapped = false;
+                                },
+                                child: Text(cancel),
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 0, primary: Colors.red),
+                              ),
+                              Flexible(
+                                child: RatingBar.builder(
+                                  itemPadding: EdgeInsets.only(top: 2),
+                                  itemSize: 25,
+                                  initialRating: 0,
+                                  minRating: 0.5,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemBuilder: (context, _) => Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    print(rating);
+                                    isRatingTapped = true;
+                                    ratingNumber = rating;
+                                  },
+                                ),
+                              ),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    totalRating = (rating! + ratingNumber);
+                                    if (isRatingTapped) {
+                                      //todo  fix error on rating button state not change after rating
+                                      Navigator.pop(context);
+                                      Dialogs.showLoadingDialog(
+                                          context,
+                                          loadingKey,
+                                          "rating user",
+                                          Colors.white70);
+                                      rateUser.rateUser(_selectedArtisan!.id,
+                                          totalRating, context);
+                                      setState(() {
+                                        isRated = true;
+                                      });
+                                    } else {
+                                      ShowAction().showToast(
+                                          "Please select at least one rating",
+                                          Colors.red);
+                                    }
+                                  },
+                                  child: Text(rateNow)),
+                            ],
+                          ));
+                    }
+                  },
+                  child: Container(
+                    height: fortyEightDp,
+                    width: sixtyDp,
+                    margin: EdgeInsets.only(
+                        top: tenDp,
+                        right: twentyDp,
+                        left: tenDp,
+                        bottom: tenDp),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(eightDp),
+                        border:
+                            Border.all(width: 0.3, color: Colors.indigoAccent)),
+                    child: Center(
+                        child: Text(
+                      !_selectedArtisan!.ratedUsers!.contains(currentUserId)
+                          ? rate
+                          : rated,
+                      style: TextStyle(color: Colors.indigoAccent),
+                    )),
+                  ),
+                )
               : Container()
         ],
       ),
@@ -196,7 +226,25 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
               ),
             ),
             SizedBox(height: 20),
-            Text(_selectedArtisan!.name!, style: TextStyle(fontSize: 20)),
+            Column(
+              children: [
+                Text(_selectedArtisan!.name!, style: TextStyle(fontSize: 20)),
+                RatingBar.builder(
+                  itemPadding: EdgeInsets.only(top: 2),
+                  itemSize: 24,
+                  ignoreGestures: true,
+                  initialRating: artisanRating!,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {},
+                ),
+              ],
+            ),
 
             SizedBox(height: 15),
             Wrap(
@@ -255,38 +303,38 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
             //Booking
             currentUserId != _selectedArtisan!.id
                 ? SizedBox(
-              height: fortyEightDp,
-              width: MediaQuery.of(context).size.width,
-              child: Container(
-                  margin: EdgeInsets.only(
-                      left: sixteenDp, right: sixteenDp, bottom: fourDp),
-                  child: TextButton(
-                    // button to open bottom sheet
-                      style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          primary: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(eightDp))),
-                      onPressed: () {
-                        showModalBottomSheet(
-                            context: context,
-                            useRootNavigator: true,
-                            builder: (context) => AddBooking(
-                              //bottom sheet to send a short message
-                              receiverName: _selectedArtisan!.name,
-                              receiverPhoneNumber:
-                              _selectedArtisan!.phoneNumber,
-                              receiverPhotoUrl:
-                              _selectedArtisan!.photoUrl,
-                              receiverId: _selectedArtisan!.id,
-                            ));
-                      },
-                      child: Text(
-                        book,
-                        style: TextStyle(fontSize: fourteenDp),
-                      ))),
-            )
+                    height: fortyEightDp,
+                    width: MediaQuery.of(context).size.width,
+                    child: Container(
+                        margin: EdgeInsets.only(
+                            left: sixteenDp, right: sixteenDp, bottom: fourDp),
+                        child: TextButton(
+                            // button to open bottom sheet
+                            style: TextButton.styleFrom(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                primary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(eightDp))),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  useRootNavigator: true,
+                                  builder: (context) => AddBooking(
+                                        //bottom sheet to send a short message
+                                        receiverName: _selectedArtisan!.name,
+                                        receiverPhoneNumber:
+                                            _selectedArtisan!.phoneNumber,
+                                        receiverPhotoUrl:
+                                            _selectedArtisan!.photoUrl,
+                                        receiverId: _selectedArtisan!.id,
+                                      ));
+                            },
+                            child: Text(
+                              book,
+                              style: TextStyle(fontSize: fourteenDp),
+                            ))),
+                  )
                 : Container(),
             //End of Booking
             SizedBox(height: 20),
@@ -295,31 +343,31 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
             Expanded(
               child: _artworkList!.length == 0
                   ? Container(
-                child: Center(child: Text('No Artwork Yet')),
-              )
+                      child: Center(child: Text('No Artwork Yet')),
+                    )
                   : GridView.builder(
-                  gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                  ),
-                  itemCount: _artworkList!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          //artwork image
-
-                          placeholder: (context, url) =>
-                              Center(child: CircularProgressIndicator()),
-                          imageUrl: _artworkList![index].artworkImageUrl,
-
-                          fit: BoxFit.cover,
-                        ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
                       ),
-                    );
-                  }),
+                      itemCount: _artworkList!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: CachedNetworkImage(
+                              //artwork image
+
+                              placeholder: (context, url) =>
+                                  Center(child: CircularProgressIndicator()),
+                              imageUrl: _artworkList![index].artworkImageUrl,
+
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      }),
             ),
           ],
         ),
