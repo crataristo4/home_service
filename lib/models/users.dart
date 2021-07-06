@@ -193,7 +193,7 @@ class Artisans {
     double? ratingPoints;
     if (ratedValue! <= 500) {
       ratingPoints = 0.5;
-    } else if (ratedValue > 600 && ratedValue <= 1000) {
+    } else if (ratedValue > 501 && ratedValue <= 1000) {
       ratingPoints = 1;
     } else if (ratedValue > 1000 && ratedValue <= 1499) {
       ratingPoints = 1.5;
