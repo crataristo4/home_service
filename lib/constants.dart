@@ -162,6 +162,7 @@ const tryAgainSometime = "Try again in sometime";
 const invalidOTP = "Invalid OTP";
 const labelSkip = 'Skip';
 const labelNext = 'Next';
+const topExperts = "Top Experts";
 const labelGetStarted = 'Get started';
 const noBookingsMade = 'No bookings made';
 const noArtworksAvailable = 'No Artworks available';

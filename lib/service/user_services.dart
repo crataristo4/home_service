@@ -9,6 +9,7 @@ import '../constants.dart';
 
 class UserService {
   final firestoreService = FirebaseFirestore.instance;
+  final mediumRaking = 500;
 
   //create an artisan
   Future<void> createArtisan(Artisans artisans, BuildContext context) {
@@ -146,9 +147,9 @@ class UserService {
             .toList(growable: true));
   }
 
-  //rate user
-  Future<void> rateArtisan(
-      String artisanId, double rating, BuildContext context) {
+  //rate artisan
+  Future<void> rateArtisan(String artisanId, double rating,
+      BuildContext context) {
     return firestoreService.collection('Users').doc(artisanId).update({
       'ratedUsers': FieldValue.arrayUnion([currentUserId]),
       'rating': rating
@@ -156,6 +157,23 @@ class UserService {
       showUpdatingSuccess(context);
     }).catchError((onError) {
       showFailure(context, onError);
+    });
+  }
+
+  //show top experts
+  Stream<List<Artisans>> getTopUsersByRating() {
+    return firestoreService
+        .collection('Users')
+        .orderBy("rating", descending: true)
+        .where("type", isEqualTo: artisan)
+        .where("rating", isGreaterThanOrEqualTo: mediumRaking)
+        .snapshots()
+        .map((snapshots) =>
+        snapshots.docs.map((document) {
+          return Artisans.fromFirestore(document.data());
+        }).toList(growable: true))
+        .handleError((error) {
+      print(error);
     });
   }
 

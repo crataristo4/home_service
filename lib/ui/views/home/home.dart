@@ -80,7 +80,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-
     _tabController!.dispose();
   }
 
@@ -117,10 +116,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               height: 40,
               margin: EdgeInsets.only(left: eightDp, top: tenDp),
               decoration: BoxDecoration(
-                  border: Border.all(
-                      width: 0.1,
-                      color: Colors.grey.withOpacity(0.6)),
-                  borderRadius: BorderRadius.circular(30)),
+                  border: Border.all(width: 0.1, color: Colors.grey),
+                            borderRadius: BorderRadius.circular(30)),
               child: ClipRRect(
                 clipBehavior: Clip.antiAlias,
                 borderRadius: BorderRadius.circular(30),

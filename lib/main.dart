@@ -12,7 +12,7 @@ import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/route_generator.dart';
 import 'package:home_service/service/artwork_service.dart';
 import 'package:home_service/service/booking_service.dart';
-import 'package:home_service/service/firestore_services.dart';
+import 'package:home_service/service/user_services.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
 import 'package:provider/provider.dart';
@@ -79,10 +79,18 @@ class EntryPoint extends StatelessWidget {
 
         ChangeNotifierProvider(create: (context) => ArtworkProvider()),
 
+        //fetch artworks
         StreamProvider<List<ArtworkModel>>.value(
           lazy: false,
           initialData: [],
           value: ArtworkService().fetchAllArtwork(),
+        ),
+
+        //fetch top rating artisan
+        StreamProvider<List<Artisans>>.value(
+          lazy: false,
+          initialData: [],
+          value: UserService().getTopUsersByRating(),
         ),
       ],
       child: MaterialApp(
