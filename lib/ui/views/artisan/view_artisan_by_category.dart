@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
@@ -44,6 +45,9 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
 
   //for getting and passing receiver details to provider
   String? receiverName, receiverPhoneNumber, receiverPhotoUrl, receiverId;
+
+  //rating
+  double? rating;
 
   @override
   void initState() {
@@ -250,6 +254,11 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                 bookingProvider.setReceiverPhone(receiverPhoneNumber);
                 bookingProvider.setReceiverPhotoUrl(receiverPhotoUrl);
 
+                //rating
+                rating =
+                    Artisans.ratingApproach(snapshot.data![index]['rating']);
+                print("rating $rating");
+
                 return GestureDetector(
                   onTap: () => Navigator.of(context).pushNamed(
                       ArtisanProfile.routeName,
@@ -322,20 +331,17 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                         ],
                                       ),
                                       RatingBar.builder(
-                                        //todo add rating to artisan
                                         itemSize: 20,
-                                        initialRating: 3,
-                                        minRating: 1,
+                                        initialRating: rating!,
                                         direction: Axis.horizontal,
                                         allowHalfRating: true,
+                                        ignoreGestures: true,
                                         itemCount: 5,
                                         itemBuilder: (context, _) => Icon(
                                           Icons.star,
                                           color: Colors.amber,
                                         ),
-                                        onRatingUpdate: (rating) {
-                                          print(rating);
-                                        },
+                                        onRatingUpdate: (rating) {},
                                       ),
                                       SizedBox(
                                         height: sixteenDp,
