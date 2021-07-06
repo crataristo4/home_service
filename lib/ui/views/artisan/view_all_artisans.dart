@@ -21,11 +21,16 @@ class ViewAllArtisans extends StatefulWidget {
 class _ViewAllArtisansState extends State<ViewAllArtisans> {
   bool isLoading = false;
   List<Artisans>? _artisanListProvider;
+  double? rating;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     _artisanListProvider = Provider.of<List<Artisans>>(context);
-
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -75,6 +80,10 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                 )
               : ListView.separated(
                   itemBuilder: (context, index) {
+                    //get rating and display
+                    rating = Artisans.ratingApproach(
+                        _artisanListProvider![index].rating!);
+
                     return Column(
                       children: [
                         Padding(
@@ -121,9 +130,9 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                       top: sixDp, bottom: sixDp),
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Flexible(
                                         //artisan's category
@@ -132,15 +141,15 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                             _artisanListProvider![index]
                                                 .category!,
                                             style:
-                                                TextStyle(color: Colors.black)),
+                                            TextStyle(color: Colors.black)),
                                       ),
                                       Flexible(
                                         //todo implement rating logic
                                         child: RatingBar.builder(
                                           itemPadding: EdgeInsets.only(top: 2),
                                           itemSize: 14,
-                                          initialRating: 3,
-                                          minRating: 1,
+                                          ignoreGestures: true,
+                                          initialRating: rating!,
                                           direction: Axis.horizontal,
                                           allowHalfRating: true,
                                           itemCount: 5,
@@ -148,9 +157,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                             Icons.star,
                                             color: Colors.amber,
                                           ),
-                                          onRatingUpdate: (rating) {
-                                            print(rating);
-                                          },
+                                          onRatingUpdate: (rating) {},
                                         ),
                                       ),
                                     ],

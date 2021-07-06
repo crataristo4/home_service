@@ -32,7 +32,6 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
   List<ArtworkModel>? _artworkList;
   int _totalNumberOfLikes = 0;
   bool isRatingTapped = false; // checks if user has tapped rating
-  bool isRated = false; // checks if user has tapped rating
   double ratingNumber = 0; //initial rating is zero
   AdmobService _admobService = AdmobService(); // ADS
   double?
@@ -40,7 +39,6 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
   double? totalRating; //total rating
   double? rating; // rating
   UserProvider rateUser = UserProvider();
-  List ratedUsers = [];
 
   @override
   void initState() {
@@ -163,9 +161,6 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                                           Colors.white70);
                                       rateUser.rateUser(_selectedArtisan!.id,
                                           totalRating, context);
-                                      setState(() {
-                                        isRated = true;
-                                      });
                                     } else {
                                       ShowAction().showToast(
                                           "Please select at least one rating",
