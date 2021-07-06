@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/provider/user_provider.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
@@ -34,6 +36,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController? _phoneNumberController = TextEditingController();
   TextEditingController? _categoryController = TextEditingController();
   String? _selectedExperience;
+  AdmobService _admobService = AdmobService();
 
   @override
   void initState() {
@@ -45,6 +48,7 @@ class _EditProfileState extends State<EditProfile> {
     }
 
     super.initState();
+    _admobService.createInterstitialAd();
   }
 
   @override
@@ -55,6 +59,9 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    Timer(Duration(seconds: 5), () {
+      _admobService.showInterstitialAd();
+    });
     UserProvider userUpdateProvider = Provider.of<UserProvider>(context);
 
     void updateUserPhoto(context, image) async {
@@ -133,7 +140,7 @@ class _EditProfileState extends State<EditProfile> {
             fillColor: Color(0xFFF5F5F5),
             filled: true,
             contentPadding:
-                EdgeInsets.symmetric(vertical: 0, horizontal: tenDp),
+            EdgeInsets.symmetric(vertical: 0, horizontal: tenDp),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFF5F5F5))),
             border: OutlineInputBorder(
@@ -158,7 +165,7 @@ class _EditProfileState extends State<EditProfile> {
             fillColor: Color(0xFFF5F5F5),
             filled: true,
             contentPadding:
-                EdgeInsets.symmetric(vertical: 0, horizontal: tenDp),
+            EdgeInsets.symmetric(vertical: 0, horizontal: tenDp),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFF5F5F5))),
             border: OutlineInputBorder(
@@ -171,95 +178,95 @@ class _EditProfileState extends State<EditProfile> {
       return getUserType == user
           ? Container()
           : TextFormField(
-              readOnly: true,
-              controller: _categoryController,
-              keyboardType: TextInputType.phone,
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.info,
-                  color: Colors.black,
-                ),
-                hintText: category,
-                labelText: 'Category',
-                fillColor: Color(0xFFF5F5F5),
-                filled: true,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: tenDp),
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFF5F5F5))),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Color(0xFFF5F5F5))),
-              ));
+          readOnly: true,
+          controller: _categoryController,
+          keyboardType: TextInputType.phone,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.info,
+              color: Colors.black,
+            ),
+            hintText: category,
+            labelText: 'Category',
+            fillColor: Color(0xFFF5F5F5),
+            filled: true,
+            contentPadding:
+            EdgeInsets.symmetric(vertical: 0, horizontal: tenDp),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFF5F5F5))),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Color(0xFFF5F5F5))),
+          ));
     }
 
     Widget buildArtisanExperience() {
       return getUserType == user
           ? Container()
           : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: eightDp, bottom: fourDp),
-                  child: Text(
-                    updateExp,
-                    style: TextStyle(
-                      fontSize: sixteenDp,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(sixDp),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(eightDp),
-                      border: Border.all(
-                          width: 0.5, color: Colors.grey.withOpacity(0.5))),
-                  child: DropdownButtonFormField<String>(
-                    value: _selectedExperience,
-                    elevation: 1,
-                    isExpanded: true,
-                    style: TextStyle(color: Color(0xFF424242)),
-                    // underline: Container(),
-                    items: [
-                      noExperience,
-                      oneYrs,
-                      twoYrs,
-                      threeYrs,
-                      fourYrs,
-                      fiveYrs,
-                      sixYrs,
-                      sevenYrs,
-                      eightYrs,
-                      nineYrs,
-                      tenPlusYrs
-                    ].map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    hint: Text(
-                      experienceLvl,
-                      style: TextStyle(color: Color(0xFF757575), fontSize: 16),
-                    ),
-                    onChanged: (String? value) async {
-                      //update provider
-                      userUpdateProvider.changeArtisanExperience(value);
-                      //push to database ..
-                      await Future.delayed(Duration(seconds: 3));
-                      userUpdateProvider.updateArtisanExperience(context);
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: eightDp, bottom: fourDp),
+            child: Text(
+              updateExp,
+              style: TextStyle(
+                fontSize: sixteenDp,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(sixDp),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(eightDp),
+                border: Border.all(
+                    width: 0.5, color: Colors.grey.withOpacity(0.5))),
+            child: DropdownButtonFormField<String>(
+              value: _selectedExperience,
+              elevation: 1,
+              isExpanded: true,
+              style: TextStyle(color: Color(0xFF424242)),
+              // underline: Container(),
+              items: [
+                noExperience,
+                oneYrs,
+                twoYrs,
+                threeYrs,
+                fourYrs,
+                fiveYrs,
+                sixYrs,
+                sevenYrs,
+                eightYrs,
+                nineYrs,
+                tenPlusYrs
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              hint: Text(
+                experienceLvl,
+                style: TextStyle(color: Color(0xFF757575), fontSize: 16),
+              ),
+              onChanged: (String? value) async {
+                //update provider
+                userUpdateProvider.changeArtisanExperience(value);
+                //push to database ..
+                await Future.delayed(Duration(seconds: 3));
+                userUpdateProvider.updateArtisanExperience(context);
 
-                      setState(() {
-                        _selectedExperience = value;
-                      });
-                    },
-                    validator: (value) =>
-                        value == null ? experienceRequired : null,
-                  ),
-                ),
-              ],
-            );
+                setState(() {
+                  _selectedExperience = value;
+                });
+              },
+              validator: (value) =>
+              value == null ? experienceRequired : null,
+            ),
+          ),
+        ],
+      );
     }
 
     popBack(context) {
@@ -269,7 +276,7 @@ class _EditProfileState extends State<EditProfile> {
     //get image from camera
     Future getImageFromCamera(BuildContext context) async {
       final filePicked =
-          await picker.getImage(source: ImageSource.camera, imageQuality: 50);
+      await picker.getImage(source: ImageSource.camera, imageQuality: 50);
 
       if (filePicked != null) {
         setState(() {
@@ -390,50 +397,51 @@ class _EditProfileState extends State<EditProfile> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
                           ///Contains Users image
                           Center(
                             //swap between network image and file image
                             child: _image != null
                                 ? Container(
-                                    height: 120,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: FileImage(_image!),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      shape: BoxShape.circle,
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                            color: Colors.grey.withOpacity(0.3),
-                                            offset: const Offset(2.0, 4.0),
-                                            blurRadius: 8),
-                                      ],
-                                      //color: Colors.black,
-                                    ),
-                                  )
+                              height: 120,
+                              width: 120,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: FileImage(_image!),
+                                  fit: BoxFit.cover,
+                                ),
+                                shape: BoxShape.circle,
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      offset: const Offset(2.0, 4.0),
+                                      blurRadius: 8),
+                                ],
+                                //color: Colors.black,
+                              ),
+                            )
                                 : GestureDetector(
-                                    onTap: () {
-                                      _showPicker(context);
-                                    },
-                                    child: Container(
-                                      height: 120,
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          boxShadow: <BoxShadow>[
-                                            BoxShadow(
-                                                color: Colors.grey
-                                                    .withOpacity(0.6),
-                                                offset: const Offset(2.0, 4.0),
-                                                blurRadius: 8),
-                                          ],
-                                          image: DecorationImage(
-                                              image: CachedNetworkImageProvider(
-                                                  imageUrl!),
-                                              fit: BoxFit.cover)),
-                                    ),
-                                  ),
+                              onTap: () {
+                                _showPicker(context);
+                              },
+                              child: Container(
+                                height: 120,
+                                width: 120,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                          color: Colors.grey
+                                              .withOpacity(0.6),
+                                          offset: const Offset(2.0, 4.0),
+                                          blurRadius: 8),
+                                    ],
+                                    image: DecorationImage(
+                                        image: CachedNetworkImageProvider(
+                                            imageUrl!),
+                                        fit: BoxFit.cover)),
+                              ),
+                            ),
                           ),
                           SizedBox(
                             height: tenDp,
@@ -449,11 +457,11 @@ class _EditProfileState extends State<EditProfile> {
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(eightDp)),
+                                        BorderRadius.circular(eightDp)),
                                   ),
                                   backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.indigo)),
+                                  MaterialStateProperty.all<Color>(
+                                      Colors.indigo)),
                               icon: Icon(
                                 Icons.camera_alt,
                                 color: Colors.white,

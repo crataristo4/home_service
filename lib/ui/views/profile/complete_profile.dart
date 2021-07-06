@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:home_service/provider/user_provider.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
@@ -37,9 +39,19 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
+  AdmobService _admobService = AdmobService();
+
+  @override
+  void initState() {
+    super.initState();
+    _admobService.createInterstitialAd();
+  }
 
   @override
   Widget build(BuildContext context) {
+    Timer(Duration(minutes: 3), () {
+      _admobService.showInterstitialAd();
+    });
     final userProvider = Provider.of<UserProvider>(context);
 
     popBack(context) {
@@ -82,7 +94,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         DocumentSnapshot docSnapShot =
-            await usersDbRef.doc(currentUserId).get();
+        await usersDbRef.doc(currentUserId).get();
         if (!docSnapShot.exists) {
           //create a storage reference
           firebase_storage.Reference firebaseStorageRef = firebase_storage
@@ -113,7 +125,6 @@ class _CompleteProfileState extends State<CompleteProfile> {
           }).catchError((onError) {
             ShowAction().showToast("Error occurred : $onError", Colors.black);
           });
-
         } //do nothing
       } else {
         // no internet
@@ -175,7 +186,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
             fillColor: Color(0xFFF5F5F5),
             filled: true,
             contentPadding:
-                EdgeInsets.symmetric(vertical: 0, horizontal: tenDp),
+            EdgeInsets.symmetric(vertical: 0, horizontal: tenDp),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFF5F5F5))),
             border: OutlineInputBorder(
@@ -187,85 +198,85 @@ class _CompleteProfileState extends State<CompleteProfile> {
       return getUserType == user
           ? Container()
           : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: eightDp, bottom: fourDp),
-                  child: Text(
-                    "$please $selectCategory",
-                    style: TextStyle(
-                      fontSize: sixteenDp,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(sixDp),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(eightDp),
-                      border: Border.all(
-                          width: 0.5, color: Colors.grey.withOpacity(0.5))),
-                  child: DropdownButtonFormField<String>(
-                    value: _selectedCategory,
-                    elevation: 1,
-                    isExpanded: true,
-                    style: TextStyle(color: Color(0xFF424242)),
-                    // underline: Container(),
-                    items: [
-                      carpenter,
-                      maison,
-                      plumber,
-                      barber,
-                      electrician,
-                      gardener,
-                      laundry,
-                      painter,
-                      hairdresser,
-                      tailor,
-                      semstress,
-                      tiler,
-                      cleaner,
-                      interiorDeco,
-                      mechanic,
-                      acRepair,
-                      fridgeRepair
-                    ].map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    hint: Text(
-                      selectCategory,
-                      style: TextStyle(color: Color(0xFF757575), fontSize: 16),
-                    ),
-                    onChanged: (String? value) {
-                      //update provider
-                      userProvider.changeArtisanCategory(value);
-                      setState(() {
-                        _selectedCategory = value;
-                      });
-                    },
-                    validator: (value) =>
-                        value == null ? categoryRequired : null,
-                  ),
-                ),
-              ],
-            );
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: eightDp, bottom: fourDp),
+            child: Text(
+              "$please $selectCategory",
+              style: TextStyle(
+                fontSize: sixteenDp,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(sixDp),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(eightDp),
+                border: Border.all(
+                    width: 0.5, color: Colors.grey.withOpacity(0.5))),
+            child: DropdownButtonFormField<String>(
+              value: _selectedCategory,
+              elevation: 1,
+              isExpanded: true,
+              style: TextStyle(color: Color(0xFF424242)),
+              // underline: Container(),
+              items: [
+                carpenter,
+                maison,
+                plumber,
+                barber,
+                electrician,
+                gardener,
+                laundry,
+                painter,
+                hairdresser,
+                tailor,
+                semstress,
+                tiler,
+                cleaner,
+                interiorDeco,
+                mechanic,
+                acRepair,
+                fridgeRepair
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              hint: Text(
+                selectCategory,
+                style: TextStyle(color: Color(0xFF757575), fontSize: 16),
+              ),
+              onChanged: (String? value) {
+                //update provider
+                userProvider.changeArtisanCategory(value);
+                setState(() {
+                  _selectedCategory = value;
+                });
+              },
+              validator: (value) =>
+              value == null ? categoryRequired : null,
+            ),
+          ),
+        ],
+      );
     }
 
     Widget buildArtisanExperience() {
       return getUserType == user
           ? Container()
           : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: eightDp, bottom: fourDp),
-                  child: Text(
-                    pleaseSelectExp,
-                    style: TextStyle(
-                      fontSize: sixteenDp,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: eightDp, bottom: fourDp),
+            child: Text(
+              pleaseSelectExp,
+              style: TextStyle(
+                fontSize: sixteenDp,
               ),
             ),
           ),
@@ -372,21 +383,21 @@ class _CompleteProfileState extends State<CompleteProfile> {
                               width: 120,
                               child: _image == null
                                   ? ClipRRect(
-                                      child: Image.asset(
-                                        "assets/images/avatar.png",
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(100),
-                                      clipBehavior: Clip.antiAlias,
-                                    )
+                                child: Image.asset(
+                                  "assets/images/avatar.png",
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(100),
+                                clipBehavior: Clip.antiAlias,
+                              )
                                   : ClipRRect(
-                                      clipBehavior: Clip.antiAlias,
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: Image.file(
-                                        _image!,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                                clipBehavior: Clip.antiAlias,
+                                borderRadius: BorderRadius.circular(100),
+                                child: Image.file(
+                                  _image!,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
@@ -416,11 +427,11 @@ class _CompleteProfileState extends State<CompleteProfile> {
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(eightDp)),
+                                        BorderRadius.circular(eightDp)),
                                   ),
                                   backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.indigo)),
+                                  MaterialStateProperty.all<Color>(
+                                      Colors.indigo)),
                               icon: Icon(
                                 Icons.camera_alt,
                                 color: Colors.white,

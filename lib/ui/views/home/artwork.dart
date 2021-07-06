@@ -6,7 +6,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/artwork.dart';
 import 'package:home_service/provider/artwork_provider.dart';
 import 'package:home_service/service/admob_service.dart';
-import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:provider/provider.dart';
@@ -40,10 +39,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
   Widget _buildArtworksCard(List<ArtworkModel>? artworkList, int index) {
     final artworkProvider = Provider.of<ArtworkProvider>(context);
     _likedUsers = artworkList![index].likedUsers;
-    //Check if the current user is part of the liked users
-    // if (_likedUsers.contains(currentUserId)) {
-    //   artworkList[index].isFavorite = true;
-    // }
+
     return GestureDetector(
       onTap: () async {
         await Navigator.of(context).pushNamed(
