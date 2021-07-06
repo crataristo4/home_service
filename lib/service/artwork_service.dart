@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/artwork.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 
@@ -43,6 +44,22 @@ class ArtworkService {
         .collection('Artworks')
         .doc(artworkId)
         .update({'likedUsers': likedUsers}).catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
+  Future<void> updateLikes(String artworkId, BuildContext context) {
+    return firestoreService.collection('Artworks').doc(artworkId).update({
+      'likedUsers': FieldValue.arrayUnion([currentUserId])
+    }).catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
+  Future<void> removeLikes(String artworkId, BuildContext context) {
+    return firestoreService.collection('Artworks').doc(artworkId).update({
+      'likedUsers': FieldValue.arrayRemove([currentUserId])
+    }).catchError((onError) {
       showFailure(context, onError);
     });
   }

@@ -62,9 +62,16 @@ class ArtworkProvider with ChangeNotifier {
     }
   }
 
-   updateLikedUsers(
-      String artworkId, List likedUsers, BuildContext context) {
+  updateLikedUsers(String artworkId, List likedUsers, BuildContext context) {
     artworkService.updateLikedUsers(artworkId, likedUsers, context);
+  }
+
+  updateLikes(String artworkId, BuildContext context) {
+    artworkService.updateLikes(artworkId, context);
+  }
+
+  removeLikes(String artworkId, BuildContext context) {
+    artworkService.removeLikes(artworkId, context);
   }
 
   deleteArtwork(String id) {

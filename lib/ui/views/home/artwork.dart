@@ -24,7 +24,9 @@ class ArtworksPage extends StatefulWidget {
 
 class _ArtworksPageState extends State<ArtworksPage> {
   Future<void>? _launched;
-  List _likedUsers = [];
+  List _likedUsers =
+      []; //Issue with list is that it stores all the current artworks liked and puts value in another artwork like
+  //for instance if u like 3 artworks and you like a 4th artwork it increases likes to 4 instead of one
   late List<ArtworkModel>? _artworkList; // data
 
   AdmobService _admobService = AdmobService();
@@ -92,25 +94,14 @@ class _ArtworksPageState extends State<ArtworksPage> {
                     Text(artworkList[index].likedUsers.length.toString()),
                     IconButton(
                         onPressed: () {
-                          //ckecks if the current user is already part of the liked users
-
-                          if (!_likedUsers.contains(currentUserId)) {
-                            _likedUsers.add(currentUserId);
-                            print('1 ');
-                            print(_likedUsers);
-                          } else {
-                            _likedUsers.remove(currentUserId);
-                            print('0');
-                            print(_likedUsers);
+                          //checks if the current user is already part of the liked users
+                          if (!artworkList[index].isFavorite) {
+                            artworkProvider.updateLikes(
+                                artworkList[index].artworkId, context);
+                          } else if (artworkList[index].isFavorite) {
+                            artworkProvider.removeLikes(
+                                artworkList[index].artworkId, context);
                           }
-
-                          artworkProvider
-                              .updateLikedUsers(artworkList[index].artworkId,
-                                  _likedUsers, context)
-                              .then((value) => setState(() {
-                                    artworkList[index].isFavorite =
-                                        !artworkList[index].isFavorite;
-                                  }));
                         },
                         icon: Icon(
                           artworkList[index].isFavorite
