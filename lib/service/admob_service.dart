@@ -3,15 +3,13 @@ import 'dart:io';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdmobService {
-  //todo change values
   static String get bannerUnitId => Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : "ca-app-pub-3940256099942544/2934735716";
+      ? 'ca-app-pub-3804995784214108/8188278644'
+      : "ca-app-pub-3804995784214108/7691361299";
 
-  //TODO CHANGE ID'S
   static String get interstitialId => Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/1033173712'
-      : 'ca-app-pub-3940256099942544/1033173712 ';
+      ? 'ca-app-pub-3804995784214108/1683715514'
+      : 'ca-app-pub-3804995784214108/1847367042';
 
   InterstitialAd? _interstitialAd;
   int numOfAttempts = 0;

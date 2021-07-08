@@ -235,7 +235,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
             );
           } else {
             //retrieve data into a list
-            return ListView.separated(
+            return ListView.builder(
               shrinkWrap: true,
               itemCount: snapshot.data!.length,
               scrollDirection: Axis.vertical,
@@ -405,7 +405,8 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                   ),
                 );
               },
-              separatorBuilder: (BuildContext context, int index) {
+              //todo add later
+              /*      separatorBuilder: (BuildContext context, int index) {
                 return index % 3 == 0
                     ? Container(
                         margin: EdgeInsets.only(bottom: sixDp),
@@ -416,7 +417,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                         ),
                       )
                     : Container();
-              },
+              },*/
               addAutomaticKeepAlives: true,
             );
           }

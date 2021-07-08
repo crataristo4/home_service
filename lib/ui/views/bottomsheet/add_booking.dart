@@ -274,7 +274,7 @@ class _AddBookingState extends State<AddBooking> {
                             if (widget.bookings != null ||
                                 widget.sentBookings != null) {
                               //reschedule
-                              //todo  check if previous day select is same as new day befoe reschedulling
+                              //todo  check if previous day select is same as new day before rescheduling
                               bookingProvider.rescheduleBookings(
                                   context,
                                   getUserType == user

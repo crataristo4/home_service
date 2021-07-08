@@ -16,9 +16,6 @@ String? category;
 String? expLevel;
 String? getUserType;
 String? imageUrl;
-//todo --- change to provider
-CollectionReference artworksDbRef =
-    FirebaseFirestore.instance.collection("Artworks");
 
 //loading key
 final GlobalKey<State> loadingKey = new GlobalKey<State>();

@@ -142,7 +142,6 @@ class _AddArtworkState extends State<AddArtwork> {
         imageUrl = value;
         //update provider
         artworkProvider.setArtworkImageUrl(imageUrl);
-        //todo -- update user profile
       }).whenComplete(() => //push to db
           artworkProvider.createArtwork(context));
     } else {

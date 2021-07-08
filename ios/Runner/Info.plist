@@ -52,8 +52,7 @@
     <string>This app needs access to location when open and in the background.</string>
 
     <key>GADApplicationIdentifier</key>
-    todo - change value for banner id
-    <string>ca-app-pub-3940256099942544~1458002511</string>
+    <string>ca-app-pub-3804995784214108/7691361299</string>
     <key>SKAdNetworkItems</key>
       <array>
         <dict>

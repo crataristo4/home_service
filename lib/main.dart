@@ -94,6 +94,7 @@ class EntryPoint extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         //checks and switches page
         initialRoute: initScreen == 0 || initScreen == null
             ? OnboardingScreen

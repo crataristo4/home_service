@@ -2,9 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/users.dart';
-import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:provider/provider.dart';
 
@@ -78,7 +76,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                     )),
                   ],
                 )
-              : ListView.separated(
+              : ListView.builder(
                   itemBuilder: (context, index) {
                     //get rating and display
                     rating = Artisans.ratingApproach(
@@ -96,12 +94,10 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                               ),
                             ),
                             onTap: () async {
+                              //2.navigate to artisan's profile
                               await Navigator.of(context).pushNamed(
                                   ArtisanProfile.routeName,
                                   arguments: _artisanListProvider![index].id);
-                              //1.pass artisans details
-                              //todo
-                              //2.navigate to artisan's profile
                             },
                             minVerticalPadding: 25,
                             horizontalTitleGap: 4,
@@ -144,7 +140,6 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                             TextStyle(color: Colors.black)),
                                       ),
                                       Flexible(
-                                        //todo implement rating logic
                                         child: RatingBar.builder(
                                           itemPadding: EdgeInsets.only(top: 2),
                                           itemSize: 14,
@@ -189,7 +184,8 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                   },
                   itemCount: _artisanListProvider!.length,
                   shrinkWrap: true,
-                  separatorBuilder: (BuildContext context, int index) {
+                  //todo add later
+                  /*          separatorBuilder: (BuildContext context, int index) {
                     return index % 3 == 0
                         ? Container(
                             margin: EdgeInsets.only(bottom: sixDp),
@@ -200,7 +196,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                             ),
                           )
                         : Container();
-                  },
+                  },*/
                   addAutomaticKeepAlives: true,
                 );
         }));

@@ -179,6 +179,7 @@ const scheduleDateTimeDes = "Helps artisan to know when to follow up on work";
 const msgDes =
     "This helps an artisan to understand and quickly follow up on the booking";
 const enterMsg = "Let Artisan know what you want";
+const homeServiceEmail = 'homeeserviceapp@gmail.com';
 const sixteenDp = 16.0;
 const eightDp = 8.0;
 const fourDp = 4.0;

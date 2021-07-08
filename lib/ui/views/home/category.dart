@@ -2,10 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/artisan_type.dart';
 import 'package:home_service/models/users.dart';
-import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/artisan/view_all_artisans.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
@@ -136,18 +134,20 @@ class _CategoryPageState extends State<CategoryPage> {
                         SizedBox(
                           height: sixteenDp,
                         ),
-                        Container(
+
+                        //todo -- add when admob account is verified
+                        /*  Container(
                           // shows a banner ad
                           height: twoFiftyDp,
                           child: AdWidget(
                             ad: AdmobService.createBanner()..load(),
                             key: UniqueKey(),
                           ),
-                        ),
+                        ),*/
                         Container(
                           margin: EdgeInsets.only(right: eightDp, top: eightDp),
                           child: TextFormField(
-                            //search for a service text field
+                              //search for a service text field
                               keyboardType: TextInputType.text,
                               controller: _searchInput,
                               textAlign: TextAlign.center,

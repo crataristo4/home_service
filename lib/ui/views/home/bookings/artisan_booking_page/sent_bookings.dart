@@ -112,11 +112,9 @@ class _SentBookingsState extends State<SentBookingsPage> {
                         noBookingsMade,
                         style: TextStyle(fontSize: twentyDp),
                       ),
-                      Expanded(
-                        child: Image.asset(
-                          "assets/images/nobookings.jpg",
-                          fit: BoxFit.cover,
-                        ),
+                      Image.asset(
+                        "assets/images/nobookings.jpg",
+                        fit: BoxFit.cover,
                       ),
                     ],
                   )

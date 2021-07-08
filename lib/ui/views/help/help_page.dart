@@ -1,8 +1,11 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:home_service/constants.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/ui/widgets/actions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HelpPage extends StatefulWidget {
@@ -17,14 +20,10 @@ class HelpPage extends StatefulWidget {
 class _HelpPageState extends State<HelpPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
-  _makePhoneCall(telUrl) async {
-    if (await canLaunch(telUrl)) {
-      await launch(telUrl);
-    } else {
-      throw '$couldNotLaunch $telUrl';
-    }
-  }
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController messageController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   _sendEmail() async {
     final Uri _emailLaunchUri = Uri(
@@ -43,6 +42,10 @@ class _HelpPageState extends State<HelpPage>
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     _tabController.index = 1;
+    if (userName != null) {
+      nameController.text = userName!;
+    }
+
     super.initState();
   }
 
@@ -82,98 +85,102 @@ class _HelpPageState extends State<HelpPage>
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Image.asset(
-              "assets/images/contactUs.png",
-              height: 130,
-              width: MediaQuery.of(context).size.width,
-              fit: BoxFit.contain,
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(
-                horizontal: tenDp,
+      body: Form(
+        key: formKey,
+        autovalidate: true,
+        child: Container(
+          child: Column(
+            children: [
+              Image.asset(
+                "assets/images/contactUs.png",
+                height: 130,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.contain,
               ),
-              height: hundredDp,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                border: Border.all(width: 0.2, color: Color(0xFFE0E0E0)),
-                borderRadius: BorderRadius.circular(eightDp),
-              ),
-              child: TabBar(
-                controller: _tabController,
-                // give the indicator a decoration (color and border radius)
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(eightDp),
-                  color: Colors.indigo,
+              Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: tenDp,
                 ),
-                labelColor: Colors.white,
-                labelStyle: TextStyle(color: Colors.white),
-                unselectedLabelColor: Colors.indigo,
-                tabs: [
-                  GestureDetector(
-                    onTap: () {
-                      _makePhoneCall(telUrlEnoch);
-                    },
-                    child: Tab(
+                height: hundredDp,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  border: Border.all(width: 0.2, color: Color(0xFFE0E0E0)),
+                  borderRadius: BorderRadius.circular(eightDp),
+                ),
+                child: TabBar(
+                  controller: _tabController,
+                  // give the indicator a decoration (color and border radius)
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(eightDp),
+                    color: Colors.indigo,
+                  ),
+                  labelColor: Colors.white,
+                  labelStyle: TextStyle(color: Colors.white),
+                  unselectedLabelColor: Colors.indigo,
+                  tabs: [
+                    GestureDetector(
+                      onTap: () {
+                        ShowAction.makePhoneCall(telUrlEnoch);
+                      },
+                      child: Tab(
+                        icon: ClipOval(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                              width: fortyDp,
+                              height: fortyDp,
+                              decoration: BoxDecoration(
+                                  color: Colors.amber.withOpacity(0.2)),
+                              child: Icon(
+                                Icons.call,
+                                color: Colors.amber,
+                              )),
+                        ),
+                        text: callUx,
+                      ),
+                    ),
+                    Tab(
                       icon: ClipOval(
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             width: fortyDp,
                             height: fortyDp,
                             decoration: BoxDecoration(
-                                color: Colors.amber.withOpacity(0.2)),
+                                color: Colors.green.withOpacity(0.2)),
                             child: Icon(
-                              Icons.call,
-                              color: Colors.amber,
+                              Icons.email_outlined,
+                              color: Colors.green,
                             )),
                       ),
-                      text: callUx,
+                      text: emailUx,
                     ),
-                  ),
-                  Tab(
-                    icon: ClipOval(
-                      clipBehavior: Clip.antiAlias,
-                      child: Container(
-                          width: fortyDp,
-                          height: fortyDp,
-                          decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(0.2)),
-                          child: Icon(
-                            Icons.email_outlined,
-                            color: Colors.green,
-                          )),
+                    Tab(
+                      icon: ClipOval(
+                        clipBehavior: Clip.antiAlias,
+                        child: Container(
+                            width: fortyDp,
+                            height: fortyDp,
+                            decoration: BoxDecoration(
+                                color: Colors.pink.withOpacity(0.2)),
+                            child: Icon(
+                              Icons.headset_mic_sharp,
+                              color: Colors.pinkAccent,
+                            )),
+                      ),
+                      text: chatUx,
                     ),
-                    text: emailUx,
-                  ),
-                  Tab(
-                    icon: ClipOval(
-                      clipBehavior: Clip.antiAlias,
-                      child: Container(
-                          width: fortyDp,
-                          height: fortyDp,
-                          decoration: BoxDecoration(
-                              color: Colors.pink.withOpacity(0.2)),
-                          child: Icon(
-                            Icons.headset_mic_sharp,
-                            color: Colors.pinkAccent,
-                          )),
-                    ),
-                    text: chatUx,
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: TabBarView(
-                physics: ClampingScrollPhysics(),
-                controller: _tabController,
-                children: [callUs(), emailUs(), chatUs()],
-              ),
-            )
-          ],
+              Expanded(
+                flex: 1,
+                child: TabBarView(
+                  physics: ClampingScrollPhysics(),
+                  controller: _tabController,
+                  children: [callUs(), emailUs(), chatUs()],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -198,7 +205,7 @@ class _HelpPageState extends State<HelpPage>
             width: twoHundredDp,
             child: GestureDetector(
               onTap: () {
-                _makePhoneCall(telUrlEnoch);
+                ShowAction.makePhoneCall(telUrlEnoch);
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -232,7 +239,7 @@ class _HelpPageState extends State<HelpPage>
 
   Widget emailUs() {
     return Container(
-        //  color: Color(0xFF757575),
+      //  color: Color(0xFF757575),
         margin: EdgeInsets.only(top: sixteenDp),
         decoration: BoxDecoration(
             color: Colors.white,
@@ -305,8 +312,9 @@ class _HelpPageState extends State<HelpPage>
     return Container(
       margin: EdgeInsets.symmetric(horizontal: sixteenDp),
       child: TextFormField(
-          autofocus: true,
           keyboardType: TextInputType.number,
+          controller: nameController,
+          enabled: false,
           decoration: InputDecoration(
             hintText: "Full name",
             fillColor: Color(0xFFF5F5F5),
@@ -325,7 +333,10 @@ class _HelpPageState extends State<HelpPage>
     return Container(
       margin: EdgeInsets.symmetric(horizontal: sixteenDp),
       child: TextFormField(
-          autofocus: true,
+          controller: emailController,
+          validator: (value) {
+            if (!EmailValidator.validate(value!)) return "invalid email";
+          },
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             hintText: "Enter email address",
@@ -345,7 +356,8 @@ class _HelpPageState extends State<HelpPage>
     return Container(
       margin: EdgeInsets.symmetric(horizontal: sixteenDp),
       child: TextFormField(
-          autofocus: true,
+          controller: messageController,
+          //  validator: (value) => value!.length > 20 ? "" : 'message too short',
           keyboardType: TextInputType.multiline,
           maxLines: 4,
           decoration: InputDecoration(
@@ -368,8 +380,10 @@ class _HelpPageState extends State<HelpPage>
         height: fortyEightDp,
         width: hundredDp,
         child: GestureDetector(
-          onTap: () {
-            //todo -- send email
+          onTap: () async {
+            if (nameController.text.isNotEmpty &&
+                messageController.text.isNotEmpty &&
+                formKey.currentState!.validate()) {}
           },
           child: Container(
             decoration: BoxDecoration(
@@ -397,6 +411,38 @@ class _HelpPageState extends State<HelpPage>
       ),
     );
   }
+
+  //todo - method from library does not work
+/*  Future<void> sendUsMail() async {
+    List<String> recipients =  ['homeeserviceapp@gmail.com', 'crataristo4@gmail.com'];
+    Dialogs.showLoadingDialog(context, loadingKey, "Sending message",
+        Colors.white70); //start the dialog
+
+    Future.delayed(Duration(seconds: 3));
+    Navigator.of(context, rootNavigator: true).pop();
+
+    final Email email = Email(
+      body: '${messageController.text}',
+      subject: "${userName!} - ${emailController.text}",
+      recipients: recipients,
+      isHTML: false,
+    );
+
+    String platformResponse;
+
+    try {
+
+      await FlutterEmailSender.send(email);
+      platformResponse = successful;
+    } catch (error) {
+      platformResponse = error.toString();
+    }
+
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(platformResponse),
+    ));
+  }*/
 
   Widget chatUs() {
     return Container(
