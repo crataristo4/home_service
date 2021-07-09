@@ -62,16 +62,18 @@ class UserProvider with ChangeNotifier {
     if (getUserType == artisan) {
       //creates a new artisan object
       Artisans newArtisan = Artisans(
-          name: name,
-          photoUrl: photoUrl,
-          phoneNumber: _phoneNumber!,
-          id: _id!,
-          dateJoined: _dateJoined!,
-          category: category,
-          type: _type!,
-          rating: 0.0,
-          expLevel: expLevel,
-          location: new GeoPoint(0, 0));
+        name: name,
+        photoUrl: photoUrl,
+        phoneNumber: _phoneNumber!,
+        id: _id!,
+        dateJoined: _dateJoined!,
+        category: category,
+        type: _type!,
+        expLevel: expLevel,
+        location: new GeoPoint(0, 0),
+        ratedUsers: [],
+        rating: 0.0,
+      );
 
       await userData.setString("category", category);
       await userData.setString("name", name);
