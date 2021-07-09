@@ -21,7 +21,6 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   String? userInfo;
-  UserTypes? _userType = UserTypes.User;
   bool isLoggedIn = false;
   int _radioValue = -1;
   final loginBloc = Bloc();
@@ -294,7 +293,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                               borderRadius:
                                                   BorderRadius.circular(8))),
                                       onPressed: snapshot
-                                              .hasData //if the text form field has some data then proceed to verify number
+                                              .hasData && userInfo != null  //if the text form field has some data then proceed to verify number
                                           ? () => verifyPhone(context)
                                           : null, //else do nothing
                                       child: Text(
@@ -361,5 +360,3 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 }
 
-//user types for Radio button allowing you to switch user types
-enum UserTypes { User, Artisan }

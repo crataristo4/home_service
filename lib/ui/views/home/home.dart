@@ -45,7 +45,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _tabController!.index = widget.tabIndex!;
 
     super.initState();
-    // _admobService.createInterstitialAd();
+    _admobService.createInterstitialAd();
   }
 
   Future<void> getCurrentUser() async {
@@ -158,9 +158,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    /* Timer(Duration(seconds: 10), () {
-      //  _admobService.showInterstitialAd();
-    });*/
+     Timer(Duration(seconds: 10), () {
+        _admobService.showInterstitialAd();
+    });
 
     return WillPopScope(
       onWillPop: () async {
