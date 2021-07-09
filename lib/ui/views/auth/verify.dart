@@ -4,6 +4,7 @@ import 'package:home_service/constants.dart';
 import 'package:home_service/provider/auth_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/actions.dart';
+import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
 class VerificationPage extends StatefulWidget {
@@ -18,16 +19,65 @@ class VerificationPage extends StatefulWidget {
 
 class _VerificationPageState extends State<VerificationPage> {
   final snackBarKey = GlobalKey<ScaffoldState>();
-  final GlobalKey<State> _verifyKey = new GlobalKey<State>();
   final _formKey = GlobalKey<FormState>();
 
   //Control the input text field.
   TextEditingController _controller = TextEditingController();
 
-
   void initState() {
     super.initState();
   }
+
+  //............................................................//
+  //Resend
+
+  //method to verify phone number
+  resendCode(BuildContext context) async {
+    ShowAction.showAlertDialog(
+        confirmNumber,
+        "${widget.phoneNumber}",
+        context,
+        TextButton(
+          child: Text(
+            cancel,
+            style: TextStyle(color: Colors.red),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        TextButton(
+          child: Text(send, style: TextStyle(color: Colors.green)),
+          onPressed: () {
+            //if yes or ... then push the phone number and user type to verify number
+            //NB: The user type will enable you to switch the state between USERS and ARTISAN
+            Navigator.pop(context);
+            try {
+              Provider.of<AuthProvider>(context, listen: false)
+                  .verifyPhone(widget.phoneNumber)
+                  .then((value) async {
+                Dialogs.showLoadingDialog(
+                    //show dialog and delay
+                    context,
+                    loadingKey,
+                    sendingCode,
+                    Colors.white70);
+              }).whenComplete(() {
+                Navigator.of(context, rootNavigator: false).pop(true);
+                ShowAction().showToast(successful, Colors.green);
+              }).catchError((e) {
+                String errorMsg = cantAuthenticate;
+                if (e.toString().contains(containsBlockedMsg)) {
+                  errorMsg = plsTryAgain;
+                }
+                _showErrorDialog(context, errorMsg);
+              });
+            } catch (e) {
+              _showErrorDialog(context, e.toString());
+            }
+          },
+        ));
+  }
+
+  //............................................................//
 
   //................................................//
   void _showErrorDialog(BuildContext context, String message) {
@@ -90,7 +140,7 @@ class _VerificationPageState extends State<VerificationPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(eightDp),
                             side: BorderSide(width: 1, color: Colors.white))),
-                    onPressed: () {},
+                    onPressed: () => resendCode(context),
                     child: Text(
                       resend,
                       style: TextStyle(fontSize: fourteenDp),
@@ -203,9 +253,8 @@ class _VerificationPageState extends State<VerificationPage> {
                                 primary: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
-                                    BorderRadius.circular(eightDp))),
-                            onPressed: () =>
-                            _formKey.currentState!
+                                        BorderRadius.circular(eightDp))),
+                            onPressed: () => _formKey.currentState!
                                     .validate() // first check if the code length is six
                                 ? verifyOTP(context) // then perform action
                                 : ShowAction() // else show error message

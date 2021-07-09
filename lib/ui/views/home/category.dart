@@ -87,7 +87,8 @@ class _CategoryPageState extends State<CategoryPage> {
                             ? Container()
                             : Container(
                                 //top expects
-                                margin: EdgeInsets.only(bottom: 10, top: 10),
+                                margin:
+                                    EdgeInsets.only(bottom: sixDp, top: sixDp),
                                 child: SizedBox(
                                   height: 100,
                                   width: MediaQuery.of(context).size.width,
@@ -105,32 +106,36 @@ class _CategoryPageState extends State<CategoryPage> {
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: sixteenDp),
                                           ),
-                                          Container(
-                                            padding: EdgeInsets.all(sixDp),
-                                            margin: EdgeInsets.only(
-                                                right: sixteenDp),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        fourDp),
-                                                border: Border.all(
-                                                    width: 0.3,
-                                                    color: Colors.grey
-                                                        .withOpacity(0.3))),
+                                          topArtisanList.length > 10
+                                              ? Container(
+                                                  padding:
+                                                      EdgeInsets.all(sixDp),
+                                                  margin: EdgeInsets.only(
+                                                      right: sixteenDp),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              fourDp),
+                                                      border: Border.all(
+                                                          width: 0.3,
+                                                          color: Colors.grey
+                                                              .withOpacity(0.3))),
                                             child: GestureDetector(
                                               onTap: () => Navigator.of(context)
                                                   .pushNamed(ViewAllTopExperts
-                                                      .routeName),
-                                              child: Text(
-                                                // view all top expects
-                                                viewAll,
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: twelveDp),
-                                              ),
-                                            ),
-                                          )
+                                                                .routeName),
+                                                    child: Text(
+                                                      // view all top expects
+                                                      viewAll,
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: twelveDp),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container()
                                         ],
                                       ),
                                       Expanded(
@@ -141,11 +146,6 @@ class _CategoryPageState extends State<CategoryPage> {
                                     ],
                                   ),
                                 ),
-                              ),
-                        topArtisanList.isEmpty
-                            ? Container()
-                            : SizedBox(
-                                height: fourDp,
                               ),
 
                         //todo -- add when admob account is verified
@@ -158,9 +158,11 @@ class _CategoryPageState extends State<CategoryPage> {
                           ),
                         ),*/
                         Container(
-                          margin: EdgeInsets.only(right: eightDp, top: eightDp),
+                          margin: EdgeInsets.only(
+                            right: eightDp,
+                          ),
                           child: TextFormField(
-                            //search for a service text field
+                              //search for a service text field
                               keyboardType: TextInputType.text,
                               controller: _searchInput,
                               textAlign: TextAlign.center,
