@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:home_service/ui/views/artisan/view_all_artisans.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
+import 'package:home_service/ui/views/artisan/view_top_experts.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/auth/verify.dart';
@@ -80,6 +81,10 @@ class RouteGenerator {
       //view all available artisans
       case ViewAllArtisans.routeName:
         return MaterialPageRoute(builder: (_) => ViewAllArtisans());
+
+      //view all top expert artisans
+      case ViewAllTopExperts.routeName:
+        return MaterialPageRoute(builder: (_) => ViewAllTopExperts());
 
       // bookings PAGE
       case BookingPage.routeName:

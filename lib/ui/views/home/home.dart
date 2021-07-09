@@ -86,7 +86,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Timer(Duration(seconds: 10), () {
-      _admobService.showInterstitialAd();
+    //  _admobService.showInterstitialAd();
     });
 
     return WillPopScope(

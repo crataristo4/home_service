@@ -6,6 +6,7 @@ import 'package:home_service/models/artisan_type.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/views/artisan/view_all_artisans.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
+import 'package:home_service/ui/views/artisan/view_top_experts.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:provider/provider.dart';
 
@@ -36,8 +37,6 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   void initState() {
-    topArtisanList = Provider.of<List<Artisans>>(context, listen: false);
-
     super.initState();
     _artisanListItems = <String>[];
     _artisanListItems = artisanListItems;
@@ -51,18 +50,20 @@ class _CategoryPageState extends State<CategoryPage> {
     _searchInput.addListener(() {
       _searchInput.text.isEmpty
           ? setState(() {
-        _isSearch = true;
-        _searchText = "";
-      })
+              _isSearch = true;
+              _searchText = "";
+            })
           : setState(() {
-        _isSearch = false;
-        _searchText = _searchInput.text;
-      });
+              _isSearch = false;
+              _searchText = _searchInput.text;
+            });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    topArtisanList = Provider.of<List<Artisans>>(context);
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: CustomScrollView(
@@ -82,58 +83,70 @@ class _CategoryPageState extends State<CategoryPage> {
                         SizedBox(
                           height: eightDp,
                         ),
-                        Container(
-                          //top expects
-                          margin: EdgeInsets.only(bottom: 10, top: 10),
-                          child: SizedBox(
-                            height: 100,
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      topExperts,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: sixteenDp),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.all(sixDp),
-                                      margin: EdgeInsets.only(right: sixteenDp),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(fourDp),
-                                          border: Border.all(
-                                              width: 0.3,
-                                              color: Colors.grey
-                                                  .withOpacity(0.3))),
-                                      child: Text(
-                                        // view all top expects
-                                        viewAll,
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: twelveDp),
+                        topArtisanList.isEmpty
+                            ? Container()
+                            : Container(
+                                //top expects
+                                margin: EdgeInsets.only(bottom: 10, top: 10),
+                                child: SizedBox(
+                                  height: 100,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            topExperts,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: sixteenDp),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.all(sixDp),
+                                            margin: EdgeInsets.only(
+                                                right: sixteenDp),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        fourDp),
+                                                border: Border.all(
+                                                    width: 0.3,
+                                                    color: Colors.grey
+                                                        .withOpacity(0.3))),
+                                            child: GestureDetector(
+                                              onTap: () => Navigator.of(context)
+                                                  .pushNamed(ViewAllTopExperts
+                                                      .routeName),
+                                              child: Text(
+                                                // view all top expects
+                                                viewAll,
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: twelveDp),
+                                              ),
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                    )
-                                  ],
+                                      Expanded(
+                                        // display to experts
+                                        child: buildTopExpect(),
+                                        flex: 1,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Expanded(
-                                  // display to experts
-                                  child: buildTopExpect(),
-                                  flex: 1,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: sixteenDp,
-                        ),
+                              ),
+                        topArtisanList.isEmpty
+                            ? Container()
+                            : SizedBox(
+                                height: fourDp,
+                              ),
 
                         //todo -- add when admob account is verified
                         /*  Container(
@@ -147,7 +160,7 @@ class _CategoryPageState extends State<CategoryPage> {
                         Container(
                           margin: EdgeInsets.only(right: eightDp, top: eightDp),
                           child: TextFormField(
-                              //search for a service text field
+                            //search for a service text field
                               keyboardType: TextInputType.text,
                               controller: _searchInput,
                               textAlign: TextAlign.center,
@@ -163,7 +176,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                     decoration: BoxDecoration(
                                       color: Colors.indigo,
                                       borderRadius:
-                                      BorderRadius.circular(eightDp),
+                                          BorderRadius.circular(eightDp),
                                       border: Border.all(
                                           width: 0.5, color: Colors.white54),
                                     ),
@@ -175,7 +188,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                       vertical: tenDp, horizontal: tenDp),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide:
-                                    BorderSide(color: Color(0xFFF5F5F5)),
+                                        BorderSide(color: Color(0xFFF5F5F5)),
                                   ),
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide(

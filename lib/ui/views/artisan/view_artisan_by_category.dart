@@ -4,10 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/bookings_provider.dart';
-import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bloc/artisan_category_list_bloc.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
@@ -169,7 +167,9 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                         color: Colors.grey),
                   ),
                 ),
-                Flexible(
+
+                //todo - to be added when location is ready
+                /* Flexible(
                   fit: FlexFit.loose,
                   child: Container(
                       width: 200,
@@ -201,13 +201,15 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                           ),
                         ],
                       )),
-                )
+                )*/
               ],
             ),
             SizedBox(
               height: sixteenDp,
             ),
-            Expanded(
+            Expanded(child: buildListCategory(context)),
+            //todo -- add later
+            /*Expanded(
               flex: 1,
               child: TabBarView(
                 controller: _tabController,
@@ -216,7 +218,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                   buildListCategory(context),
                 ],
               ),
-            )
+            )*/
           ],
         ),
       ),
@@ -237,6 +239,7 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
             //retrieve data into a list
             return ListView.builder(
               shrinkWrap: true,
+              primary: true,
               itemCount: snapshot.data!.length,
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int index) {

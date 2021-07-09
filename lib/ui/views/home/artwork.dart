@@ -164,7 +164,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
               return _artworkList!.length != 0
                   ? Container(
                       margin: EdgeInsets.all(twentyFourDp),
-                      child: ListView.separated(
+                      child: ListView.builder(
                         addAutomaticKeepAlives: true,
                         itemCount: _artworkList!.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -187,7 +187,8 @@ class _ArtworksPageState extends State<ArtworksPage> {
                             return adContainer;
                           }
                         },
-                        separatorBuilder: (BuildContext context, int index) {
+                        //todo -- to be added later
+                        /*       separatorBuilder: (BuildContext context, int index) {
                           return index % 3 == 0
                               ? Container(
                             margin: EdgeInsets.only(bottom: sixDp),
@@ -198,7 +199,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
                                   ),
                                 )
                               : Container();
-                        },
+                        },*/
                       ))
                   : Container(
                       child: Column(

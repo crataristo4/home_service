@@ -60,7 +60,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     Timer(Duration(seconds: 5), () {
-      _admobService.showInterstitialAd();
+    //  _admobService.showInterstitialAd();
     });
     UserProvider userUpdateProvider = Provider.of<UserProvider>(context);
 
