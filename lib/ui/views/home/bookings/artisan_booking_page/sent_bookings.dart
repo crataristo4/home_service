@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/artisan/bookings.dart';
 import 'package:home_service/provider/bookings_provider.dart';
-import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
@@ -118,7 +116,7 @@ class _SentBookingsState extends State<SentBookingsPage> {
                       ),
                     ],
                   )
-                : ListView.separated(
+                : ListView.builder(
                     addAutomaticKeepAlives: true,
                     itemBuilder: (context, index) {
                       return Column(
@@ -350,7 +348,8 @@ class _SentBookingsState extends State<SentBookingsPage> {
                     },
                     itemCount: sentBookingsList.length,
                     shrinkWrap: true,
-                    separatorBuilder: (BuildContext context, int index) {
+                    //todo - to be added in future
+                    /*      separatorBuilder: (BuildContext context, int index) {
                       return index % 3 == 0
                           ? Container(
                               margin: EdgeInsets.only(bottom: sixDp),
@@ -361,7 +360,7 @@ class _SentBookingsState extends State<SentBookingsPage> {
                               ),
                             )
                           : Container();
-                    },
+                    },*/
                   );
           },
         ),

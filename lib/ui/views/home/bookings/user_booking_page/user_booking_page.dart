@@ -116,7 +116,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                     "assets/images/nobookings.jpg",
                     fit: BoxFit.cover,
                   )
-                : ListView.separated(
+                : ListView.builder(
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
@@ -348,7 +348,8 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                     },
                     itemCount: userBookingList.length,
                     shrinkWrap: true,
-                    separatorBuilder: (BuildContext context, int index) {
+                    //todo - to be added in future
+                    /*     separatorBuilder: (BuildContext context, int index) {
                       return index % 3 == 0
                           ? Container(
                               margin: EdgeInsets.only(bottom: sixDp),
@@ -359,7 +360,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                               ),
                             )
                           : Container();
-                    },
+                    },*/
                     addAutomaticKeepAlives: true,
                   );
           },

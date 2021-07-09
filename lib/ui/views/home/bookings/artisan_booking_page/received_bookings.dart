@@ -44,7 +44,7 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                       ),
                     ],
                   )
-                : ListView.separated(
+                : ListView.builder(
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
@@ -287,7 +287,8 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                     itemCount: receivedBookingList.length,
                     addAutomaticKeepAlives: true,
                     shrinkWrap: true,
-                    separatorBuilder: (BuildContext context, int index) {
+                    //todo - to be added in future
+                    /*      separatorBuilder: (BuildContext context, int index) {
                       return index % 3 == 0
                           ? Container(
                               margin: EdgeInsets.only(bottom: sixDp),
@@ -298,7 +299,7 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
                               ),
                             )
                           : Container();
-                    },
+                    },*/
                   );
           },
         ),

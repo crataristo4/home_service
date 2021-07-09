@@ -40,6 +40,10 @@ class EntryPoint extends StatelessWidget {
         //user creation
         ChangeNotifierProvider(create: (context) => UserProvider()),
 
+        //single user
+        StreamProvider.value(
+            value: UserService().getUserStream(), initialData: []),
+
         //get all users
         StreamProvider<List<Users>>.value(
           lazy: false,
