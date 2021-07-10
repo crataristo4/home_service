@@ -71,7 +71,7 @@ class UserProvider with ChangeNotifier {
         type: _type!,
         expLevel: expLevel,
         location: new GeoPoint(0, 0),
-        ratedUsers: [],
+       // ratedUsers: [],
         rating:
             0.1, //0.0 rating throws an error in db because type in db is number and model type is double
       );

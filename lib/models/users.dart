@@ -89,24 +89,21 @@ class Artisans {
   String? type;
   String? expLevel;
   List? ratedUsers = [];
-  bool? isRated;
   double? rating;
 
   GeoPoint? location;
 
-  Artisans(
-      {required this.name,
-      required this.photoUrl,
-      required this.phoneNumber,
-      required this.id,
-      required this.dateJoined,
-      required this.category,
-      required this.type,
-      required this.expLevel,
-      required this.location,
-      this.ratedUsers,
-      required this.rating,
-      this.isRated});
+  Artisans({required this.name,
+    required this.photoUrl,
+    required this.phoneNumber,
+    required this.id,
+    required this.dateJoined,
+    required this.category,
+    required this.type,
+    required this.expLevel,
+    required this.location,
+    this.ratedUsers,
+    required this.rating,});
 
   Artisans.expLevel({this.expLevel});
 

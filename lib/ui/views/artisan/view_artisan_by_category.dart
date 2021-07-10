@@ -321,15 +321,16 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                           SizedBox(
                                             width: 100,
                                           ),
-                                          Text(
+                                          //todo add artisan location and convert into distance
+
+                                          /* Text(
                                             //shows artisans distance
                                             "3 km",
-                                            //todo add artisan location and convert into distance
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: sixteenDp,
                                             ),
-                                          ),
+                                          ),*/
                                         ],
                                       ),
                                       RatingBar.builder(

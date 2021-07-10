@@ -112,10 +112,10 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                   style: TextStyle(color: Colors.black),
                                 ),
                                 //todo implement location
-                                Text(
+                               /* Text(
                                   "3 km",
                                   style: TextStyle(color: Colors.black),
-                                ),
+                                ),*/
                               ],
                             ),
                             subtitle: Column(
