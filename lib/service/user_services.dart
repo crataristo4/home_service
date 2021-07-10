@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
+import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 
 import '../constants.dart';
@@ -148,13 +149,15 @@ class UserService {
   }
 
   //rate artisan
-  Future<void> rateArtisan(String artisanId, double rating,
-      BuildContext context) {
+  Future<void> rateArtisan(
+      String artisanId, double rating, BuildContext context) {
     return firestoreService.collection('Users').doc(artisanId).update({
       'ratedUsers': FieldValue.arrayUnion([currentUserId]),
       'rating': rating
     }).whenComplete(() {
       showUpdatingSuccess(context);
+      Navigator.of(context)
+          .pushReplacementNamed(ArtisanProfile.routeName, arguments: artisanId);
     }).catchError((onError) {
       showFailure(context, onError);
     });
@@ -168,10 +171,9 @@ class UserService {
         .where("type", isEqualTo: artisan)
         .where("rating", isGreaterThanOrEqualTo: mediumRaking)
         .snapshots()
-        .map((snapshots) =>
-        snapshots.docs.map((document) {
-          return Artisans.fromFirestore(document.data());
-        }).toList(growable: true))
+        .map((snapshots) => snapshots.docs.map((document) {
+              return Artisans.fromFirestore(document.data());
+            }).toList(growable: true))
         .handleError((error) {
       print(error);
     });

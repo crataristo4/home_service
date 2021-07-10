@@ -32,7 +32,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
   List<ArtworkModel>? _artworkList;
   int _totalNumberOfLikes = 0;
   bool isRatingTapped = false; // checks if user has tapped rating
-  double ratingNumber = 0; //initial rating is zero
+  double ratingNumber = 0.0; //initial rating is zero
   AdmobService _admobService = AdmobService(); // ADS
   double?
       artisanRating; // gets rating from artisan and adds up to what other users will rate
@@ -61,8 +61,9 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
     for (var i = 0; i < _artworkList!.length; i++) {
       _totalNumberOfLikes += _artworkList![i].likedUsers.length;
     }
-    super.initState();
+    //create ad
     _admobService.createInterstitialAd();
+    super.initState();
   }
 
   @override
@@ -107,9 +108,10 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
           currentUserId != _selectedArtisan!.id
               ? GestureDetector(
                   onTap: () {
-                    if (_selectedArtisan!.isRated!) {
+                    if (_selectedArtisan!.ratedUsers!.contains(currentUserId)) {
                       ShowAction().showToast("Already rated", Colors.red);
-                    } else if (!_selectedArtisan!.isRated!) {
+                    } else if (!_selectedArtisan!.ratedUsers!
+                        .contains(currentUserId)) {
                       ShowAction.showDetails(
                           rate,
                           "You can only rate ${_selectedArtisan!.name} once",
@@ -172,25 +174,39 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                     }
                   },
                   child: Container(
-                    height: fortyEightDp,
-                    width: sixtyDp,
-                    margin: EdgeInsets.only(
-                        top: tenDp,
-                        right: twentyDp,
-                        left: tenDp,
-                        bottom: tenDp),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(eightDp),
-                        border:
-                            Border.all(width: 0.3, color: Colors.indigoAccent)),
-                    child: Center(
-                        child: Text(
-                      !_selectedArtisan!.ratedUsers!.contains(currentUserId)
-                          ? rate
-                          : rated,
-                      style: TextStyle(color: Colors.indigoAccent),
-                    )),
-                  ),
+                      height: fortyEightDp,
+                      width: sixtyDp,
+                      margin: EdgeInsets.only(
+                          top: tenDp,
+                          right: twentyDp,
+                          left: tenDp,
+                          bottom: tenDp),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(eightDp),
+                          border: Border.all(
+                              width: 0.3, color: Colors.indigoAccent)),
+                      child: Center(
+                          child: !_selectedArtisan!.ratedUsers!
+                                  .contains(currentUserId)
+                              ? Text(
+                                  rate,
+                                  style: TextStyle(color: Colors.indigoAccent),
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      rated,
+                                      style:
+                                          TextStyle(color: Colors.indigoAccent),
+                                    ),
+                                    Icon(
+                                      Icons.check_circle,
+                                      size: tenDp,
+                                      color: Colors.green,
+                                    )
+                                  ],
+                                ))),
                 )
               : Container()
         ],
