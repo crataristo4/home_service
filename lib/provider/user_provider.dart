@@ -72,7 +72,8 @@ class UserProvider with ChangeNotifier {
         expLevel: expLevel,
         location: new GeoPoint(0, 0),
         ratedUsers: [],
-        rating: 0.0,
+        rating:
+            0.1, //0.0 rating throws an error in db because type in db is number and model type is double
       );
 
       await userData.setString("category", category);
