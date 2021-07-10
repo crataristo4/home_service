@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/provider/bookings_provider.dart';
-import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
@@ -26,10 +25,13 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
   CollectionReference bookingCR =
       FirebaseFirestore.instance.collection('Bookings');
   int? bookingCount;
+  FirebaseAuth mAuth = FirebaseAuth.instance;
+  String? uid;
 
   @override
   void initState() {
     getBookingItemCount();
+    uid = mAuth.currentUser!.uid;
     super.initState();
   }
 
@@ -37,9 +39,11 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
   Future<void> getBookingItemCount() async {
     QuerySnapshot querySnapshot = await bookingCR
         .orderBy("timestamp", descending: true)
-        .where("senderId", isEqualTo: currentUserId)
+        .where("senderId", isEqualTo: uid)
         .get();
     List<DocumentSnapshot> documentSnapshot = querySnapshot.docs;
+
+    print("User id $uid");
 
     setState(() {
       bookingCount = documentSnapshot.length;
@@ -79,9 +83,9 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                               context: context,
                               useRootNavigator: true,
                               builder: (context) => AddBooking.reschedule(
-                                //bottom sheet reschedule bookings
-                                bookings: userBookingList[index],
-                              ));
+                                    //bottom sheet reschedule bookings
+                                    bookings: userBookingList[index],
+                                  ));
                         }),
                     ListTile(
                       leading: Icon(
