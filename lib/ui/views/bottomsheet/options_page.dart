@@ -61,7 +61,7 @@ class _OptionsPageState extends State<OptionsPage> {
                         ),
                       ),
                     ),
-                    getUserType == 'user'
+                    getUserType == user
                         ? Container()
                         : Row(
                             children: [
@@ -73,7 +73,7 @@ class _OptionsPageState extends State<OptionsPage> {
                                   },
                                   child: Container(
                                       height: fortyEightDp,
-                                      width: sixtyDp,
+                                      width: 50,
                                       margin: EdgeInsets.only(
                                           top: tenDp,
                                           right: twentyDp,
@@ -83,13 +83,12 @@ class _OptionsPageState extends State<OptionsPage> {
                                           borderRadius:
                                               BorderRadius.circular(eightDp),
                                           border: Border.all(
-                                              width: 0.3,
+                                              width: 0.1,
                                               color: Colors.indigoAccent)),
                                       child: Center(
-                                          child: Text(
-                                        history,
-                                        style: TextStyle(
-                                            color: Colors.indigoAccent),
+                                          child: Icon(
+                                        Icons.notifications,
+                                        color: Theme.of(context).primaryColor,
                                       )))),
                               IconButton(
                                 onPressed: () {

@@ -88,7 +88,7 @@ class Artisans {
   String? category;
   String? type;
   String? expLevel;
-  List? ratedUsers = [];
+  List? ratedUsers;
   double? rating;
   dynamic lastSeen;
   GeoPoint? location;
@@ -146,7 +146,7 @@ class Artisans {
         category: data['category'],
         type: data['type'],
         rating: data['rating'],
-        ratedUsers: data['ratedUsers'] ?? [],
+        ratedUsers: data['ratedUsers'],
         expLevel: data['expLevel'],
         lastSeen: data['lastSeen'],
         location: data['location']);

@@ -48,7 +48,7 @@ class _HistoryPageState extends State<HistoryPage> {
             ),
           ),
         ),
-        title: Text(history, style: TextStyle(color: Colors.black)),
+        title: Text(notifications, style: TextStyle(color: Colors.black)),
       ),
       body: Builder(
         builder: (BuildContext context) {

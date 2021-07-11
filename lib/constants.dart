@@ -151,9 +151,12 @@ const selectCategory = 'Select Category';
 const categoryRequired = "category is required";
 const selectAccountType = 'Please select an account type';
 const rate = 'Rate';
+const ratingUser = "rating user";
 const rated = 'Rated';
 const rateNow = 'Rate Now';
 const history = 'History';
+const notifications = 'Notifications';
+const pleaseSelectAtLeastOneRating = ' Please select at least one rating';
 
 const enterPhoneToLogin = "Enter your phone number to Log in";
 const confirmNumber = 'Confirm number';

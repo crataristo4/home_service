@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/users.dart';
+import 'package:home_service/provider/history_provider.dart';
 import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
@@ -40,6 +41,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
   double? totalRating; //total rating
   double? rating; // rating
   UserProvider rateUser = UserProvider();
+  HistoryProvider _historyProvider = HistoryProvider();
 
   @override
   void initState() {
@@ -163,18 +165,27 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                                   onPressed: () {
                                     totalRating = (rating! + ratingNumber);
                                     if (isRatingTapped) {
-                                      //todo  fix error on rating button state not change after rating
                                       Navigator.pop(context);
                                       Dialogs.showLoadingDialog(
                                           context,
                                           loadingKey,
-                                          "rating user",
+                                          ratingUser,
                                           Colors.white70);
                                       rateUser.rateUser(_selectedArtisan!.id,
                                           totalRating, context);
+
+                                      //create rating history
+                                      _historyProvider.updateProviderListener(
+                                          _selectedArtisan!.id,
+                                          userName,
+                                          imageUrl,
+                                          'rated you $ratingNumber ⭐');
+                                      //create history
+                                      _historyProvider
+                                          .createHistory(_selectedArtisan!.id!);
                                     } else {
                                       ShowAction().showToast(
-                                          "Please select at least one rating",
+                                          pleaseSelectAtLeastOneRating,
                                           Colors.red);
                                     }
                                   },
