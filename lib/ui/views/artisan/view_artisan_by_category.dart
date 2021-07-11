@@ -7,6 +7,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/provider/history_provider.dart';
+import 'package:home_service/service/location_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bloc/artisan_category_list_bloc.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
@@ -33,8 +34,8 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
   late TabController _tabController; // tabs
   int? itemCount; // shows number of artisans in a category
   ArtisanCategoryListBloc? _artisanCategoryListBloc; // fetches artisan category
-  //form key to validate input
-  final _formKey = GlobalKey<FormState>();
+  GetLocationService _getLocationService = GetLocationService();
+  double? distanceBetween, artisanLat, artisanLng, userLat, userLng;
 
   //message editing controller
   TextEditingController _controller = TextEditingController();
@@ -58,6 +59,18 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
     _artisanCategoryListBloc = ArtisanCategoryListBloc();
     _artisanCategoryListBloc!.fetchFirstList(usersDbRef, widget.categoryName);
     getCategoryCount();
+
+    if (userLocation != null) {
+      setState(() {
+        userLat = userLocation!.latitude;
+        userLng = userLocation!.longitude;
+      });
+    } else {
+      setState(() {
+        userLat = GetLocationService.lat;
+        userLng = GetLocationService.lng;
+      });
+    }
     super.initState();
   }
 
@@ -264,6 +277,16 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                 rating =
                     Artisans.ratingApproach(snapshot.data![index]['rating']);
 
+                //distance between
+                GeoPoint artisanLocation = snapshot.data![index]['location'];
+                artisanLat = artisanLocation.latitude;
+                artisanLng = artisanLocation.longitude;
+
+                //calculate distance between
+                double distanceBetween =
+                    _getLocationService.getDistanceInKilometers(
+                        userLat!, userLng!, artisanLat!, artisanLng!);
+
                 return GestureDetector(
                   onTap: () {
                     //check if user is not same
@@ -318,39 +341,21 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
 
                             Container(
                               margin: EdgeInsets.symmetric(vertical: tenDp),
-                              child: Row(
+                              width: MediaQuery.of(context).size.width / 1.6,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  //artisan name
+                                  Text(
+                                    snapshot.data![index]['name'],
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: sixteenDp),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      //artisan name
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Text(
-                                            snapshot.data![index]['name'],
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: sixteenDp),
-                                          ),
-                                          SizedBox(
-                                            width: 100,
-                                          ),
-                                          //todo add artisan location and convert into distance
-
-                                          /* Text(
-                                            //shows artisans distance
-                                            "3 km",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: sixteenDp,
-                                            ),
-                                          ),*/
-                                        ],
-                                      ),
                                       RatingBar.builder(
                                         itemSize: 20,
                                         initialRating: rating!,
@@ -364,19 +369,27 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                                         ),
                                         onRatingUpdate: (rating) {},
                                       ),
-                                      SizedBox(
-                                        height: sixteenDp,
-                                      ),
                                       Text(
-                                        //shows artisans experience level
-                                        snapshot.data![index]['expLevel'],
+                                        //shows artisans distance
+                                        "${distanceBetween.roundToDouble()} km",
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: sixteenDp,
-                                            color: Colors.grey),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: sixteenDp,
+                                        ),
                                       ),
                                     ],
-                                  )
+                                  ),
+                                  SizedBox(
+                                    height: sixteenDp,
+                                  ),
+                                  Text(
+                                    //shows artisans experience level
+                                    snapshot.data![index]['expLevel'],
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: sixteenDp,
+                                        color: Colors.grey),
+                                  ),
                                 ],
                               ),
                             )

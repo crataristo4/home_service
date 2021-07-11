@@ -95,7 +95,6 @@ class UserService {
         .collection('Users')
         .doc(currentUserId)
         .update({'location': GeoPoint(lat, lng)}).whenComplete(() {
-      print('----------lat----$lat---------lng-----$lng-----------------');
     }).catchError((onError) {
       showFailure(context, onError);
     });

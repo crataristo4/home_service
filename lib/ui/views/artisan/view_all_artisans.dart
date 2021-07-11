@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/history_provider.dart';
 import 'package:home_service/service/location_service.dart';
@@ -109,7 +108,6 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                             artisanLat!,
                             artisanLng!);
 
-                    print("----????? $distanceBetween");
 
                     //get rating and display
                     rating = Artisans.ratingApproach(
