@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/service/admob_service.dart';
@@ -34,23 +35,56 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TabController? _tabController;
-  String? message, nameFromPrefs, imageFromPrefs;
-  AdmobService _admobService = AdmobService();
-  UserProvider _userProvider = UserProvider();
+  String? message;
+  AdmobService _admobService = AdmobService(); //Ads
+  UserProvider _userProvider = UserProvider(); //for updating user details
+
+  //for getting location coordinates
+  Position? position;
+  StreamSubscription<Position>? positionStream;
 
   @override
   void initState() {
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController!.index = widget.tabIndex!;
+    _admobService.createInterstitialAd(); //create ad
+
     getCurrentUser();
     greetingMessage();
     updateLastSeen();
 
-    _tabController = TabController(length: 3, vsync: this);
-    _tabController!.index = widget.tabIndex!;
-
     super.initState();
-    _admobService.createInterstitialAd();
+    getLocationCoordinates();
+
+    /*    double distanceInMeters = Geolocator.distanceBetween(5.528254542564721,
+          -0.4398921391288495, 5.559118882473237, -0.2464267605654535);
+      double distanceToKm = distanceInMeters / 1000;
+
+      print('${distanceToKm.roundToDouble()} km');*/
   }
 
+  getLocationCoordinates() {
+    Timer(Duration(seconds: 30), () async {
+      try {
+        //get coordinates
+        positionStream = Geolocator.getPositionStream(
+                desiredAccuracy: LocationAccuracy.high,
+                distanceFilter: 10,
+                intervalDuration: Duration(minutes: 10))
+            .listen((Position position) {
+          //update artisans location coordinates
+          if (position != null) {
+            _userProvider.updateLocationCoordinates(
+                context, position.latitude, position.longitude);
+          }
+        });
+      } catch (e) {
+        print("Error on location");
+      }
+    });
+  }
+
+  //check user details
   Future<void> getCurrentUser() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -155,13 +189,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   //update artisans last seen
   Future<void> updateLastSeen() {
+    Future.delayed(Duration(seconds: 30));
     return _userProvider.updateLastSeen(context);
   }
 
   @override
   void dispose() {
-    super.dispose();
     _tabController!.dispose();
+    if (positionStream != null) {
+      positionStream!.cancel();
+      positionStream = null;
+    }
+    super.dispose();
   }
 
   @override

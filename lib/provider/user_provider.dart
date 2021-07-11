@@ -159,6 +159,11 @@ class UserProvider with ChangeNotifier {
     userService.updateLastSeen(updateLastSeen, context);
   }
 
+  //update location coordinates
+  updateLocationCoordinates(BuildContext context, double? lat, double? lng) {
+    userService.updateLocation(context, lat!, lng!);
+  }
+
   // rate artisan
   rateUser(String? artisanId, double? rating, BuildContext context) {
     userService.rateArtisan(artisanId!, rating!, context);

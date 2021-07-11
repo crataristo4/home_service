@@ -80,20 +80,19 @@ class UserService {
         .doc(currentUserId)
         .update(artisan.updateLastSeenToMap())
         .whenComplete(() {
-      print('-------------------------------------------');
     }).catchError((onError) {
       showFailure(context, onError);
     });
   }
 
   //update location
-  Future<void> updateLocation(Users user, BuildContext context) {
+  Future<void> updateLocation(BuildContext context, double lat, double lng) {
     return firestoreService
         .collection('Users')
         .doc(currentUserId)
-        .update(user.updateUserLocationToMap())
-        .whenComplete(() async {})
-        .catchError((onError) {
+        .update({'location': GeoPoint(lat, lng)}).whenComplete(() {
+      print('----------lat----$lat---------lng-----$lng-----------------');
+    }).catchError((onError) {
       showFailure(context, onError);
     });
   }

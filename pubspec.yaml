@@ -51,6 +51,7 @@ dependencies:
   country_code_picker: ^2.0.1
   provider: ^5.0.0
   google_mobile_ads: ^0.13.2
+  geolocator: ^7.2.0+1
 
 flutter_icons:
   android: "launcher_icon"
