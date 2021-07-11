@@ -51,6 +51,8 @@
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>This app needs access to location when open and in the background.</string>
 
+<key>EnableBackgroundLocationUpdates</key>
+   <true/>
     <key>GADApplicationIdentifier</key>
     <string>ca-app-pub-3804995784214108/7691361299</string>
     <key>SKAdNetworkItems</key>

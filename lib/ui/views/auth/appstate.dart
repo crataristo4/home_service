@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/ui/views/auth/register.dart';
@@ -12,6 +13,7 @@ String? category;
 String? expLevel;
 String? getUserType;
 String? imageUrl;
+GeoPoint? userLocation;
 
 //loading key
 final GlobalKey<State> loadingKey = new GlobalKey<State>();
@@ -43,7 +45,6 @@ class _AppStateState extends State<AppState> {
         currentUserId = FirebaseAuth.instance.currentUser!.uid;
         phoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber;
       });
-
     } catch (error) {
       print("Error on App state : $error");
     }
@@ -65,10 +66,10 @@ class _AppStateState extends State<AppState> {
             child: Scaffold(
                 body: currentUserId != null
                     ? Home(
-                        tabIndex: tabIndex! == 0 || tabIndex! == 2
-                            ? tabIndex = 1
-                            : tabIndex = 1,
-                      )
+                  tabIndex: tabIndex! == 0 || tabIndex! == 2
+                      ? tabIndex = 1
+                      : tabIndex = 1,
+                )
                     : RegistrationPage())),
       ),
     );

@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/history_provider.dart';
+import 'package:home_service/service/location_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:provider/provider.dart';
@@ -23,9 +25,22 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
   List<Artisans>? _artisanListProvider;
   double? rating;
   HistoryProvider _historyProvider = HistoryProvider();
+  GetLocationService _getLocationService = GetLocationService();
+  double? distanceBetween, artisanLat, artisanLng, userLat, userLng;
 
   @override
   void initState() {
+    if (userLocation != null) {
+      setState(() {
+        userLat = userLocation!.latitude;
+        userLng = userLocation!.longitude;
+      });
+    } else {
+      setState(() {
+        userLat = GetLocationService.lat;
+        userLng = GetLocationService.lng;
+      });
+    }
     super.initState();
   }
 
@@ -81,6 +96,21 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                 )
               : ListView.builder(
                   itemBuilder: (context, index) {
+                    //artisans locations
+                    artisanLat =
+                        _artisanListProvider![index].location!.latitude;
+                    artisanLng =
+                        _artisanListProvider![index].location!.longitude;
+
+                    distanceBetween =
+                        _getLocationService.getDistanceInKilometers(
+                            userLocation!.latitude,
+                            userLocation!.longitude,
+                            artisanLat!,
+                            artisanLng!);
+
+                    print("----????? $distanceBetween");
+
                     //get rating and display
                     rating = Artisans.ratingApproach(
                         _artisanListProvider![index].rating!);
@@ -128,10 +158,14 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                   style: TextStyle(color: Colors.black),
                                 ),
                                 //todo implement location
-                                /* Text(
-                                  "3 km",
+                                Text(
+                                  _artisanListProvider![index]
+                                          .id!
+                                          .contains(currentUserId!)
+                                      ? ""
+                                      : "${distanceBetween!.roundToDouble()} km",
                                   style: TextStyle(color: Colors.black),
-                                ),*/
+                                ),
                               ],
                             ),
                             subtitle: Column(
@@ -142,9 +176,9 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                       top: sixDp, bottom: sixDp),
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Flexible(
                                         //artisan's category
@@ -153,7 +187,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                             _artisanListProvider![index]
                                                 .category!,
                                             style:
-                                                TextStyle(color: Colors.black)),
+                                            TextStyle(color: Colors.black)),
                                       ),
                                       Flexible(
                                         child: RatingBar.builder(
