@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/provider/bookings_provider.dart';
+import 'package:home_service/provider/history_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/show_user_profile.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
@@ -22,6 +23,7 @@ class ReceivedBookingsPage extends StatefulWidget {
 class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
   CollectionReference bookingCR =
       FirebaseFirestore.instance.collection('Bookings');
+  HistoryProvider _historyProvider = HistoryProvider();
 
   @override
   void initState() {

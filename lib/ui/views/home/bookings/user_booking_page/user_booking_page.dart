@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/booking.dart';
 import 'package:home_service/provider/bookings_provider.dart';
+import 'package:home_service/provider/history_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
@@ -27,6 +28,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
   int? bookingCount;
   FirebaseAuth mAuth = FirebaseAuth.instance;
   String? uid;
+  HistoryProvider _historyProvider = HistoryProvider();
 
   @override
   void initState() {
@@ -97,6 +99,15 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                         style: TextStyle(color: Colors.indigoAccent),
                       ),
                       onTap: () async {
+                        _historyProvider.updateProviderListener(
+                            userBookingList[index].receiverId,
+                            userName,
+                            imageUrl,
+                            viewedYourProfile);
+                        //create history
+                        _historyProvider
+                            .createHistory(userBookingList[index].receiverId!);
+
                         await Navigator.of(context).pushNamed(
                           ArtisanProfile.routeName,
                           arguments: userBookingList[index].receiverId,

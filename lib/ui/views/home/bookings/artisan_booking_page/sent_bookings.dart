@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/artisan/bookings.dart';
 import 'package:home_service/provider/bookings_provider.dart';
+import 'package:home_service/provider/history_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
@@ -25,6 +26,7 @@ class SentBookingsPage extends StatefulWidget {
 class _SentBookingsState extends State<SentBookingsPage> {
   CollectionReference bookingCR =
       FirebaseFirestore.instance.collection('Bookings');
+  HistoryProvider _historyProvider = HistoryProvider();
 
   @override
   Widget build(BuildContext context) {

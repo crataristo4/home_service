@@ -6,6 +6,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/bookings_provider.dart';
+import 'package:home_service/provider/history_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bloc/artisan_category_list_bloc.dart';
 import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
@@ -46,6 +47,8 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
 
   //rating
   double? rating;
+
+  HistoryProvider _historyProvider = HistoryProvider();
 
   @override
   void initState() {
@@ -262,9 +265,24 @@ class _ViewArtisanByCategoryPageState extends State<ViewArtisanByCategoryPage>
                     Artisans.ratingApproach(snapshot.data![index]['rating']);
 
                 return GestureDetector(
-                  onTap: () => Navigator.of(context).pushNamed(
-                      ArtisanProfile.routeName,
-                      arguments: snapshot.data![index]['id']),
+                  onTap: () {
+                    //check if user is not same
+                    if (!snapshot.data![index]['id']
+                        .toString()
+                        .contains(currentUserId!)) {
+                      _historyProvider.updateProviderListener(
+                          snapshot.data![index]['id'],
+                          userName,
+                          imageUrl,
+                          viewedYourProfile);
+                      //create history
+                      _historyProvider
+                          .createHistory(snapshot.data![index]['id']);
+                    }
+
+                    Navigator.of(context).pushNamed(ArtisanProfile.routeName,
+                        arguments: snapshot.data![index]['id']);
+                  },
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 150,

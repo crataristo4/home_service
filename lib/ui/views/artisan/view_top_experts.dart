@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/models/users.dart';
+import 'package:home_service/provider/history_provider.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +20,8 @@ class ViewAllTopExperts extends StatefulWidget {
 class _ViewAllTopExpertsState extends State<ViewAllTopExperts> {
   late List<Artisans> topArtisanList;
   double? rating;
+
+  HistoryProvider _historyProvider = HistoryProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +78,14 @@ class _ViewAllTopExpertsState extends State<ViewAllTopExperts> {
         rating = Artisans.ratingApproach(topArtisanList[index].rating!);
         return GestureDetector(
           onTap: () async {
+            if (topArtisanList[index].id.toString().contains(currentUserId!)) {
+//create history
+              _historyProvider.updateProviderListener(topArtisanList[index].id,
+                  userName, imageUrl, viewedYourProfile);
+              //create history
+              _historyProvider.createHistory(topArtisanList[index].id!);
+            }
+
             //open artisans profile
             await Navigator.of(context).pushNamed(ArtisanProfile.routeName,
                 arguments: topArtisanList[index].id);

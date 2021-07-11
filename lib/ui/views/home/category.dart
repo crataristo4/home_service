@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:home_service/models/artisan_type.dart';
 import 'package:home_service/models/users.dart';
+import 'package:home_service/provider/history_provider.dart';
 import 'package:home_service/ui/views/artisan/view_all_artisans.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
 import 'package:home_service/ui/views/artisan/view_top_experts.dart';
@@ -34,6 +35,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   late List<Artisans> topArtisanList;
   late double? rating;
+  HistoryProvider _historyProvider = HistoryProvider();
 
   @override
   void initState() {
@@ -119,10 +121,13 @@ class _CategoryPageState extends State<CategoryPage> {
                                                       border: Border.all(
                                                           width: 0.3,
                                                           color: Colors.grey
-                                                              .withOpacity(0.3))),
-                                            child: GestureDetector(
-                                              onTap: () => Navigator.of(context)
-                                                  .pushNamed(ViewAllTopExperts
+                                                              .withOpacity(
+                                                                  0.3))),
+                                                  child: GestureDetector(
+                                                    onTap: () => Navigator.of(
+                                                            context)
+                                                        .pushNamed(
+                                                            ViewAllTopExperts
                                                                 .routeName),
                                                     child: Text(
                                                       // view all top expects
@@ -211,8 +216,10 @@ class _CategoryPageState extends State<CategoryPage> {
                                   fontWeight: FontWeight.bold),
                             ),
                             GestureDetector(
-                              onTap: () => Navigator.of(context)
-                                  .pushNamed(ViewAllArtisans.routeName),
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed(ViewAllArtisans.routeName);
+                              },
                               child: Container(
                                 padding: EdgeInsets.all(sixDp),
                                 margin: EdgeInsets.only(right: sixteenDp),

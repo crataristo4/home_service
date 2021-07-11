@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/artwork.dart';
 import 'package:home_service/provider/artwork_provider.dart';
+import 'package:home_service/provider/history_provider.dart';
 import 'package:home_service/service/admob_service.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +29,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
       []; //Issue with list is that it stores all the current artworks liked and puts value in another artwork like
   //for instance if u like 3 artworks and you like a 4th artwork it increases likes to 4 instead of one
   late List<ArtworkModel>? _artworkList; // data
-
+  HistoryProvider _historyProvider = HistoryProvider();
   AdmobService _admobService = AdmobService();
 
   @override
@@ -42,6 +44,12 @@ class _ArtworksPageState extends State<ArtworksPage> {
 
     return GestureDetector(
       onTap: () async {
+        if (!artworkList[index].artisanId.toString().contains(currentUserId!)) {
+          _historyProvider.updateProviderListener(artworkList[index].artisanId,
+              userName, imageUrl, viewedYourProfile);
+          //create history
+          _historyProvider.createHistory(artworkList[index].artisanId);
+        }
         await Navigator.of(context).pushNamed(
           ArtisanProfile.routeName,
           arguments: artworkList[index].artisanId,
