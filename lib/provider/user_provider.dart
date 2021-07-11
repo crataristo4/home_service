@@ -153,6 +153,12 @@ class UserProvider with ChangeNotifier {
     userService.updatePhotoUrl(updateUser, context);
   }
 
+  //update last seen
+  updateLastSeen(BuildContext context) {
+    Artisans updateLastSeen = Artisans.lastSeen(lastSeen: timeStamp);
+    userService.updateLastSeen(updateLastSeen, context);
+  }
+
   // rate artisan
   rateUser(String? artisanId, double? rating, BuildContext context) {
     userService.rateArtisan(artisanId!, rating!, context);

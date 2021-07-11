@@ -73,6 +73,19 @@ class UserService {
     });
   }
 
+  //update last seen
+  Future<void> updateLastSeen(Artisans artisan, BuildContext context) {
+    return firestoreService
+        .collection('Users')
+        .doc(currentUserId)
+        .update(artisan.updateLastSeenToMap())
+        .whenComplete(() {
+      print('-------------------------------------------');
+    }).catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
   //update location
   Future<void> updateLocation(Users user, BuildContext context) {
     return firestoreService

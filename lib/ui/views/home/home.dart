@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
+import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/options_page.dart';
@@ -35,11 +36,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TabController? _tabController;
   String? message, nameFromPrefs, imageFromPrefs;
   AdmobService _admobService = AdmobService();
+  UserProvider _userProvider = UserProvider();
 
   @override
   void initState() {
     getCurrentUser();
     greetingMessage();
+    updateLastSeen();
 
     _tabController = TabController(length: 3, vsync: this);
     _tabController!.index = widget.tabIndex!;
@@ -150,6 +153,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
   }
 
+  //update artisans last seen
+  Future<void> updateLastSeen() {
+    return _userProvider.updateLastSeen(context);
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -158,8 +166,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-     Timer(Duration(seconds: 10), () {
-        _admobService.showInterstitialAd();
+    Timer(Duration(seconds: 10), () {
+      //  _admobService.showInterstitialAd();
     });
 
     return WillPopScope(

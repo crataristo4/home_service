@@ -90,10 +90,11 @@ class Artisans {
   String? expLevel;
   List? ratedUsers = [];
   double? rating;
-
+  dynamic lastSeen;
   GeoPoint? location;
 
-  Artisans({required this.name,
+  Artisans({
+    required this.name,
     required this.photoUrl,
     required this.phoneNumber,
     required this.id,
@@ -103,13 +104,17 @@ class Artisans {
     required this.expLevel,
     required this.location,
     this.ratedUsers,
-    required this.rating,});
+    required this.rating,
+    this.lastSeen,
+  });
 
   Artisans.expLevel({this.expLevel});
 
   Artisans.name({this.name});
 
   Artisans.location({this.location});
+
+  Artisans.lastSeen({this.lastSeen});
 
   get getArtisanName => name;
 
@@ -143,6 +148,7 @@ class Artisans {
         rating: data['rating'],
         ratedUsers: data['ratedUsers'] ?? [],
         expLevel: data['expLevel'],
+        lastSeen: data['lastSeen'],
         location: data['location']);
   }
 
@@ -159,6 +165,7 @@ class Artisans {
       'photoUrl': photoUrl,
       'location': location,
       'ratedUsers': ratedUsers,
+      'lastSeen': lastSeen
     };
   }
 
@@ -177,6 +184,12 @@ class Artisans {
   Map<String, dynamic> updateLocationToMap() {
     return {
       'location': location,
+    };
+  }
+
+  Map<String, dynamic> updateLastSeenToMap() {
+    return {
+      'lastSeen': lastSeen,
     };
   }
 

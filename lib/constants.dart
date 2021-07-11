@@ -119,6 +119,7 @@ const viewProfile = 'View profile';
 const deleteBookings = 'Delete bookings';
 const save = 'Save';
 const sent = "Sent ";
+const profile = "Profile ";
 const status = "Status";
 const bookingMessage = "Booking Message";
 const bookingDate = "Booking date ";

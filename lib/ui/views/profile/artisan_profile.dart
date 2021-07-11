@@ -14,6 +14,7 @@ import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeAgo;
 
 import '../../../constants.dart';
 
@@ -82,10 +83,19 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
         elevation: 0,
         backgroundColor: Colors.white12,
         iconTheme: IconThemeData(color: Colors.black),
-        title: Text(
-          'Profile',
-          style: TextStyle(color: Colors.black),
-        ),
+        title: _selectedArtisan!.id!.contains(currentUserId!)
+            ? Text(
+                profile,
+                style: TextStyle(
+                  color: Colors.black54,
+                ),
+              )
+            : Text(
+                _selectedArtisan!.lastSeen! == null
+                    ? profile
+                    : 'Last seen \n${timeAgo.format(_selectedArtisan!.lastSeen.toDate())}',
+                style: TextStyle(color: Colors.black54, fontSize: fourteenDp),
+              ),
         actions: [
           currentUserId != _selectedArtisan!.id
               ? Container(
