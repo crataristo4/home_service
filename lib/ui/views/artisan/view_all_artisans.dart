@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_service/models/users.dart';
+import 'package:home_service/provider/history_provider.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +22,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
   bool isLoading = false;
   List<Artisans>? _artisanListProvider;
   double? rating;
+  HistoryProvider _historyProvider = HistoryProvider();
 
   @override
   void initState() {
@@ -54,7 +57,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
           ),
           title: Text(
             _artisanListProvider!.length == 0
-                ? "No Artisans available"
+                ? noArtisansAvailable
                 : "${_artisanListProvider!.length} $availableArtisans",
             style: TextStyle(
                 color: Colors.black,
@@ -94,6 +97,19 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                               ),
                             ),
                             onTap: () async {
+                              if (!_artisanListProvider![index]
+                                  .id!
+                                  .contains(currentUserId!)) {
+                                _historyProvider.updateProviderListener(
+                                    _artisanListProvider![index].id!,
+                                    userName,
+                                    imageUrl,
+                                    viewedYourProfile);
+                                //create history record
+                                _historyProvider.createHistory(
+                                    _artisanListProvider![index].id!);
+                              }
+
                               //2.navigate to artisan's profile
                               await Navigator.of(context).pushNamed(
                                   ArtisanProfile.routeName,
@@ -112,7 +128,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                   style: TextStyle(color: Colors.black),
                                 ),
                                 //todo implement location
-                               /* Text(
+                                /* Text(
                                   "3 km",
                                   style: TextStyle(color: Colors.black),
                                 ),*/
@@ -126,9 +142,9 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                       top: sixDp, bottom: sixDp),
                                   child: Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Flexible(
                                         //artisan's category
@@ -137,7 +153,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                             _artisanListProvider![index]
                                                 .category!,
                                             style:
-                                            TextStyle(color: Colors.black)),
+                                                TextStyle(color: Colors.black)),
                                       ),
                                       Flexible(
                                         child: RatingBar.builder(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_service/ui/views/artisan/history.dart';
 import 'package:home_service/ui/views/artisan/view_all_artisans.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
 import 'package:home_service/ui/views/artisan/view_top_experts.dart';
@@ -96,6 +97,10 @@ class RouteGenerator {
       //received bookings artisan
       case ReceivedBookingsPage.routeName:
         return MaterialPageRoute(builder: (_) => ReceivedBookingsPage());
+
+      //received bookings artisan
+      case HistoryPage.routeName:
+        return MaterialPageRoute(builder: (_) => HistoryPage());
 
       //view artisans by category
       case ViewArtisanByCategoryPage.routeName:

@@ -44,7 +44,9 @@ const confirmedBooking = 'Confirmed bookings';
 const confirmed = 'Confirmed';
 const approve = 'Approve';
 const viewAll = 'View All';
+const viewedYourProfile = 'Viewed your profile';
 const availableArtisans = "Available Artisans";
+const noArtisansAvailable = "No Artisans available";
 const chooseAservice = "Choose a service";
 const goodMorning = 'Good Morning';
 const goodAfternoon = 'Good Afternoon';
@@ -150,6 +152,7 @@ const selectAccountType = 'Please select an account type';
 const rate = 'Rate';
 const rated = 'Rated';
 const rateNow = 'Rate Now';
+const history = 'History';
 
 const enterPhoneToLogin = "Enter your phone number to Log in";
 const confirmNumber = 'Confirm number';

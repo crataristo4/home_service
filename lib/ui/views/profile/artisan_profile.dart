@@ -348,7 +348,9 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
                 : Container(),
             //End of Booking
             SizedBox(height: 20),
-            Text('Artwork', style: TextStyle(fontSize: 16)),
+            _artworkList!.length == 0
+                ? Container()
+                : Text('Artwork', style: TextStyle(fontSize: 16)),
             SizedBox(height: 10),
             Expanded(
               child: _artworkList!.length == 0

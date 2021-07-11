@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:home_service/models/users.dart';
+import 'package:home_service/ui/views/artisan/history.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/help/help_page.dart';
@@ -61,19 +63,49 @@ class _OptionsPageState extends State<OptionsPage> {
                     ),
                     getUserType == 'user'
                         ? Container()
-                        : IconButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) => AddArtwork());
-                            },
-                            icon: Icon(
-                              Icons.add_a_photo,
-                              size: 30,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            tooltip: 'Add Artwork',
+                        : Row(
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context)
+                                        .pushNamed(HistoryPage.routeName);
+                                  },
+                                  child: Container(
+                                      height: fortyEightDp,
+                                      width: sixtyDp,
+                                      margin: EdgeInsets.only(
+                                          top: tenDp,
+                                          right: twentyDp,
+                                          left: tenDp,
+                                          bottom: tenDp),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(eightDp),
+                                          border: Border.all(
+                                              width: 0.3,
+                                              color: Colors.indigoAccent)),
+                                      child: Center(
+                                          child: Text(
+                                        history,
+                                        style: TextStyle(
+                                            color: Colors.indigoAccent),
+                                      )))),
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) => AddArtwork());
+                                },
+                                icon: Icon(
+                                  Icons.add_a_photo,
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                tooltip: 'Add Artwork',
+                              ),
+                            ],
                           )
                   ],
                 ),
@@ -116,6 +148,7 @@ class _OptionsPageState extends State<OptionsPage> {
     );
   }
 
+  //options method
   Widget buildOptionsList(
       String title, String subtitle, IconData icons, Color iconColor) {
     return GestureDetector(
@@ -167,6 +200,7 @@ class _OptionsPageState extends State<OptionsPage> {
     );
   }
 
+  //sign out method
   signOut() {
     ShowAction.showAlertDialog(
         logOut,
@@ -210,7 +244,6 @@ class _OptionsPageState extends State<OptionsPage> {
             //navigate to register
             Navigator.of(context).pushNamedAndRemoveUntil(
                 RegistrationPage.routeName, (route) => false);
-
           },
         ));
   }

@@ -8,15 +8,19 @@ import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/artwork_provider.dart';
 import 'package:home_service/provider/auth_provider.dart';
 import 'package:home_service/provider/bookings_provider.dart';
+import 'package:home_service/provider/history_provider.dart';
 import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/route_generator.dart';
 import 'package:home_service/service/artwork_service.dart';
 import 'package:home_service/service/booking_service.dart';
+import 'package:home_service/service/history_service.dart';
 import 'package:home_service/service/user_services.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/onboarding/onboarding_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'models/history.dart';
 
 int? initScreen;
 
@@ -96,6 +100,14 @@ class EntryPoint extends StatelessWidget {
           initialData: [],
           value: UserService().getTopUsersByRating(),
         ),
+
+        ChangeNotifierProvider(create: (context) => HistoryProvider()),
+
+        //fetch history
+        StreamProvider<List<History>>.value(
+            lazy: false,
+            value: HistoryService().fetchHistory(),
+            initialData: []),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
