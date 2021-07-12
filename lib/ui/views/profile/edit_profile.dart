@@ -36,7 +36,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController? _phoneNumberController = TextEditingController();
   TextEditingController? _categoryController = TextEditingController();
   String? _selectedExperience;
-  AdmobService _admobService = AdmobService();
+ // AdmobService _admobService = AdmobService();
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class _EditProfileState extends State<EditProfile> {
     }
 
     super.initState();
-    _admobService.createInterstitialAd();
+    //  _admobService.createInterstitialAd();
   }
 
   @override

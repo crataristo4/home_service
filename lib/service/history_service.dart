@@ -12,7 +12,7 @@ class HistoryService {
         .doc(artisanId)
         .collection('History')
         .add(history.historyToMap())
-        .whenComplete(() => print("History created"))
+        .whenComplete(() {})
         .catchError((error) {
       print('Error $error');
     });

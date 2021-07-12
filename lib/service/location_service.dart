@@ -12,7 +12,7 @@ class GetLocationService {
   UserProvider _userProvider = UserProvider(); //for updating user details
 
   Future<Position>? getUserCoordinates(BuildContext context) {
-    Timer(Duration(seconds: 10), () {
+    Timer(Duration(seconds: 30), () {
       positionStream = Geolocator.getPositionStream(
               desiredAccuracy: LocationAccuracy.high,
               distanceFilter: 10,
@@ -30,7 +30,6 @@ class GetLocationService {
 
           dispose();
 
-          print("lat : ==$lat   ???? lng $lng");
         }
       });
     });

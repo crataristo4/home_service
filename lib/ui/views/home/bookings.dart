@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/models/booking.dart';
-import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/bookings/artisan_booking_page/received_bookings.dart';
 import 'package:home_service/ui/views/home/bookings/artisan_booking_page/sent_bookings.dart';
@@ -25,7 +24,7 @@ class _BookingPageState extends State<BookingPage> {
   List<Bookings>? _allBookingList;
   int _selectedIndex = 0;
   GlobalKey globalKey = GlobalKey();
-  AdmobService _admobService = AdmobService();
+ // AdmobService _admobService = AdmobService();
   List<Widget> artisanBookingOptions = <Widget>[
     SentBookingsPage(),
     ReceivedBookingsPage(),
@@ -40,7 +39,7 @@ class _BookingPageState extends State<BookingPage> {
   @override
   void initState() {
     super.initState();
-    _admobService.createInterstitialAd();
+    // _admobService.createInterstitialAd();
   }
 
   @override
@@ -48,7 +47,7 @@ class _BookingPageState extends State<BookingPage> {
     _allBookingList = Provider.of<List<Bookings>>(context);
 
     Timer(Duration(seconds: 120), () {
-      _admobService.showInterstitialAd();
+      //  _admobService.showInterstitialAd();
     });
 
     return WillPopScope(

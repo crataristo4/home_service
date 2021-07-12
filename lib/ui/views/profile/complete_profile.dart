@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:home_service/provider/user_provider.dart';
-import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
@@ -38,18 +37,18 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
-  AdmobService _admobService = AdmobService();
+ // AdmobService _admobService = AdmobService();
 
   @override
   void initState() {
     super.initState();
-    _admobService.createInterstitialAd();
+    // _admobService.createInterstitialAd();
   }
 
   @override
   Widget build(BuildContext context) {
     Timer(Duration(minutes: 3), () {
-      _admobService.showInterstitialAd();
+      //  _admobService.showInterstitialAd();
     });
     final userProvider = Provider.of<UserProvider>(context);
 
@@ -222,24 +221,25 @@ class _CompleteProfileState extends State<CompleteProfile> {
               style: TextStyle(color: Color(0xFF424242)),
               // underline: Container(),
               items: [
-                carpenter,
-                maison,
-                plumber,
-                barber,
-                electrician,
-                gardener,
-                laundry,
-                painter,
-                hairdresser,
-                tailor,
-                semstress,
-                tiler,
-                cleaner,
-                interiorDeco,
-                mechanic,
-                acRepair,
-                fridgeRepair
-              ].map<DropdownMenuItem<String>>((String value) {
+                      carpenter,
+                      maison,
+                      plumber,
+                      barber,
+                      electrician,
+                      gardener,
+                      laundry,
+                      painter,
+                      hairdresser,
+                      houseKeeper,
+                      tailor,
+                      semstress,
+                      tiler,
+                      cleaner,
+                      interiorDeco,
+                      mechanic,
+                      acRepair,
+                      fridgeRepair
+                    ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),

@@ -52,7 +52,9 @@ class AdmobService {
 
             if (numOfAttempts <= 2) createInterstitialAd();
           },
-        ));
+        )).onError((error, stackTrace) {
+      print('Error: $error Stacktrace: $stackTrace');
+    });
   }
 
   void showInterstitialAd() {

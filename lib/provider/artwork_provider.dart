@@ -87,6 +87,7 @@ class ArtworkProvider with ChangeNotifier {
     _timeStamp = timeStamp;
 
     ArtworkModel commentsModel = ArtworkModel.comment(
+        id: currentUserId,
         name: userName,
         photoUrl: imageUrl,
         message: comment,

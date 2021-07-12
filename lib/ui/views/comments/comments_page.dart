@@ -249,18 +249,20 @@ class _CommentsPageState extends State<CommentsPage> {
                     ),
                     SizedBox(width: twentyDp,),*/
 
-                    GestureDetector(
-                      onTap: () {
-                        //delete comment
-                        _artworkProvider.deleteComment(
-                            widget.id!, doc.id, context);
-                      },
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                        size: 22,
-                      ),
-                    ),
+                 doc['id'].toString().contains(currentUserId!)
+                        ? GestureDetector(
+                            onTap: () {
+                              //delete comment
+                              _artworkProvider.deleteComment(
+                                  widget.id!, doc.id, context);
+                            },
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                              size: 22,
+                            ),
+                          )
+                        : Container(),
                     SizedBox(
                       width: 24,
                     ),

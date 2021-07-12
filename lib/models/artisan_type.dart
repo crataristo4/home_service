@@ -19,6 +19,7 @@ List<String> artisanListItems = [
   fridgeRepair,
   gardener,
   hairdresser,
+  houseKeeper,
   laundry,
   interiorDeco,
   maison,
@@ -40,6 +41,7 @@ List<String> artisanImageListItems = [
   "assets/images/fridgerepairer.jpg",
   "assets/images/gardener.jpg",
   "assets/images/hairdresser.jpg",
+  "assets/images/househelp.jpg",
   "assets/images/laundry.jpg",
   "assets/images/interior.jpg",
   "assets/images/maison.jpg",
@@ -119,5 +121,9 @@ List getArtisanType = [
   ArtisanType(
       name: artisanListItems[16],
       image: artisanImageListItems[16],
+      bgColor: [Colors.deepPurpleAccent, Colors.blueAccent]),
+  ArtisanType(
+      name: artisanListItems[17],
+      image: artisanImageListItems[17],
       bgColor: [Colors.deepPurpleAccent, Colors.blueAccent]),
 ];

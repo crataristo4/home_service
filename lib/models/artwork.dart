@@ -10,7 +10,7 @@ class ArtworkModel {
   String? artisanPhoneNumber;
   String? artisanId;
   List? likedUsers = [];
-
+  String? id;
   bool? isFavorite;
   dynamic timeStamp;
   String? name; //for comments
@@ -19,9 +19,10 @@ class ArtworkModel {
 
   get getArtisanId => artisanId;
 
-  ArtworkModel({required this.artworkImageUrl,
-    required this.artworkPrice,
-    required this.artworkId,
+  ArtworkModel(
+      {required this.artworkImageUrl,
+      required this.artworkPrice,
+      required this.artworkId,
     required this.artisanName,
     required this.artisanCategory,
     required this.artisanPhotoUrl,
@@ -69,6 +70,7 @@ class ArtworkModel {
   //comments
 
   ArtworkModel.comment({
+    this.id,
     this.name,
     this.photoUrl,
     this.message,
@@ -78,6 +80,7 @@ class ArtworkModel {
 
   factory ArtworkModel.fromComments(Map<String, dynamic> data) {
     return ArtworkModel.comment(
+        id: data['id'],
         name: data['name'],
         photoUrl: data['photoUrl'],
         message: data['message'],
@@ -87,6 +90,7 @@ class ArtworkModel {
 
   Map<String, dynamic> commentsToMap() {
     return {
+      'id': id,
       'name': name,
       'photoUrl': photoUrl,
       'message': message,

@@ -17,6 +17,7 @@ const electrician = 'Electrician';
 const laundry = 'Laundry';
 const painter = 'Painter';
 const hairdresser = 'Hair dresser';
+const houseKeeper = 'House keeper';
 const tailor = 'Tailor';
 const semstress = 'Semstress';
 const tiler = 'Tiler';

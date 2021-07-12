@@ -27,29 +27,26 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
       FirebaseFirestore.instance.collection('Bookings');
   int? bookingCount;
   FirebaseAuth mAuth = FirebaseAuth.instance;
-  String? uid;
   HistoryProvider _historyProvider = HistoryProvider();
 
   @override
   void initState() {
-    getBookingItemCount();
-    uid = mAuth.currentUser!.uid;
     super.initState();
+   // getBookingItemCount();
   }
 
   //method to get number of bookings
-  Future<void> getBookingItemCount() async {
-    QuerySnapshot querySnapshot = await bookingCR
-        .orderBy("timestamp", descending: true)
-        .where("senderId", isEqualTo: uid)
-        .get();
-    List<DocumentSnapshot> documentSnapshot = querySnapshot.docs;
-
-
-    setState(() {
-      bookingCount = documentSnapshot.length;
+/*  Future<void> getBookingItemCount() async {
+    await bookingCR
+       // .orderBy("timestamp",descending: true)
+        .where("senderId", isEqualTo: currentUserId)
+        .get()
+        .then((value) {
+      setState(() {
+        bookingCount = value.docs.length;
+      });
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -136,243 +133,249 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.indigoAccent,
-        title: bookingCount == 0 || bookingCount == null
-            ? Text(noBookingsMade)
-            : Text("$bookingCount $bookingsMade"),
-      ),
-      body: Container(
+        /*      appBar: AppBar(
+          backgroundColor: Colors.indigoAccent,
+          title: bookingCount == 0 || bookingCount == null
+              ? Text(noBookingsMade)
+              : Text("$bookingCount $bookingsMade"),
+        ),*/
+        body: Container(
             child: StreamBuilder<QuerySnapshot>(
-            stream: bookingCR
-                .orderBy("timestamp", descending: true)
-                .where("senderId", isEqualTo: currentUserId)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return LoadHome();
-              }
+                stream: bookingCR
+                    .orderBy("timestamp", descending: true)
+                    .where("senderId", isEqualTo: currentUserId)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return LoadHome();
+                  }
 
-              if (snapshot.data!.docs.isEmpty) {
-                return Image.asset(
-                  "assets/images/nobookings.jpg",
-                  fit: BoxFit.cover,
-                );
-              }
+                  if (snapshot.data!.docs.isEmpty) {
+                    return Image.asset(
+                      "assets/images/nobookings.jpg",
+                      fit: BoxFit.cover,
+                    );
+                  }
 
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  DocumentSnapshot doc = snapshot.data!.docs[index];
+                  return ListView.builder(
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot doc = snapshot.data!.docs[index];
 
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: tenDp, vertical: 2),
-                        child: ListTile(
-                          onTap: () {
-                            showOptions(context, index);
-                          },
-                          minVerticalPadding: tenDp,
-                          horizontalTitleGap: 4,
-                          tileColor: Colors.grey[100],
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: tenDp, vertical: 2),
+                            child: ListTile(
+                              onTap: () {
+                                showOptions(context, index);
+                              },
+                              minVerticalPadding: tenDp,
+                              horizontalTitleGap: 4,
+                              tileColor: Colors.grey[100],
+                              title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    //name of receiver
-                                    doc['receiverName'],
-                                    style: TextStyle(color: Colors.black),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        //name of receiver
+                                        doc['receiverName'],
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      doc['status'] == confirmed
+                                          ? Icon(
+                                              Icons.check_circle_rounded,
+                                              color: Colors.green,
+                                            )
+                                          : Container()
+                                    ],
                                   ),
-                                  doc['status'] == confirmed
-                                      ? Icon(
-                                          Icons.check_circle_rounded,
-                                          color: Colors.green,
-                                        )
-                                      : Container()
-                                ],
-                              ),
 
-                              //time sent
-                              Row(
-                                children: [
-                                  Text(sent,
-                                      style: TextStyle(
-                                        fontSize: fourteenDp,
-                                        color: Colors.black45,
-                                      )),
-                                  Icon(Icons.access_time,
-                                      color: Colors.black45),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: fourDp),
-                                    child: Text(
-                                      timeAgo.format(doc["timestamp"].toDate()),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: fourteenDp),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: sixDp,
-                              ),
-                              Divider(
-                                height: 1,
-                                thickness: 0.9,
-                              )
-                            ],
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: tenDp,
-                              ),
-                              Text(bookingMessage,
-                                  style: TextStyle(color: Colors.black45)),
-                              Padding(
-                                padding: EdgeInsets.only(top: 2, bottom: sixDp),
-                                child: Text(doc["message"],
-                                    style: TextStyle(
-                                      color: Colors.black87,
-                                    )),
-                              ),
-                              Divider(
-                                height: 1,
-                                thickness: 0.9,
-                              ),
-                              SizedBox(
-                                height: tenDp,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    bookingDate,
-                                  ),
-                                  //show as rescheduled if changes booking time
-                                  Text(
-                                    doc["isReschedule"] == true
-                                        ? rescheduled
-                                        : "",
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  doc["isReschedule"] == true
-                                      ? Shimmer.fromColors(
-                                          period: Duration(seconds: 5),
-                                          baseColor: Colors.black,
-                                          highlightColor: Colors.red,
-                                          child: Icon(
-                                            Icons.calendar_today,
-                                            color: doc['status'] == pending
-                                                ? Colors.blue
-                                                : Colors.green,
-                                          ),
-                                        )
-                                      : Icon(
-                                          Icons.calendar_today,
-                                          color: doc['status'] == pending
-                                              ? Colors.blue
-                                              : Colors.green,
+                                  //time sent
+                                  Row(
+                                    children: [
+                                      Text(sent,
+                                          style: TextStyle(
+                                            fontSize: fourteenDp,
+                                            color: Colors.black45,
+                                          )),
+                                      Icon(Icons.access_time,
+                                          color: Colors.black45),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: fourDp),
+                                        child: Text(
+                                          timeAgo.format(
+                                              doc["timestamp"].toDate()),
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: fourteenDp),
                                         ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: sixDp,
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    thickness: 0.9,
+                                  )
+                                ],
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: tenDp,
+                                  ),
+                                  Text(bookingMessage,
+                                      style: TextStyle(color: Colors.black45)),
                                   Padding(
-                                    padding: EdgeInsets.only(left: fourDp),
-                                    child: doc["isReschedule"] == true
-                                        ? Shimmer.fromColors(
-                                            period: Duration(seconds: 5),
-                                            baseColor: Colors.black,
-                                            highlightColor: Colors.red,
-                                            child: Text(
-                                              //  booking date
-                                              doc['bookingDate'],
-                                              style: TextStyle(
-                                                  color:
-                                                      doc['status'] == pending
-                                                          ? Colors.blue
-                                                          : Colors.green,
-                                                  fontStyle: FontStyle.italic),
-                                            ),
-                                          )
-                                        : Text(
-                                            //  booking date
-                                            doc['bookingDate'],
-                                            style: TextStyle(
+                                    padding:
+                                        EdgeInsets.only(top: 2, bottom: sixDp),
+                                    child: Text(doc["message"],
+                                        style: TextStyle(
+                                          color: Colors.black87,
+                                        )),
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    thickness: 0.9,
+                                  ),
+                                  SizedBox(
+                                    height: tenDp,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        bookingDate,
+                                      ),
+                                      //show as rescheduled if changes booking time
+                                      Text(
+                                        doc["isReschedule"] == true
+                                            ? rescheduled
+                                            : "",
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      doc["isReschedule"] == true
+                                          ? Shimmer.fromColors(
+                                              period: Duration(seconds: 5),
+                                              baseColor: Colors.black,
+                                              highlightColor: Colors.red,
+                                              child: Icon(
+                                                Icons.calendar_today,
                                                 color: doc['status'] == pending
                                                     ? Colors.blue
                                                     : Colors.green,
-                                                fontStyle: FontStyle.italic),
-                                          ),
+                                              ),
+                                            )
+                                          : Icon(
+                                              Icons.calendar_today,
+                                              color: doc['status'] == pending
+                                                  ? Colors.blue
+                                                  : Colors.green,
+                                            ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: fourDp),
+                                        child: doc["isReschedule"] == true
+                                            ? Shimmer.fromColors(
+                                                period: Duration(seconds: 5),
+                                                baseColor: Colors.black,
+                                                highlightColor: Colors.red,
+                                                child: Text(
+                                                  //  booking date
+                                                  doc['bookingDate'],
+                                                  style: TextStyle(
+                                                      color: doc['status'] ==
+                                                              pending
+                                                          ? Colors.blue
+                                                          : Colors.green,
+                                                      fontStyle:
+                                                          FontStyle.italic),
+                                                ),
+                                              )
+                                            : Text(
+                                                //  booking date
+                                                doc['bookingDate'],
+                                                style: TextStyle(
+                                                    color:
+                                                        doc['status'] == pending
+                                                            ? Colors.blue
+                                                            : Colors.green,
+                                                    fontStyle:
+                                                        FontStyle.italic),
+                                              ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: tenDp,
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    thickness: 0.9,
+                                  ),
+                                  SizedBox(
+                                    height: tenDp,
+                                  ),
+                                  Text(
+                                    status,
+                                    style: TextStyle(color: Colors.black45),
+                                  ),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(
+                                    //  status
+                                    doc['status'],
+                                    style: TextStyle(
+                                        color: doc['status'] == pending
+                                            ? Colors.blue
+                                            : Colors.green),
+                                  ),
+                                  SizedBox(
+                                    height: tenDp,
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    thickness: 0.9,
                                   ),
                                 ],
                               ),
-                              SizedBox(
-                                height: tenDp,
+                              leading: Padding(
+                                padding: EdgeInsets.only(top: eightDp),
+                                child: CircleAvatar(
+                                  radius: 40,
+                                  foregroundImage: CachedNetworkImageProvider(
+                                      doc['receiverPhotoUrl']),
+                                  backgroundColor: Colors.indigo,
+                                ),
                               ),
-                              Divider(
-                                height: 1,
-                                thickness: 0.9,
-                              ),
-                              SizedBox(
-                                height: tenDp,
-                              ),
-                              Text(
-                                status,
-                                style: TextStyle(color: Colors.black45),
-                              ),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              Text(
-                                //  status
-                                doc['status'],
-                                style: TextStyle(
-                                    color: doc['status'] == pending
-                                        ? Colors.blue
-                                        : Colors.green),
-                              ),
-                              SizedBox(
-                                height: tenDp,
-                              ),
-                              Divider(
-                                height: 1,
-                                thickness: 0.9,
-                              ),
-                            ],
-                          ),
-                          leading: Padding(
-                            padding: EdgeInsets.only(top: eightDp),
-                            child: CircleAvatar(
-                              radius: 40,
-                              foregroundImage: CachedNetworkImageProvider(
-                                  doc['receiverPhotoUrl']),
-                              backgroundColor: Colors.indigo,
                             ),
                           ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      )
-                    ],
-                  );
-                },
-                itemCount: snapshot.data!.docs.length,
-                shrinkWrap: true,
-                //todo - to be added in future
-                /*     separatorBuilder: (BuildContext context, int index) {
+                          SizedBox(
+                            height: 10,
+                          )
+                        ],
+                      );
+                    },
+                    itemCount: snapshot.data!.docs.length,
+                    shrinkWrap: true,
+                    //todo - to be added in future
+                    /*     separatorBuilder: (BuildContext context, int index) {
                           return index % 3 == 0
                               ? Container(
                                   margin: EdgeInsets.only(bottom: sixDp),

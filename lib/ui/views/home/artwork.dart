@@ -8,7 +8,6 @@ import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/data.dart';
 import 'package:home_service/provider/artwork_provider.dart';
 import 'package:home_service/provider/history_provider.dart';
-import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/comments/comments_page.dart';
 import 'package:home_service/ui/widgets/actions.dart';
@@ -33,7 +32,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
   //for instance if u like 3 artworks and you like a 4th artwork it increases likes to 4 instead of one
   late List<ArtworkModel>? _artworkList; // data
   HistoryProvider _historyProvider = HistoryProvider();
-  AdmobService _admobService = AdmobService();
+  //AdmobService _admobService = AdmobService();
   late final artworkProvider;
   int? commentCount;
   CollectionReference artworkRf =
@@ -42,7 +41,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
   @override
   void initState() {
     artworkProvider = Provider.of<ArtworkProvider>(context, listen: false);
-    _admobService.createInterstitialAd();
+    // _admobService.createInterstitialAd();
     super.initState();
   }
 /*
@@ -208,7 +207,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
     _artworkList = Provider.of<List<ArtworkModel>>(context);
 
     Timer(Duration(seconds: 60), () {
-      _admobService.showInterstitialAd();
+      // _admobService.showInterstitialAd();
     });
 
     return _artworkList == null

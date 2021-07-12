@@ -84,6 +84,7 @@ class UserService {
         .doc(currentUserId)
         .update(artisan.updateLastSeenToMap())
         .whenComplete(() {
+          print('??????????????????last??? seen?????');
     }).catchError((onError) {
       showFailure(context, onError);
     });
