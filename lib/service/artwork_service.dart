@@ -106,16 +106,16 @@ class ArtworkService {
 
   //create comment
   Future<void> createNewComment(
-      ArtworkModel artworkModel, BuildContext context) {
+      String artworkId, ArtworkModel artworkModel, BuildContext context) {
     return firestoreService
         .collection('Artworks')
-        .doc(artworkModel.artworkId)
+        .doc(artworkId)
         .collection('Comments')
         .add(artworkModel.commentsToMap())
         .whenComplete(() async {
-      showSuccess(context);
+      print("??????????????????? ............");
     }).catchError((onError) {
-      showFailure(context, onError);
+      showCommentFailure(context, onError);
     });
   }
 
@@ -130,5 +130,10 @@ class ArtworkService {
   showFailure(context, error) {
     ShowAction().showToast(error, Colors.black);
     Navigator.of(context, rootNavigator: true).pop(); //close the dialog
+  }
+
+  showCommentFailure(context, error) {
+    ShowAction().showToast(error, Colors.black);
+    //close the dialog
   }
 }

@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:home_service/provider/artwork_provider.dart';
+import 'package:home_service/ui/widgets/actions.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 import '../../../constants.dart';
@@ -20,10 +22,18 @@ class CommentsPage extends StatefulWidget {
 class _CommentsPageState extends State<CommentsPage> {
   CollectionReference commentsCR =
       FirebaseFirestore.instance.collection('Artworks');
+  TextEditingController _addCommentController = TextEditingController();
+  ArtworkProvider _artworkProvider = ArtworkProvider();
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _addCommentController.dispose();
+    super.dispose();
   }
 
   @override
@@ -79,22 +89,36 @@ class _CommentsPageState extends State<CommentsPage> {
                     bottom: eightDp,
                   ),
                   child: TextFormField(
-                      //search for a service text field
+                    //comment text field
                       keyboardType: TextInputType.text,
+                      controller: _addCommentController,
                       decoration: InputDecoration(
                           hintStyle: TextStyle(fontSize: sixteenDp),
-                          suffix: Container(
-                            child: Icon(
-                              Icons.send,
-                              color: Colors.white,
-                            ),
-                            width: thirtySixDp,
-                            height: thirtySixDp,
-                            decoration: BoxDecoration(
-                              color: Colors.indigo,
-                              borderRadius: BorderRadius.circular(eightDp),
-                              border:
-                                  Border.all(width: 0.5, color: Colors.white54),
+                          suffix: GestureDetector(
+                            onTap: () {
+                              //add comment
+                              if (_addCommentController.text.isNotEmpty) {
+                                _artworkProvider.createArtworkComment(context,
+                                    widget.id!, _addCommentController.text);
+                                _addCommentController.clear();
+                              } else {
+                                ShowAction().showToast(
+                                    commentsCannotBeEmpty, Colors.red);
+                              }
+                            },
+                            child: Container(
+                              child: Icon(
+                                Icons.send,
+                                color: Colors.white,
+                              ),
+                              width: thirtySixDp,
+                              height: thirtySixDp,
+                              decoration: BoxDecoration(
+                                color: Colors.indigo,
+                                borderRadius: BorderRadius.circular(eightDp),
+                                border: Border.all(
+                                    width: 0.5, color: Colors.white54),
+                              ),
                             ),
                           ),
                           hintText: writeAComment,
@@ -128,9 +152,7 @@ class _CommentsPageState extends State<CommentsPage> {
           }
 
           if (snapshot.data!.docs.isEmpty) {
-            return Center(
-              child: Text('No comments available'),
-            );
+            return Center(child: Text(noCommentsAvailable));
           }
 
           return ListView.builder(
@@ -139,6 +161,7 @@ class _CommentsPageState extends State<CommentsPage> {
             addAutomaticKeepAlives: true,
             itemBuilder: (context, index) {
               DocumentSnapshot doc = snapshot.data!.docs[index];
+
               return buildCommentList(doc);
             },
             itemCount: snapshot.data!.docs.length,

@@ -80,4 +80,18 @@ class ArtworkProvider with ChangeNotifier {
   deleteArtwork(String id) {
     artworkService.deleteArtwork(id);
   }
+
+  //create artwork comment
+  createArtworkComment(
+      BuildContext context, String? artworkId, String? comment) {
+    _timeStamp = timeStamp;
+
+    ArtworkModel commentsModel = ArtworkModel.comment(
+        name: userName,
+        photoUrl: imageUrl,
+        message: comment,
+        timeStamp: _timeStamp);
+
+    artworkService.createNewComment(artworkId!, commentsModel, context);
+  }
 }
