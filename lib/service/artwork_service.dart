@@ -96,6 +96,19 @@ class ArtworkService {
     });
   }
 
+  Future<void> deleteComment(
+      String artworkId, String commentId, BuildContext context) {
+    return firestoreService
+        .collection('Artworks')
+        .doc(artworkId)
+        .collection('Comments')
+        .doc(commentId)
+        .delete()
+        .catchError((error) {
+      showCommentFailure(context, error);
+    });
+  }
+
 //...................................................................................
 
 //retrieve all artwork todo -- add pagination

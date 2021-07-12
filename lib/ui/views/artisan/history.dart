@@ -52,29 +52,33 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
       body: Builder(
         builder: (BuildContext context) {
-          return ListView.builder(
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: tenDp, vertical: 2),
-                    child: ListTile(
-                      onTap: () {},
-                      minVerticalPadding: 30,
-                      horizontalTitleGap: 0,
-                      tileColor: Colors.grey[100],
-                      title: Text(
-                        //name of viewer
-                        historyList![index].name,
-                        style:
-                            TextStyle(color: Colors.black, fontSize: sixteenDp),
-                      ),
-                      subtitle: Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
+          return historyList!.length == 0
+              ? Center(
+                  child: Text(noNotifications),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: tenDp, vertical: 2),
+                          child: ListTile(
+                            onTap: () {},
+                            minVerticalPadding: 30,
+                            horizontalTitleGap: 0,
+                            tileColor: Colors.grey[100],
+                            title: Text(
+                              //name of viewer
+                              historyList![index].name,
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: sixteenDp),
+                            ),
+                            subtitle: Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
                                 top: 2, bottom: sixDp, right: 4),
                             child: Text(historyList![index].message,
                                 style: TextStyle(

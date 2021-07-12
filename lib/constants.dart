@@ -176,6 +176,7 @@ const noBookingsMade = 'No bookings made';
 const noArtworksAvailable = 'No Artworks available';
 const noBookingsReceived = 'No bookings received';
 const noCommentsAvailable = 'No comments available';
+const noNotifications = 'No Notifications available';
 const commentsCannotBeEmpty = "Comments cannot be empty";
 const bookingsMade = 'Bookings made';
 const sendingCode = 'Please wait sending code...';

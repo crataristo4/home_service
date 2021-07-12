@@ -45,15 +45,14 @@ class _ArtworksPageState extends State<ArtworksPage> {
     _admobService.createInterstitialAd();
     super.initState();
   }
-
-  Future<void> getBookingItemCount(String id) async {
+/*
+  Future<void> getCommentItemCount(String id) async {
     await artworkRf.doc(id).collection('Comments').get().then((value) {
       setState(() {
         commentCount = value.docs.length;
       });
-      print("???????/ .......... ${value.docs.length}");
     });
-  }
+  }*/
 
   Widget _buildArtworksCard(List<ArtworkModel>? artworkList, int index) {
     _likedUsers = artworkList![index].likedUsers!;
@@ -116,7 +115,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
               ),
               Row(
                 children: [
-                  Text(commentCount == null ? '' : '$commentCount'),
+                  //Text(commentCount == null ? '' : '$commentCount'),
                   IconButton(
                       onPressed: () {
                         pushToComment(
@@ -223,7 +222,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
                         addAutomaticKeepAlives: true,
                         itemCount: _artworkList!.length,
                         itemBuilder: (BuildContext context, int index) {
-                          getBookingItemCount(_artworkList![index].artworkId!);
+                          // getCommentItemCount(_artworkList![index].artworkId!);
                           if (_artworkList![index] is ArtworkModel) {
                             return Column(
                               children: [

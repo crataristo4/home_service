@@ -105,4 +105,10 @@ class ArtworkProvider with ChangeNotifier {
   removeCommentLikes(String artworkId, String commentId, BuildContext context) {
     artworkService.removeCommentLikes(artworkId, commentId, context);
   }
+
+  //delete comment
+
+  deleteComment(String artworkId, String commentId, context) {
+    artworkService.deleteComment(artworkId, commentId, context);
+  }
 }

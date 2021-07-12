@@ -91,7 +91,7 @@ class _CommentsPageState extends State<CommentsPage> {
                     bottom: eightDp,
                   ),
                   child: TextFormField(
-                    //comment text field
+                      //comment text field
                       keyboardType: TextInputType.text,
                       controller: _addCommentController,
                       decoration: InputDecoration(
@@ -248,6 +248,22 @@ class _CommentsPageState extends State<CommentsPage> {
                       size: sixteenDp,
                     ),
                     SizedBox(width: twentyDp,),*/
+
+                    GestureDetector(
+                      onTap: () {
+                        //delete comment
+                        _artworkProvider.deleteComment(
+                            widget.id!, doc.id, context);
+                      },
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                        size: 22,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 24,
+                    ),
                     Padding(
                       padding: EdgeInsets.only(top: eightDp, right: eightDp),
                       child: Text(
@@ -279,10 +295,19 @@ class _CommentsPageState extends State<CommentsPage> {
                             : Colors.blueAccent,
                         size: twentyDp,
                       ),
-                    )
+                    ),
                   ],
                 ),
-              )
+              ),
+              SizedBox(
+                height: tenDp,
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width / 1.4,
+                  child: Divider(
+                    thickness: 0.1,
+                    color: Colors.black45,
+                  ))
             ],
           )
         ],
