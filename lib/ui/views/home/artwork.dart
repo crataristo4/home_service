@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/artwork.dart';
@@ -33,16 +34,29 @@ class _ArtworksPageState extends State<ArtworksPage> {
   late List<ArtworkModel>? _artworkList; // data
   HistoryProvider _historyProvider = HistoryProvider();
   AdmobService _admobService = AdmobService();
+  late final artworkProvider;
+  int? commentCount;
+  CollectionReference artworkRf =
+      FirebaseFirestore.instance.collection('Artworks');
 
   @override
   void initState() {
-    super.initState();
+    artworkProvider = Provider.of<ArtworkProvider>(context, listen: false);
     _admobService.createInterstitialAd();
+    super.initState();
+  }
+
+  Future<void> getBookingItemCount(String id) async {
+    await artworkRf.doc(id).collection('Comments').get().then((value) {
+      setState(() {
+        commentCount = value.docs.length;
+      });
+      print("???????/ .......... ${value.docs.length}");
+    });
   }
 
   Widget _buildArtworksCard(List<ArtworkModel>? artworkList, int index) {
-    final artworkProvider = Provider.of<ArtworkProvider>(context);
-    _likedUsers = artworkList![index].likedUsers;
+    _likedUsers = artworkList![index].likedUsers!;
 
     return Container(
       padding: EdgeInsets.all(12),
@@ -102,7 +116,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
               ),
               Row(
                 children: [
-                  Text('3'),
+                  Text(commentCount == null ? '' : '$commentCount'),
                   IconButton(
                       onPressed: () {
                         pushToComment(
@@ -114,7 +128,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
                         Icons.comment,
                         color: Colors.indigoAccent,
                       )),
-                  Text(artworkList[index].likedUsers.length.toString()),
+                  Text(artworkList[index].likedUsers!.length.toString()),
                   IconButton(
                       onPressed: () {
                         //checks if the current user is already part of the liked users
@@ -141,7 +155,6 @@ class _ArtworksPageState extends State<ArtworksPage> {
             borderRadius: BorderRadius.circular(10),
             child: GestureDetector(
               onTap: () {
-                print(" id ??  ${artworkList[index].artworkId}");
                 pushToComment(
                     artworkList[index].artworkId,
                     artworkList[index].artisanName,
@@ -149,8 +162,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
               },
               child: CachedNetworkImage(
                 //artwork image
-                height: 200,
-
+                height: twoHundredDp,
                 placeholder: (context, url) =>
                     Center(child: CircularProgressIndicator()),
                 imageUrl: artworkList[index].artworkImageUrl!,
@@ -159,7 +171,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
               ),
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: tenDp),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -211,6 +223,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
                         addAutomaticKeepAlives: true,
                         itemCount: _artworkList!.length,
                         itemBuilder: (BuildContext context, int index) {
+                          getBookingItemCount(_artworkList![index].artworkId!);
                           if (_artworkList![index] is ArtworkModel) {
                             return Column(
                               children: [

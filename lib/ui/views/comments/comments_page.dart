@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/provider/artwork_provider.dart';
+import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
@@ -24,6 +25,7 @@ class _CommentsPageState extends State<CommentsPage> {
       FirebaseFirestore.instance.collection('Artworks');
   TextEditingController _addCommentController = TextEditingController();
   ArtworkProvider _artworkProvider = ArtworkProvider();
+  List? likes;
 
   @override
   void initState() {
@@ -162,6 +164,8 @@ class _CommentsPageState extends State<CommentsPage> {
             itemBuilder: (context, index) {
               DocumentSnapshot doc = snapshot.data!.docs[index];
 
+              likes = doc['likedUsers'];
+
               return buildCommentList(doc);
             },
             itemCount: snapshot.data!.docs.length,
@@ -174,7 +178,6 @@ class _CommentsPageState extends State<CommentsPage> {
       width: MediaQuery.of(context).size.width,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
         children: [
           Padding(
             padding: EdgeInsets.only(top: eightDp, right: eightDp),
@@ -213,10 +216,19 @@ class _CommentsPageState extends State<CommentsPage> {
               ),
               Padding(
                 padding: EdgeInsets.only(top: fourDp, right: eightDp),
-                child: Text(
-                  //name
-                  doc['message'],
-                  style: TextStyle(color: Colors.black45),
+                child: Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 1.4,
+                    child: Text(
+                      //name
+                      doc['message'],
+                      maxLines: 40,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      style: TextStyle(color: Colors.black45),
+                    ),
+                  ),
                 ),
               ),
               Container(
@@ -239,14 +251,34 @@ class _CommentsPageState extends State<CommentsPage> {
                     Padding(
                       padding: EdgeInsets.only(top: eightDp, right: eightDp),
                       child: Text(
-                        '3',
+                        "${likes!.length}",
                         style: TextStyle(color: Colors.black45),
                       ),
                     ),
-                    Icon(
-                      Icons.thumb_up,
-                      color: Colors.blueAccent,
-                      size: twentyDp,
+                    GestureDetector(
+                      onTap: () {
+                        //checks if the current user is already part of the liked users
+                        if (!doc
+                            .get('likedUsers')
+                            .toString()
+                            .contains(currentUserId!)) {
+                          _artworkProvider.updateCommentLikes(
+                              widget.id!, doc.id, context);
+                        } else {
+                          _artworkProvider.removeCommentLikes(
+                              widget.id!, doc.id, context);
+                        }
+                      },
+                      child: Icon(
+                        Icons.thumb_up,
+                        color: !doc
+                                .get('likedUsers')
+                                .toString()
+                                .contains(currentUserId!)
+                            ? Colors.grey
+                            : Colors.blueAccent,
+                        size: twentyDp,
+                      ),
                     )
                   ],
                 ),

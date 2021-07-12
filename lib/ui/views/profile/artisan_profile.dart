@@ -62,7 +62,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
             widget.artisanId == artisanArtwork.artisanId)
         .toList();
     for (var i = 0; i < _artworkList!.length; i++) {
-      _totalNumberOfLikes += _artworkList![i].likedUsers.length;
+      _totalNumberOfLikes += _artworkList![i].likedUsers!.length;
     }
     //create ad
     _admobService.createInterstitialAd();

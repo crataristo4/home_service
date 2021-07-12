@@ -9,7 +9,8 @@ class ArtworkModel {
   String? artisanPhotoUrl;
   String? artisanPhoneNumber;
   String? artisanId;
-  List likedUsers = [];
+  List? likedUsers = [];
+
   bool? isFavorite;
   dynamic timeStamp;
   String? name; //for comments
@@ -18,23 +19,22 @@ class ArtworkModel {
 
   get getArtisanId => artisanId;
 
-  ArtworkModel(
-      {required this.artworkImageUrl,
-      required this.artworkPrice,
-      required this.artworkId,
-      required this.artisanName,
-      required this.artisanCategory,
-      required this.artisanPhotoUrl,
-      required this.artisanPhoneNumber,
-      required this.artisanId,
-      required this.likedUsers,
-      required this.timeStamp,
-      this.isFavorite= false}){
-        //Check if the current user is part of the liked users
-        if(likedUsers.contains(currentUserId)){
-          this.isFavorite = true;
-        }
-      }
+  ArtworkModel({required this.artworkImageUrl,
+    required this.artworkPrice,
+    required this.artworkId,
+    required this.artisanName,
+    required this.artisanCategory,
+    required this.artisanPhotoUrl,
+    required this.artisanPhoneNumber,
+    required this.artisanId,
+    required this.likedUsers,
+    required this.timeStamp,
+    this.isFavorite = false}) {
+    //Check if the current user is part of the liked users
+    if (likedUsers!.contains(currentUserId)) {
+      this.isFavorite = true;
+    }
+  }
 
   //for provider
   factory ArtworkModel.fromFirestore(Map<String, dynamic> data) {
@@ -68,16 +68,21 @@ class ArtworkModel {
 
   //comments
 
-  ArtworkModel.comment(
-      {this.name, this.photoUrl, this.message, this.timeStamp});
+  ArtworkModel.comment({
+    this.name,
+    this.photoUrl,
+    this.message,
+    this.timeStamp,
+    this.likedUsers,
+  });
 
   factory ArtworkModel.fromComments(Map<String, dynamic> data) {
     return ArtworkModel.comment(
-      name: data['name'],
-      photoUrl: data['photoUrl'],
-      message: data['message'],
-      timeStamp: data['timestamp'],
-    );
+        name: data['name'],
+        photoUrl: data['photoUrl'],
+        message: data['message'],
+        timeStamp: data['timestamp'],
+        likedUsers: data['likedUsers'] ?? []);
   }
 
   Map<String, dynamic> commentsToMap() {
@@ -86,6 +91,7 @@ class ArtworkModel {
       'photoUrl': photoUrl,
       'message': message,
       'timestamp': timeStamp,
+      'likedUsers': likedUsers
     };
   }
 }

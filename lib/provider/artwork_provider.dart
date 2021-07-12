@@ -66,12 +66,12 @@ class ArtworkProvider with ChangeNotifier {
     artworkService.updateLikedUsers(artworkId, likedUsers, context);
   }
 
-  //update likes
+  //update artwork likes
   updateLikes(String artworkId, BuildContext context) {
     artworkService.updateLikes(artworkId, context);
   }
 
-//remove likes
+//remove artwork likes
   removeLikes(String artworkId, BuildContext context) {
     artworkService.removeLikes(artworkId, context);
   }
@@ -90,8 +90,19 @@ class ArtworkProvider with ChangeNotifier {
         name: userName,
         photoUrl: imageUrl,
         message: comment,
-        timeStamp: _timeStamp);
+        timeStamp: _timeStamp,
+        likedUsers: []);
 
     artworkService.createNewComment(artworkId!, commentsModel, context);
+  }
+
+  //update comment likes
+  updateCommentLikes(String artworkId, String commentId, BuildContext context) {
+    artworkService.updateCommentLikes(artworkId, commentId, context);
+  }
+
+//remove comment likes
+  removeCommentLikes(String artworkId, String commentId, BuildContext context) {
+    artworkService.removeCommentLikes(artworkId, commentId, context);
   }
 }

@@ -45,7 +45,6 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
         .get();
     List<DocumentSnapshot> documentSnapshot = querySnapshot.docs;
 
-    print("User id $uid");
 
     setState(() {
       bookingCount = documentSnapshot.length;

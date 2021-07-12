@@ -48,6 +48,7 @@ class ArtworkService {
     });
   }
 
+  //update artwork likes----------------------------------------------------
   Future<void> updateLikes(String artworkId, BuildContext context) {
     return firestoreService.collection('Artworks').doc(artworkId).update({
       'likedUsers': FieldValue.arrayUnion([currentUserId])
@@ -63,6 +64,39 @@ class ArtworkService {
       showFailure(context, onError);
     });
   }
+
+//-----------------------------------------------------------------------------
+
+  //update user likes on comments section
+  Future<void> updateCommentLikes(
+      String artworkId, String commentId, BuildContext context) {
+    return firestoreService
+        .collection('Artworks')
+        .doc(artworkId)
+        .collection('Comments')
+        .doc(commentId)
+        .update({
+      'likedUsers': FieldValue.arrayUnion([currentUserId])
+    }).catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
+  Future<void> removeCommentLikes(
+      String artworkId, String commentId, BuildContext context) {
+    return firestoreService
+        .collection('Artworks')
+        .doc(artworkId)
+        .collection('Comments')
+        .doc(commentId)
+        .update({
+      'likedUsers': FieldValue.arrayRemove([currentUserId])
+    }).catchError((onError) {
+      showFailure(context, onError);
+    });
+  }
+
+//...................................................................................
 
 //retrieve all artwork todo -- add pagination
   Stream<List<ArtworkModel>> fetchAllArtwork() {
@@ -112,9 +146,7 @@ class ArtworkService {
         .doc(artworkId)
         .collection('Comments')
         .add(artworkModel.commentsToMap())
-        .whenComplete(() async {
-      print("??????????????????? ............");
-    }).catchError((onError) {
+        .catchError((onError) {
       showCommentFailure(context, onError);
     });
   }
