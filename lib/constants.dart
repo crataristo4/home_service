@@ -155,6 +155,7 @@ const ratingUser = "rating user";
 const rated = 'Rated';
 const rateNow = 'Rate Now';
 const history = 'History';
+const comments = 'Comments';
 const notifications = 'Notifications';
 const pleaseSelectAtLeastOneRating = ' Please select at least one rating';
 
@@ -180,6 +181,7 @@ const loggingYouOut = 'logging you out ...';
 const bookingARequest = 'Booking a request ,please wait...';
 const unableToConnect = 'Unable to connect';
 const searchService = "Search for a service";
+const writeAComment = "Write a comment";
 const scheduleDateAndTime = "Schedule date and time";
 const pleaseRescheduleDate = "Please Reschedule date and time";
 const scheduleDateTimeDes = "Helps artisan to know when to follow up on work";

@@ -394,7 +394,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
 
                               placeholder: (context, url) =>
                                   Center(child: CircularProgressIndicator()),
-                              imageUrl: _artworkList![index].artworkImageUrl,
+                              imageUrl: _artworkList![index].artworkImageUrl!,
 
                               fit: BoxFit.cover,
                             ),

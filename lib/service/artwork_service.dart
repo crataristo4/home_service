@@ -64,12 +64,11 @@ class ArtworkService {
     });
   }
 
-//retrieve all artwork
+//retrieve all artwork todo -- add pagination
   Stream<List<ArtworkModel>> fetchAllArtwork() {
     return firestoreService
         .collection('Artworks')
         .orderBy("timeStamp", descending: true)
-        .limit(20)
         .snapshots()
         .map((snapshots) => snapshots.docs
             .map((document) => ArtworkModel.fromFirestore(document.data()))
@@ -87,6 +86,37 @@ class ArtworkService {
         .delete()
         .whenComplete(() => {ShowAction().showToast(successful, Colors.black)})
         .catchError((error) {});
+  }
+
+  //fetch comments on artwork
+  Stream<List<ArtworkModel>> fetchArtworkComments(ArtworkModel comments) {
+    return firestoreService
+        .collection('Artworks')
+        .doc(comments.artworkId)
+        .collection('Comments')
+        .orderBy("timeStamp", descending: true)
+        .snapshots()
+        .map((snapshots) => snapshots.docs
+            .map((document) => ArtworkModel.fromComments(document.data()))
+            .toList(growable: true))
+        .handleError((error) {
+      print(error);
+    });
+  }
+
+  //create comment
+  Future<void> createNewComment(
+      ArtworkModel artworkModel, BuildContext context) {
+    return firestoreService
+        .collection('Artworks')
+        .doc(artworkModel.artworkId)
+        .collection('Comments')
+        .add(artworkModel.commentsToMap())
+        .whenComplete(() async {
+      showSuccess(context);
+    }).catchError((onError) {
+      showFailure(context, onError);
+    });
   }
 
   showSuccess(context) async {

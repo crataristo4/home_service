@@ -1,17 +1,20 @@
 import 'package:home_service/ui/views/auth/appstate.dart';
 
 class ArtworkModel {
-  final artworkImageUrl;
-  final artworkPrice;
-  final artworkId;
-  final artisanName;
-  final artisanCategory;
-  final artisanPhotoUrl;
-  final artisanPhoneNumber;
-  final artisanId;
+  String? artworkImageUrl;
+  dynamic artworkPrice;
+  String? artworkId;
+  String? artisanName;
+  String? artisanCategory;
+  String? artisanPhotoUrl;
+  String? artisanPhoneNumber;
+  String? artisanId;
   List likedUsers = [];
-  bool isFavorite;
+  bool? isFavorite;
   dynamic timeStamp;
+  String? name; //for comments
+  String? photoUrl;
+  String? message; // for comments
 
   get getArtisanId => artisanId;
 
@@ -60,6 +63,29 @@ class ArtworkModel {
       'timeStamp': timeStamp,
       'artworkPrice': artworkPrice,
       'likedUsers': likedUsers,
+    };
+  }
+
+  //comments
+
+  ArtworkModel.comment(
+      {this.name, this.photoUrl, this.message, this.timeStamp});
+
+  factory ArtworkModel.fromComments(Map<String, dynamic> data) {
+    return ArtworkModel.comment(
+      name: data['name'],
+      photoUrl: data['photoUrl'],
+      message: data['message'],
+      timeStamp: data['timestamp'],
+    );
+  }
+
+  Map<String, dynamic> commentsToMap() {
+    return {
+      'name': name,
+      'photoUrl': photoUrl,
+      'message': message,
+      'timestamp': timeStamp,
     };
   }
 }

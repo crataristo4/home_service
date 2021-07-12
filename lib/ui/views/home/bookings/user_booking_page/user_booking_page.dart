@@ -144,8 +144,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
             : Text("$bookingCount $bookingsMade"),
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(vertical: eightDp),
-        child: StreamBuilder<QuerySnapshot>(
+            child: StreamBuilder<QuerySnapshot>(
             stream: bookingCR
                 .orderBy("timestamp", descending: true)
                 .where("senderId", isEqualTo: currentUserId)
@@ -386,10 +385,8 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                                 )
                               : Container();
                         },*/
-                addAutomaticKeepAlives: true,
-              );
-            }),
-      ),
-    );
+                    addAutomaticKeepAlives: true,
+                  );
+                })));
   }
 }

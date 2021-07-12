@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_service/models/data.dart';
 import 'package:home_service/ui/views/artisan/history.dart';
 import 'package:home_service/ui/views/artisan/view_all_artisans.dart';
 import 'package:home_service/ui/views/artisan/view_artisan_by_category.dart';
@@ -7,6 +8,7 @@ import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/auth/register.dart';
 import 'package:home_service/ui/views/auth/verify.dart';
 import 'package:home_service/ui/views/bottomsheet/show_user_profile.dart';
+import 'package:home_service/ui/views/comments/comments_page.dart';
 import 'package:home_service/ui/views/help/help_page.dart';
 import 'package:home_service/ui/views/home/bookings.dart';
 import 'package:home_service/ui/views/home/bookings/artisan_booking_page/received_bookings.dart';
@@ -107,6 +109,16 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (_) => ViewArtisanByCategoryPage(
                   categoryName: args as String,
+                ));
+
+      //comments page
+      case CommentsPage.routeName:
+        final data = settings.arguments as Data;
+        return MaterialPageRoute(
+            builder: (_) => CommentsPage(
+                  id: data.id,
+                  name: data.name,
+                  artworkImageUrl: data.imageUrl,
                 ));
 
       default:
