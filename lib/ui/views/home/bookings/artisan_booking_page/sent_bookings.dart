@@ -30,11 +30,11 @@ class _SentBookingsState extends State<SentBookingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final sentBookingsList = Provider.of<List<SentBookings>>(context);
+   // final sentBookingsList = Provider.of<List<SentBookings>>(context);
     final bookingProvider = BookingsProvider();
 
     //options bottom sheet
-    void showOptions(context, index) async {
+    void showOptions(context, DocumentSnapshot doc) async {
       showModalBottomSheet(
           context: context,
           builder: (BuildContext bc) {
@@ -61,9 +61,11 @@ class _SentBookingsState extends State<SentBookingsPage> {
                               context: context,
                               useRootNavigator: true,
                               builder: (context) =>
-                                  AddBooking.rescheduleArtisan(
+                                  AddBooking.rescheduleBooking(
                                     //bottom sheet reschedule bookings
-                                    sentBookings: sentBookingsList[index],
+                                    bookingId: doc['id'],
+                                    bookingMsg: doc['message'],
+                                    bookingDate: doc['bookingDate'],
                                   ));
                         }),
                     ListTile(
@@ -78,7 +80,7 @@ class _SentBookingsState extends State<SentBookingsPage> {
                       onTap: () async {
                         await Navigator.of(context).pushNamed(
                           ArtisanProfile.routeName,
-                          arguments: sentBookingsList[index].receiverId,
+                          arguments: doc['receiverId'],
                         );
                       },
                     ),
@@ -94,8 +96,7 @@ class _SentBookingsState extends State<SentBookingsPage> {
                           Dialogs.showLoadingDialog(context, loadingKey,
                               deletingBooking, Colors.white70);
                           //delete bookings
-                          bookingProvider.deleteBook(
-                              context, sentBookingsList[index].id!);
+                          bookingProvider.deleteBook(context, doc['id']!);
                         }),
                   ],
                 ),
@@ -145,7 +146,7 @@ class _SentBookingsState extends State<SentBookingsPage> {
                         child: ListTile(
                           onTap: () async {
                             //shows an option for user to perform an action
-                            showOptions(context, index);
+                            showOptions(context, doc);
                           },
                           minVerticalPadding: 25,
                           horizontalTitleGap: 1,

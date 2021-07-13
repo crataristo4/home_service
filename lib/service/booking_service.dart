@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:home_service/models/artisan/bookings.dart';
 import 'package:home_service/models/booking.dart';
-import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 
@@ -67,6 +65,7 @@ class BookingService {
   }
 
 //----------------------------------------------------------------------------------------------
+/*
   //get all sent  user
   Stream<List<Bookings>> getUserBookings() {
     return firestoreService
@@ -122,6 +121,7 @@ class BookingService {
     } else
       print("Nothig...n");
   }
+*/
 
 //----------------------------------------------------------------------------------------------------------
   showBookingConfirmedSuccess(context) async {

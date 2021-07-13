@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:home_service/models/artisan/bookings.dart';
-import 'package:home_service/models/booking.dart';
 import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
@@ -13,8 +11,10 @@ import '../../../constants.dart';
 class AddBooking extends StatefulWidget {
 //for getting and passing receiver details to provider
   String? receiverName, receiverPhoneNumber, receiverPhotoUrl, receiverId;
-  Bookings? bookings;
-  SentBookings? sentBookings;
+
+  /*Bookings? bookings;
+  SentBookings? sentBookings;*/
+  String? bookingId, bookingMsg, bookingDate;
 
   AddBooking(
       {Key? key,
@@ -24,9 +24,12 @@ class AddBooking extends StatefulWidget {
       this.receiverId})
       : super(key: key);
 
-  AddBooking.reschedule({Key? key, this.bookings});
+  /* AddBooking.reschedule({Key? key, this.bookings});
 
-  AddBooking.rescheduleArtisan({Key? key, this.sentBookings});
+  AddBooking.rescheduleArtisan({Key? key, this.sentBookings});*/
+
+  AddBooking.rescheduleBooking(
+      {Key? key, this.bookingId, this.bookingMsg, this.bookingDate});
 
   @override
   _AddBookingState createState() => _AddBookingState();
@@ -66,6 +69,7 @@ class _AddBookingState extends State<AddBooking> {
 
   @override
   void initState() {
+/*
     if (widget.bookings != null || widget.sentBookings != null) {
       getUserType == user
           ? _controller.text = widget.bookings!.message!
@@ -76,6 +80,19 @@ class _AddBookingState extends State<AddBooking> {
       setState(() {
         updateButton = rescheduleBookings;
       });
+
+    }
+*/
+
+    if (widget.bookingId != null &&
+        widget.bookingDate != null &&
+        widget.bookingMsg != null) {
+      _controller.text = widget.bookingMsg!;
+      _controllerDateTime.text = widget.bookingDate!;
+      setState(() {
+        updateButton = rescheduleBookings;
+      });
+
       bookingProvider.changeMessage(_controller.text);
       bookingProvider.changeBookingDateTime(_controllerDateTime.text);
     } else {
@@ -226,8 +243,9 @@ class _AddBookingState extends State<AddBooking> {
                                         ),
                                       ),
                                       hintText: scheduleDateAndTime,
-                                      helperText: widget.bookings != null ||
-                                              widget.sentBookings != null
+                                      helperText: widget.bookingId != null ||
+                                              widget.bookingDate != null ||
+                                              widget.bookingMsg != null
                                           ? pleaseRescheduleDate
                                           : scheduleDateTimeDes,
                                       helperMaxLines: 2,
@@ -265,27 +283,19 @@ class _AddBookingState extends State<AddBooking> {
                                 //show dialog and delay
                                 context,
                                 loadingKey,
-                                widget.bookings != null ||
-                                        widget.sentBookings != null
+                                widget.bookingId != null
                                     ? rescheduling
                                     : bookingARequest,
                                 Colors.white70);
 
-                            if (widget.bookings != null ||
-                                widget.sentBookings != null) {
+                            if (widget.bookingId != null) {
                               //reschedule
                               //todo  check if previous day select is same as new day before rescheduling
                               bookingProvider.rescheduleBookings(
                                   context,
-                                  getUserType == user
-                                      ? widget.bookings!.id
-                                      : widget.sentBookings!.id,
-                                  getUserType == user
-                                      ? widget.bookings!.message
-                                      : widget.sentBookings!.message,
-                                  getUserType == user
-                                      ? widget.bookings!.bookingDate
-                                      : widget.sentBookings!.bookingDate);
+                                  widget.bookingId!,
+                                  widget.bookingMsg!,
+                                  widget.bookingDate!);
                             } else {
                               //create new booking
                               bookingProvider.createNewBookings(

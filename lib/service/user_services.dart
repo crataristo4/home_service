@@ -101,9 +101,9 @@ class UserService {
     });
   }
 
-  Stream<DocumentSnapshot> getUserStream() async* {
+/*  Stream<DocumentSnapshot> getUserStream() async* {
     yield* firestoreService.doc("Users/$currentUserId").snapshots();
-  }
+  }*/
 
   //get all artisans from db
   Stream<List<Artisans>> getAllArtisans() {

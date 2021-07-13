@@ -44,48 +44,17 @@ class EntryPoint extends StatelessWidget {
         //user creation
         ChangeNotifierProvider(create: (context) => UserProvider()),
 
-        //single user
+        /* //single user
         StreamProvider.value(
             value: UserService().getUserStream(), initialData: []),
+*/
+        ChangeNotifierProvider(create: (context) => ArtworkProvider()),
 
-        //get all users
-        StreamProvider<List<Users>>.value(
-          lazy: false,
-          initialData: [],
-          value: UserService().getAllUsers(),
-        ),
-
-        //get all artisan
-        StreamProvider<List<Artisans>>.value(
-          lazy: false,
-          initialData: [],
-          value: UserService().getAllArtisans(),
-        ),
+        ChangeNotifierProvider(create: (context) => HistoryProvider()),
 
         ChangeNotifierProvider(
           create: (context) => BookingsProvider(),
         ),
-
-        //all bookings - user
-        StreamProvider<List<Bookings>>.value(
-            lazy: false,
-            value: BookingService().getUserBookings(),
-            initialData: []),
-
-        //get received bookings made to artisans (for Artisan page)
-        StreamProvider<List<ReceivedBookings>>.value(
-          lazy: false,
-          initialData: [],
-          value: BookingService().getReceivedBookings(),
-        ),
-
-        //get sent bookings made .Artisan to artisans (for Artisan page)
-        StreamProvider<List<SentBookings>>.value(
-            lazy: false,
-            value: BookingService().getSentBookings(),
-            initialData: []),
-
-        ChangeNotifierProvider(create: (context) => ArtworkProvider()),
 
         //fetch artworks
         StreamProvider<List<ArtworkModel>>.value(
@@ -101,7 +70,38 @@ class EntryPoint extends StatelessWidget {
           value: UserService().getTopUsersByRating(),
         ),
 
-        ChangeNotifierProvider(create: (context) => HistoryProvider()),
+        /*  //get all users
+        StreamProvider<List<Users>>.value(
+          lazy: false,
+          initialData: [],
+          value: UserService().getAllUsers(),
+        ),*/
+
+        //get all artisan
+        StreamProvider<List<Artisans>>.value(
+          lazy: false,
+          initialData: [],
+          value: UserService().getAllArtisans(),
+        ),
+
+        /*  //all bookings - user
+        StreamProvider<List<Bookings>>.value(
+            lazy: false,
+            value: BookingService().getUserBookings(),
+            initialData: []),*/
+
+        /*   //get received bookings made to artisans (for Artisan page)
+        StreamProvider<List<ReceivedBookings>>.value(
+          lazy: false,
+          initialData: [],
+          value: BookingService().getReceivedBookings(),
+        ),*/
+
+        //get sent bookings made .Artisan to artisans (for Artisan page)
+        /*   StreamProvider<List<SentBookings>>.value(
+            lazy: false,
+            value: BookingService().getSentBookings(),
+            initialData: []),*/
 
         //fetch history
         StreamProvider<List<History>>.value(

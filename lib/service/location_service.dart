@@ -12,7 +12,7 @@ class GetLocationService {
   UserProvider _userProvider = UserProvider(); //for updating user details
 
   Future<Position>? getUserCoordinates(BuildContext context) {
-    Timer(Duration(seconds: 30), () {
+    Timer(Duration(minutes: 2), () {
       positionStream = Geolocator.getPositionStream(
               desiredAccuracy: LocationAccuracy.high,
               distanceFilter: 10,
@@ -38,8 +38,6 @@ class GetLocationService {
   getLastKnownLocation() async {
     position = await Geolocator.getLastKnownPosition();
 
-    print('---Lat: ${position!.latitude} --- lng : ${position!.longitude}');
-
     return position;
   }
 
@@ -49,8 +47,6 @@ class GetLocationService {
         usersLatitude, usersLongitude, artisansLatitude, artisansLongitude);
 
     double distanceToKm = distanceInMeters / 1000;
-
-    print('${distanceToKm.roundToDouble()} km');
 
     return distanceToKm;
   }

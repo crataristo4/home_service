@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
-import 'package:home_service/models/booking.dart';
 import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/provider/history_provider.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
@@ -11,7 +10,6 @@ import 'package:home_service/ui/views/bottomsheet/add_booking.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
 import 'package:home_service/ui/widgets/load_home.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
-import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
@@ -50,11 +48,11 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userBookingList = Provider.of<List<Bookings>>(context);
+    //final userBookingList = Provider.of<List<Bookings>>(context);
     final bookingProvider = BookingsProvider();
 
     //options bottom sheet
-    void showOptions(context, index) async {
+    void showOptions(context, DocumentSnapshot doc) async {
       showModalBottomSheet(
           context: context,
           builder: (BuildContext bc) {
@@ -80,9 +78,12 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                           showModalBottomSheet(
                               context: context,
                               useRootNavigator: true,
-                              builder: (context) => AddBooking.reschedule(
+                              builder: (context) =>
+                                  AddBooking.rescheduleBooking(
                                     //bottom sheet reschedule bookings
-                                    bookings: userBookingList[index],
+                                    bookingId: doc['id'],
+                                    bookingMsg: doc['message'],
+                                    bookingDate: doc['bookingDate'],
                                   ));
                         }),
                     ListTile(
@@ -96,17 +97,16 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                       ),
                       onTap: () async {
                         _historyProvider.updateProviderListener(
-                            userBookingList[index].receiverId,
+                            doc['receiverId'],
                             userName,
                             imageUrl,
                             viewedYourProfile);
                         //create history
-                        _historyProvider
-                            .createHistory(userBookingList[index].receiverId!);
+                        _historyProvider.createHistory(doc['receiverId']!);
 
                         await Navigator.of(context).pushNamed(
                           ArtisanProfile.routeName,
-                          arguments: userBookingList[index].receiverId,
+                          arguments: doc['receiverId'],
                         );
                       },
                     ),
@@ -122,8 +122,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                           Dialogs.showLoadingDialog(context, loadingKey,
                               deletingBooking, Colors.white70);
                           //delete bookings
-                          bookingProvider.deleteBook(
-                              context, userBookingList[index].id!);
+                          bookingProvider.deleteBook(context, doc['id']!);
                         }),
                   ],
                 ),
@@ -168,7 +167,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> {
                                 horizontal: tenDp, vertical: 2),
                             child: ListTile(
                               onTap: () {
-                                showOptions(context, index);
+                                showOptions(context, doc);
                               },
                               minVerticalPadding: tenDp,
                               horizontalTitleGap: 4,
