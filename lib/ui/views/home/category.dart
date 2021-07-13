@@ -68,189 +68,168 @@ class _CategoryPageState extends State<CategoryPage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        body: CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Container(
-                margin: EdgeInsets.only(left: eightDp, right: eightDp),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          height: eightDp,
-                        ),
-                        topArtisanList.isEmpty
-                            ? Container()
-                            : Container(
-                                //top expects
-                                margin:
-                                    EdgeInsets.only(bottom: sixDp, top: sixDp),
-                                child: SizedBox(
-                                  height: 100,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            topExperts,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: sixteenDp),
+        body: Container(
+          margin: EdgeInsets.only(left: eightDp, right: eightDp),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  height: eightDp,
+                ),
+                topArtisanList.isEmpty
+                    ? Container()
+                    : Container(
+                        //top expects
+                        margin: EdgeInsets.only(bottom: sixDp, top: sixDp),
+                        child: SizedBox(
+                          height: 100,
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    topExperts,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: sixteenDp),
+                                  ),
+                                  topArtisanList.length > 10
+                                      ? Container(
+                                          padding: EdgeInsets.all(sixDp),
+                                          margin:
+                                              EdgeInsets.only(right: sixteenDp),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(fourDp),
+                                              border: Border.all(
+                                                  width: 0.3,
+                                                  color: Colors.grey
+                                                      .withOpacity(0.3))),
+                                          child: GestureDetector(
+                                            onTap: () => Navigator.of(context)
+                                                .pushNamed(ViewAllTopExperts
+                                                    .routeName),
+                                            child: Text(
+                                              // view all top expects
+                                              viewAll,
+                                              style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: twelveDp),
+                                            ),
                                           ),
-                                          topArtisanList.length > 10
-                                              ? Container(
-                                                  padding:
-                                                      EdgeInsets.all(sixDp),
-                                                  margin: EdgeInsets.only(
-                                                      right: sixteenDp),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              fourDp),
-                                                      border: Border.all(
-                                                          width: 0.3,
-                                                          color: Colors.grey
-                                                              .withOpacity(
-                                                                  0.3))),
-                                                  child: GestureDetector(
-                                                    onTap: () => Navigator.of(
-                                                            context)
-                                                        .pushNamed(
-                                                            ViewAllTopExperts
-                                                                .routeName),
-                                                    child: Text(
-                                                      // view all top expects
-                                                      viewAll,
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: twelveDp),
-                                                    ),
-                                                  ),
-                                                )
-                                              : Container()
-                                        ],
-                                      ),
-                                      Expanded(
-                                        // display to experts
-                                        child: buildTopExpect(),
-                                        flex: 1,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                        )
+                                      : Container()
+                                ],
                               ),
-
-                        //todo -- add when admob account is verified
-                        /*  Container(
-                          // shows a banner ad
-                          height: twoFiftyDp,
-                          child: AdWidget(
-                            ad: AdmobService.createBanner()..load(),
-                            key: UniqueKey(),
-                          ),
-                        ),*/
-                        Container(
-                          margin: EdgeInsets.only(
-                            right: eightDp,
-                          ),
-                          child: TextFormField(
-                              //search for a service text field
-                              keyboardType: TextInputType.text,
-                              controller: _searchInput,
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                  hintStyle: TextStyle(fontSize: sixteenDp),
-                                  suffix: Container(
-                                    child: Icon(
-                                      Icons.search,
-                                      color: Colors.white,
-                                    ),
-                                    width: thirtySixDp,
-                                    height: thirtySixDp,
-                                    decoration: BoxDecoration(
-                                      color: Colors.indigo,
-                                      borderRadius:
-                                          BorderRadius.circular(eightDp),
-                                      border: Border.all(
-                                          width: 0.5, color: Colors.white54),
-                                    ),
-                                  ),
-                                  hintText: searchService,
-                                  fillColor: Colors.white70,
-                                  filled: true,
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: tenDp, horizontal: tenDp),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xFFF5F5F5)),
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Color(0xFFF5F5F5))))),
-                        ),
-
-                        SizedBox(
-                          height: sixteenDp,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              chooseAservice,
-                              style: TextStyle(
-                                  fontSize: twentyDp,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context)
-                                    .pushNamed(ViewAllArtisans.routeName);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(sixDp),
-                                margin: EdgeInsets.only(right: sixteenDp),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(fourDp),
-                                    border: Border.all(
-                                        width: 0.3,
-                                        color: Colors.grey.withOpacity(0.3))),
-                                child: Text(
-                                  viewAll,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: twelveDp,
-                                      color: Colors.grey),
-                                ),
+                              Expanded(
+                                // display to experts
+                                child: buildTopExpect(),
+                                flex: 1,
                               ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                //todo -- add when admob account is verified
+                /*  Container(
+                        // shows a banner ad
+                        height: twoFiftyDp,
+                        child: AdWidget(
+                          ad: AdmobService.createBanner()..load(),
+                          key: UniqueKey(),
+                        ),
+                      ),*/
+                Container(
+                  margin: EdgeInsets.only(
+                    right: eightDp,
+                  ),
+                  child: TextFormField(
+                      //search for a service text field
+                      keyboardType: TextInputType.text,
+                      controller: _searchInput,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                          hintStyle: TextStyle(fontSize: sixteenDp),
+                          suffix: Container(
+                            child: Icon(
+                              Icons.search,
+                              color: Colors.white,
                             ),
-                          ],
+                            width: thirtySixDp,
+                            height: thirtySixDp,
+                            decoration: BoxDecoration(
+                              color: Colors.indigo,
+                              borderRadius: BorderRadius.circular(eightDp),
+                              border:
+                                  Border.all(width: 0.5, color: Colors.white54),
+                            ),
+                          ),
+                          hintText: searchService,
+                          fillColor: Colors.white70,
+                          filled: true,
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: tenDp, horizontal: tenDp),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFF5F5F5)),
+                          ),
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Color(0xFFF5F5F5))))),
+                ),
+
+                SizedBox(
+                  height: sixteenDp,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      chooseAservice,
+                      style: TextStyle(
+                          fontSize: twentyDp, fontWeight: FontWeight.bold),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushNamed(ViewAllArtisans.routeName);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(sixDp),
+                        margin: EdgeInsets.only(right: sixteenDp),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(fourDp),
+                            border: Border.all(
+                                width: 0.3,
+                                color: Colors.grey.withOpacity(0.3))),
+                        child: Text(
+                          viewAll,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: twelveDp,
+                              color: Colors.grey),
                         ),
-                        SizedBox(
-                          height: sixteenDp,
-                        ),
-                        _isSearch ? displayArtisanTypes() : _searchList(),
-                        // switch between searched list and default list
-                      ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-            )
-          ],
+                SizedBox(
+                  height: sixteenDp,
+                ),
+                _isSearch ? displayArtisanTypes() : _searchList(),
+
+                // switch between searched list and default list
+              ],
+            ),
+          ),
         ));
   }
 
@@ -275,8 +254,7 @@ class _CategoryPageState extends State<CategoryPage> {
     return Container(
       width: 300,
       margin: EdgeInsets.only(
-        right: fourDp,
-      ),
+          right: fourDp, bottom: 10),
       height: MediaQuery.of(context).size.height / 1.68,
       child: GridView.builder(
           shrinkWrap: true,
