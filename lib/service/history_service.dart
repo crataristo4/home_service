@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:home_service/models/history.dart';
-import 'package:home_service/ui/views/auth/appstate.dart';
 
 class HistoryService {
   final firestoreService = FirebaseFirestore.instance;
@@ -18,7 +17,7 @@ class HistoryService {
     });
   }
 
-  //get all history
+/*  //get all history
   Stream<List<History>> fetchHistory() {
     return firestoreService
         .collection('Users')
@@ -26,8 +25,8 @@ class HistoryService {
         .collection('History')
         .orderBy('timestamp', descending: true)
         .snapshots()
-        .map((event) => event.docs.map((data) {
-              return History.fromFirestore(data.data());
+        .map((event) => event.docs.map((snapshots) {
+              return History.fromFirestore(snapshots.data());
             }).toList(growable: true));
-  }
+  }*/
 }

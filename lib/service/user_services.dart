@@ -14,7 +14,7 @@ import '../constants.dart';
 
 class UserService {
   final firestoreService = FirebaseFirestore.instance;
-  final mediumRaking = 500;
+  final mediumRaking = 500.00;
 
   //create an artisan
   Future<void> createArtisan(Artisans artisans, BuildContext context) {
@@ -78,14 +78,13 @@ class UserService {
   }
 
   //update last seen
-  Future<void> updateLastSeen(Artisans artisan, BuildContext context) {
-    return firestoreService
+  Future<void> updateLastSeen(Artisans artisan, BuildContext context) async {
+    return await firestoreService
         .collection('Users')
         .doc(currentUserId)
         .update(artisan.updateLastSeenToMap())
-        .whenComplete(() {
-          print('??????????????????last??? seen?????');
-    }).catchError((onError) {
+        .whenComplete(() {})
+        .catchError((onError) {
       showFailure(context, onError);
     });
   }
@@ -140,7 +139,6 @@ class UserService {
         .where("id", isNotEqualTo: currentUserId)
         .where("type", isEqualTo: artisan)
         .where("category", isEqualTo: category)
-        .limit(20)
         .snapshots()
         .map((snapshots) => snapshots.docs
             .map((document) => Artisans.fromFirestore(document.data()))
@@ -156,7 +154,7 @@ class UserService {
         .where("id", isNotEqualTo: currentUserId)
         .where("type", isEqualTo: artisan)
         .where("category", isEqualTo: category)
-        .limit(20)
+    //.limit(20)
         .startAfterDocument(documentList[documentList.length - 1])
         .snapshots()
         .map((snapshots) => snapshots.docs

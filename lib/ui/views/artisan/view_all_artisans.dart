@@ -158,8 +158,9 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                 //todo implement location
                                 Text(
                                   _artisanListProvider![index]
-                                          .id!
-                                          .contains(currentUserId!)
+                                              .id!
+                                              .contains(currentUserId!) ||
+                                          distanceBetween == 0.0
                                       ? ""
                                       : "${distanceBetween!.roundToDouble()} km",
                                   style: TextStyle(color: Colors.black),

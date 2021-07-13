@@ -65,30 +65,44 @@ class _CommentsPageState extends State<CommentsPage> {
               ),
             ),
           )),
-      body: Container(
-          margin: EdgeInsets.symmetric(horizontal: tenDp),
-          child: SingleChildScrollView(
+      body: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: true,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
-                    //artwork image
-                    height: twoHundredDp,
-                    placeholder: (context, url) =>
-                        Center(child: CircularProgressIndicator()),
-                    imageUrl: widget.artworkImageUrl!,
-                    fit: BoxFit.cover,
-                  ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: tenDp),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                //artwork image
+                                height: twoHundredDp,
+                                placeholder: (context, url) =>
+                                    Center(child: CircularProgressIndicator()),
+                                imageUrl: widget.artworkImageUrl!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Container(
+                                color: Colors.white,
+                                child: buildComments(),
+                                height: MediaQuery.of(context).size.height / 2),
+                          ],
+                        ),
+                      )),
                 ),
                 Container(
-                    color: Colors.white,
-                    child: buildComments(),
-                    height: MediaQuery.of(context).size.height / 2),
-                Container(
-                  margin: EdgeInsets.only(
-                    bottom: eightDp,
+                  margin: EdgeInsets.all(
+                    eightDp,
                   ),
                   child: TextFormField(
                       //comment text field
@@ -134,10 +148,12 @@ class _CommentsPageState extends State<CommentsPage> {
                           border: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Color(0xFFF5F5F5))))),
-                )
+                ),
               ],
             ),
-          )),
+          )
+        ],
+      ),
     );
   }
 
@@ -160,6 +176,7 @@ class _CommentsPageState extends State<CommentsPage> {
           return ListView.builder(
             shrinkWrap: true,
             primary: true,
+            physics: ClampingScrollPhysics(),
             addAutomaticKeepAlives: true,
             itemBuilder: (context, index) {
               DocumentSnapshot doc = snapshot.data!.docs[index];
@@ -216,18 +233,15 @@ class _CommentsPageState extends State<CommentsPage> {
               ),
               Padding(
                 padding: EdgeInsets.only(top: fourDp, right: eightDp),
-                child: Expanded(
-                  flex: 1,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 1.4,
-                    child: Text(
-                      //name
-                      doc['message'],
-                      maxLines: 40,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                      style: TextStyle(color: Colors.black45),
-                    ),
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 1.4,
+                  child: Text(
+                    //name
+                    doc['message'],
+                    maxLines: 40,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                    style: TextStyle(color: Colors.black45),
                   ),
                 ),
               ),
