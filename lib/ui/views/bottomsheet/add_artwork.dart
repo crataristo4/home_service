@@ -29,7 +29,6 @@ class _AddArtworkState extends State<AddArtwork> {
   final _formKey = GlobalKey<FormState>();
   var uuid = Uuid();
 
-
   final artworkProvider = ArtworkProvider();
   TextEditingController _priceController = TextEditingController();
 
@@ -43,7 +42,6 @@ class _AddArtworkState extends State<AddArtwork> {
         _image = File(filePicked.path);
       });
     }
-    //uploadPhoto(context, _image);
   }
 
   //get image from gallery
@@ -54,7 +52,7 @@ class _AddArtworkState extends State<AddArtwork> {
       setState(() {
         _image = File(filePicked.path);
       });
-    } // uploadPhoto(context, _image);
+    }
   }
 
   //choose camera or from gallery
@@ -67,16 +65,26 @@ class _AddArtworkState extends State<AddArtwork> {
               child: new Wrap(
                 children: <Widget>[
                   new ListTile(
-                      leading: Icon(Icons.photo_library),
-                      title: Text(photoLibrary),
+                      leading: Icon(
+                        Icons.photo_library,
+                        color: Colors.indigo,
+                      ),
+                      title: Text(photoLibrary,
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       onTap: () {
                         getImageFromGallery(context);
 
                         Navigator.of(context).pop();
                       }),
                   new ListTile(
-                    leading: Icon(Icons.photo_camera),
-                    title: Text(camera),
+                    leading: Icon(
+                      Icons.photo_camera,
+                      color: Colors.red,
+                    ),
+                    title: Text(
+                      camera,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     onTap: () {
                       getImageFromCamera(context);
 
@@ -211,14 +219,17 @@ class _AddArtworkState extends State<AddArtwork> {
                               ),
                             ),
                           )
-                        : Container(
-                            height: 200,
-                            width: MediaQuery.of(context).size.width,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.file(
-                                _image!,
-                                fit: BoxFit.cover,
+                        : GestureDetector(
+                            onTap: () => _showPicker(context),
+                            child: Container(
+                              height: 200,
+                              width: MediaQuery.of(context).size.width,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.file(
+                                  _image!,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
