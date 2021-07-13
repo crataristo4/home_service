@@ -45,14 +45,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _tabController!.index = widget.tabIndex!;
     //_admobService.createInterstitialAd(); //create ad
     greetingMessage();
+    _userService.getCurrentUser(context);
+    updateLocation();
 
     super.initState();
-
-    _userService.getCurrentUser(context);
-    _getLocationService.getUserCoordinates(context);
-    if (getUserType == artisan) {
-      updateLastSeen();
-    }
   }
 
   //greeting message to user
@@ -77,11 +73,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
   }
 
-  //update artisans last seen
+  //update location
+  Future<void> updateLocation() async {
+    if (GetLocationService.lat != null || GetLocationService.lng != null) {
+      updateLastSeen();
+      _userProvider.updateLocationCoordinates(
+          context, GetLocationService.lat, GetLocationService.lng);
+    } else {
+      _getLocationService.getUserCoordinates(context);
+    }
+  }
+
   Future<void> updateLastSeen() async {
     if (getUserType == artisan) {
-      Future.delayed(Duration(seconds: 30));
-      _userProvider.updateLastSeen(context);
+      return _userProvider.updateLastSeen(context);
     }
   }
 
@@ -93,7 +98,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 10), () {
+    Timer(Duration(seconds: 1), () {
       //  _admobService.showInterstitialAd();
     });
 

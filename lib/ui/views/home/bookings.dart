@@ -2,13 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
-import 'package:home_service/models/booking.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/bookings/artisan_booking_page/received_bookings.dart';
 import 'package:home_service/ui/views/home/bookings/artisan_booking_page/sent_bookings.dart';
 import 'package:home_service/ui/views/home/home.dart';
-import 'package:home_service/ui/widgets/load_home.dart';
-import 'package:provider/provider.dart';
 
 
 class BookingPage extends StatefulWidget {
@@ -21,7 +18,7 @@ class BookingPage extends StatefulWidget {
 }
 
 class _BookingPageState extends State<BookingPage> {
-  List<Bookings>? _allBookingList;
+  //List<Bookings>? _allBookingList;
   int _selectedIndex = 0;
   GlobalKey globalKey = GlobalKey();
  // AdmobService _admobService = AdmobService();
@@ -44,7 +41,7 @@ class _BookingPageState extends State<BookingPage> {
 
   @override
   Widget build(BuildContext context) {
-    _allBookingList = Provider.of<List<Bookings>>(context);
+    //  _allBookingList = Provider.of<List<Bookings>>(context);
 
     Timer(Duration(seconds: 120), () {
       //  _admobService.showInterstitialAd();
@@ -56,20 +53,18 @@ class _BookingPageState extends State<BookingPage> {
 
         return true;
       },
-      child: _allBookingList == null
-          ? LoadHome()
-          : Scaffold(
-              body: Center(
-                child: artisanBookingOptions.elementAt(_selectedIndex),
-              ),
-              backgroundColor: Colors.white,
-              bottomNavigationBar: BottomNavigationBar(
-                key: globalKey,
-                items: <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.workspaces_filled,
-                      color: _selectedIndex == 0
+      child: Scaffold(
+        body: Center(
+          child: artisanBookingOptions.elementAt(_selectedIndex),
+        ),
+        backgroundColor: Colors.white,
+        bottomNavigationBar: BottomNavigationBar(
+          key: globalKey,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.workspaces_filled,
+                color: _selectedIndex == 0
                           ? Colors.indigoAccent
                           : Colors.grey,
                     ),
