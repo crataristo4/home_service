@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/provider/user_provider.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/service/location_service.dart';
 import 'package:home_service/service/user_services.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
@@ -34,7 +35,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TabController? _tabController;
   String? message;
 
-  // AdmobService _admobService =  AdmobService(); //Ads
+  AdmobService _admobService = AdmobService(); //Ads
   UserProvider _userProvider = UserProvider(); //for updating user details
   GetLocationService _getLocationService = GetLocationService();
   UserService _userService = UserService();
@@ -43,12 +44,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     _tabController!.index = widget.tabIndex!;
-    //_admobService.createInterstitialAd(); //create ad
+    _admobService.createInterstitialAd(); //create ad
     greetingMessage();
     _userService.getCurrentUser(context);
     updateLocation();
 
     super.initState();
+  }
+
+  _HomeState() {
+    Timer(Duration(minutes: 1), () {
+      _admobService.showInterstitialAd();
+    });
   }
 
   //greeting message to user
@@ -98,10 +105,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 1), () {
-      //  _admobService.showInterstitialAd();
-    });
-
     return WillPopScope(
       onWillPop: () async {
         if (_tabController!.index == 0 || _tabController!.index == 2) {
