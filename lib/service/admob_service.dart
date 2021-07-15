@@ -18,9 +18,27 @@ class AdmobService {
     MobileAds.instance.initialize();
   }
 
-  static BannerAd createBanner() {
+  static BannerAd createBannerMedium() {
     BannerAd bannerAd = BannerAd(
         size: AdSize.mediumRectangle,
+        adUnitId: bannerUnitId,
+        listener: BannerAdListener(
+            onAdLoaded: (Ad ad) => print('Ad loaded'),
+            onAdOpened: (Ad ad) => print('Ad opened'),
+            onAdClosed: (Ad ad) {
+              ad.dispose();
+            },
+            onAdFailedToLoad: (Ad ad, LoadAdError error) {
+              ad.dispose();
+            }),
+        request: AdRequest());
+
+    return bannerAd;
+  }
+
+  static BannerAd createBannerSmall() {
+    BannerAd bannerAd = BannerAd(
+        size: AdSize.fullBanner,
         adUnitId: bannerUnitId,
         listener: BannerAdListener(
             onAdLoaded: (Ad ad) => print('Ad loaded'),

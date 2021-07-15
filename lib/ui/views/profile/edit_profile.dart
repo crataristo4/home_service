@@ -36,7 +36,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController? _phoneNumberController = TextEditingController();
   TextEditingController? _categoryController = TextEditingController();
   String? _selectedExperience;
- // AdmobService _admobService = AdmobService();
+  AdmobService _admobService = AdmobService();
 
   @override
   void initState() {
@@ -46,9 +46,8 @@ class _EditProfileState extends State<EditProfile> {
       _categoryController!.text = category!;
       _selectedExperience = expLevel;
     }
-
+    _admobService.createInterstitialAd();
     super.initState();
-    //  _admobService.createInterstitialAd();
   }
 
   @override
@@ -57,11 +56,14 @@ class _EditProfileState extends State<EditProfile> {
     super.dispose();
   }
 
+  _EditProfileState() {
+    Timer(Duration(minutes: 10), () {
+      _admobService.showInterstitialAd();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 5), () {
-    //  _admobService.showInterstitialAd();
-    });
     UserProvider userUpdateProvider = Provider.of<UserProvider>(context);
 
     void updateUserPhoto(context, image) async {

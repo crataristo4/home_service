@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/artisan_type.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/history_provider.dart';
@@ -53,7 +54,7 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   _CategoryPageState() {
-    Timer(Duration(minutes: 2), () {
+    Timer(Duration(minutes: 3), () {
       _admobService.showInterstitialAd();
     });
     _searchInput.addListener(() {
@@ -142,24 +143,23 @@ class _CategoryPageState extends State<CategoryPage> {
                         ),
                       ],
                     ),
+                        ),
+                      ),
+
+                Container(
+                  // shows a banner ad
+                  height: sixtyDp,
+                  child: AdWidget(
+                    ad: AdmobService.createBannerSmall()..load(),
+                    key: UniqueKey(),
                   ),
                 ),
-
-                //todo -- add when admob account is verified
-                /*  Container(
-                        // shows a banner ad
-                        height: twoFiftyDp,
-                        child: AdWidget(
-                          ad: AdmobService.createBanner()..load(),
-                          key: UniqueKey(),
-                        ),
-                      ),*/
                 Container(
                   margin: EdgeInsets.only(
                     right: eightDp,
                   ),
                   child: TextFormField(
-                    //search for a service text field
+                      //search for a service text field
                       keyboardType: TextInputType.text,
                       controller: _searchInput,
                       textAlign: TextAlign.center,

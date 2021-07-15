@@ -35,7 +35,7 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
   int _totalNumberOfLikes = 0;
   bool isRatingTapped = false; // checks if user has tapped rating
   double ratingNumber = 0.0; //initial rating is zero
-  //AdmobService _admobService = AdmobService(); // ADS
+  AdmobService _admobService = AdmobService(); // ADS
   double?
       artisanRating; // gets rating from artisan and adds up to what other users will rate
   double? totalRating; //total rating
@@ -65,8 +65,14 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
       _totalNumberOfLikes += _artworkList![i].likedUsers!.length;
     }
     //create ad
-    //_admobService.createInterstitialAd();
+    _admobService.createInterstitialAd();
     super.initState();
+  }
+
+  _ArtisanProfileState() {
+    Timer(Duration(minutes: 12), () {
+      _admobService.showInterstitialAd();
+    });
   }
 
   @override
@@ -76,10 +82,6 @@ class _ArtisanProfileState extends State<ArtisanProfile> {
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(minutes: 7), () {
-      // _admobService.showInterstitialAd();
-    });
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

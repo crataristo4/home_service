@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/provider/user_provider.dart';
 import 'package:home_service/service/admob_service.dart';
@@ -209,6 +210,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 ),
               ],
             ),
+          ),
+        ),
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.only(bottom: sixDp),
+          height: sixtyDp,
+          child: AdWidget(
+            ad: AdmobService.createBannerSmall()..load(),
+            key: UniqueKey(),
           ),
         ),
         body: Column(

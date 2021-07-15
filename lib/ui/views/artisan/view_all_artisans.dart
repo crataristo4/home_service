@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/history_provider.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/service/location_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
@@ -93,7 +95,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                     )),
                   ],
                 )
-              : ListView.builder(
+              : ListView.separated(
                   itemBuilder: (context, index) {
                     //artisans locations
                     artisanLat =
@@ -107,7 +109,6 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                             userLocation!.longitude,
                             artisanLat!,
                             artisanLng!);
-
 
                     //get rating and display
                     rating = Artisans.ratingApproach(
@@ -155,7 +156,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                   _artisanListProvider![index].name!,
                                   style: TextStyle(color: Colors.black),
                                 ),
-                                //todo implement location
+
                                 Text(
                                   _artisanListProvider![index]
                                               .id!
@@ -175,9 +176,9 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                       top: sixDp, bottom: sixDp),
                                   child: Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Flexible(
                                         //artisan's category
@@ -186,7 +187,7 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                                             _artisanListProvider![index]
                                                 .category!,
                                             style:
-                                            TextStyle(color: Colors.black)),
+                                                TextStyle(color: Colors.black)),
                                       ),
                                       Flexible(
                                         child: RatingBar.builder(
@@ -233,19 +234,18 @@ class _ViewAllArtisansState extends State<ViewAllArtisans> {
                   },
                   itemCount: _artisanListProvider!.length,
                   shrinkWrap: true,
-                  //todo add later
-                  /*          separatorBuilder: (BuildContext context, int index) {
+            separatorBuilder: (BuildContext context, int index) {
                     return index % 3 == 0
                         ? Container(
                             margin: EdgeInsets.only(bottom: sixDp),
                             height: twoFiftyDp,
                             child: AdWidget(
-                              ad: AdmobService.createBanner()..load(),
+                              ad: AdmobService.createBannerMedium()..load(),
                               key: UniqueKey(),
                             ),
                           )
                         : Container();
-                  },*/
+                  },
                   addAutomaticKeepAlives: true,
                 );
         }));

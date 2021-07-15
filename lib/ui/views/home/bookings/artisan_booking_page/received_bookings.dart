@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/provider/bookings_provider.dart';
 import 'package:home_service/provider/history_provider.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/bottomsheet/show_user_profile.dart';
 import 'package:home_service/ui/views/profile/artisan_profile.dart';
@@ -62,7 +64,7 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
               );
             }
 
-            return ListView.builder(
+            return ListView.separated(
               itemBuilder: (context, index) {
                 DocumentSnapshot doc = snapshot.data!.docs[index];
 
@@ -298,19 +300,18 @@ class _ReceivedBookingsPageState extends State<ReceivedBookingsPage> {
               itemCount: snapshot.data!.docs.length,
               addAutomaticKeepAlives: true,
               shrinkWrap: true,
-              //todo - to be added in future
-              /*      separatorBuilder: (BuildContext context, int index) {
-                      return index % 3 == 0
-                          ? Container(
-                              margin: EdgeInsets.only(bottom: sixDp),
-                              height: twoFiftyDp,
-                              child: AdWidget(
-                                ad: AdmobService.createBanner()..load(),
-                                key: UniqueKey(),
-                              ),
-                            )
-                          : Container();
-                    },*/
+              separatorBuilder: (BuildContext context, int index) {
+                return index % 1 == 0
+                    ? Container(
+                        margin: EdgeInsets.only(bottom: sixDp),
+                        height: twoFiftyDp,
+                        child: AdWidget(
+                          ad: AdmobService.createBannerMedium()..load(),
+                          key: UniqueKey(),
+                        ),
+                      )
+                    : Container();
+              },
             );
           },
         ),

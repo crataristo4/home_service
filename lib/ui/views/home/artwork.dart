@@ -8,6 +8,7 @@ import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/data.dart';
 import 'package:home_service/provider/artwork_provider.dart';
 import 'package:home_service/provider/history_provider.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/comments/comments_page.dart';
 import 'package:home_service/ui/widgets/actions.dart';
@@ -32,7 +33,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
   //for instance if u like 3 artworks and you like a 4th artwork it increases likes to 4 instead of one
   late List<ArtworkModel>? _artworkList; // data
   HistoryProvider _historyProvider = HistoryProvider();
-  //AdmobService _admobService = AdmobService();
+  AdmobService _admobService = AdmobService();
   late final artworkProvider;
   int? commentCount;
   CollectionReference artworkRf =
@@ -41,23 +42,21 @@ class _ArtworksPageState extends State<ArtworksPage> {
   @override
   void initState() {
     artworkProvider = Provider.of<ArtworkProvider>(context, listen: false);
-    // _admobService.createInterstitialAd();
+    _admobService.createInterstitialAd();
     super.initState();
   }
-/*
-  Future<void> getCommentItemCount(String id) async {
-    await artworkRf.doc(id).collection('Comments').get().then((value) {
-      setState(() {
-        commentCount = value.docs.length;
-      });
+
+  _ArtworksPageState() {
+    Timer(Duration(minutes: 5), () {
+      _admobService.showInterstitialAd();
     });
-  }*/
+  }
 
   Widget _buildArtworksCard(List<ArtworkModel>? artworkList, int index) {
     _likedUsers = artworkList![index].likedUsers!;
 
     return Container(
-      padding: EdgeInsets.all(12),
+      padding: EdgeInsets.all(twelveDp),
       decoration: BoxDecoration(
           color: Colors.grey[100], borderRadius: BorderRadius.circular(10)),
       child: Column(
@@ -206,10 +205,6 @@ class _ArtworksPageState extends State<ArtworksPage> {
   Widget build(BuildContext context) {
     _artworkList = Provider.of<List<ArtworkModel>>(context);
 
-    Timer(Duration(seconds: 60), () {
-      // _admobService.showInterstitialAd();
-    });
-
     return _artworkList == null
         ? LoadHome()
         : Builder(
@@ -217,7 +212,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
               return _artworkList!.length != 0
                   ? Container(
                       margin: EdgeInsets.all(twentyFourDp),
-                      child: ListView.builder(
+                  child: ListView.separated(
                         addAutomaticKeepAlives: true,
                         itemCount: _artworkList!.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -241,19 +236,19 @@ class _ArtworksPageState extends State<ArtworksPage> {
                             return adContainer;
                           }
                         },
-                        //todo -- to be added later
-                        /*       separatorBuilder: (BuildContext context, int index) {
-                          return index % 3 == 0
+                        separatorBuilder: (BuildContext context, int index) {
+                          return index % 1 == 0
                               ? Container(
-                            margin: EdgeInsets.only(bottom: sixDp),
+                                  margin: EdgeInsets.only(bottom: sixDp),
                                   height: twoFiftyDp,
                                   child: AdWidget(
-                                    ad: AdmobService.createBanner()..load(),
+                                    ad: AdmobService.createBannerMedium()
+                                      ..load(),
                                     key: UniqueKey(),
                                   ),
                                 )
                               : Container();
-                        },*/
+                        },
                       ))
                   : Container(
                       child: Column(

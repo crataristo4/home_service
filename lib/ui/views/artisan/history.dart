@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
@@ -68,7 +70,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   child: Text(noNotifications),
                 );
               }
-              return ListView.builder(
+              return ListView.separated(
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   DocumentSnapshot doc = snapshot.data!.docs[index];
@@ -131,6 +133,19 @@ class _HistoryPageState extends State<HistoryPage> {
                   );
                 },
                 itemCount: snapshot.data!.docs.length,
+                separatorBuilder: (BuildContext context, int index) {
+                  return index % 2 == 0
+                      ? Container(
+                          margin: EdgeInsets.only(bottom: sixDp),
+                          height: twoFiftyDp,
+                          child: AdWidget(
+                            ad: AdmobService.createBannerMedium()..load(),
+                            key: UniqueKey(),
+                          ),
+                        )
+                      : Container();
+                },
+                addAutomaticKeepAlives: true,
               );
             }));
   }

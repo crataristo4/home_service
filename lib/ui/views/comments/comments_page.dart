@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/provider/artwork_provider.dart';
+import 'package:home_service/service/admob_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
@@ -173,7 +175,7 @@ class _CommentsPageState extends State<CommentsPage> {
             return Center(child: Text(noCommentsAvailable));
           }
 
-          return ListView.builder(
+          return ListView.separated(
             shrinkWrap: true,
             primary: true,
             physics: ClampingScrollPhysics(),
@@ -186,6 +188,18 @@ class _CommentsPageState extends State<CommentsPage> {
               return buildCommentList(doc);
             },
             itemCount: snapshot.data!.docs.length,
+            separatorBuilder: (BuildContext context, int index) {
+              return index % 2 == 0
+                  ? Container(
+                      margin: EdgeInsets.only(bottom: sixDp),
+                      height: sixtyDp,
+                      child: AdWidget(
+                        ad: AdmobService.createBannerSmall()..load(),
+                        key: UniqueKey(),
+                      ),
+                    )
+                  : Container();
+            },
           );
         });
   }
