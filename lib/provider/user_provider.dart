@@ -17,6 +17,7 @@ class UserProvider with ChangeNotifier {
       _dateJoined,
       _type,
       _phoneNumber;
+  double? _latitude, _longitude;
   DateFormat dateFormat = DateFormat().add_yMMMMEEEEd();
 
   get name => _name;
@@ -27,7 +28,17 @@ class UserProvider with ChangeNotifier {
 
   get photoUrl => _photoUrl;
 
+  get latitude => _latitude;
+
+  get longitude => _longitude;
+
   UserService userService = UserService();
+
+  changeLocation(double? lat, double? lng) {
+    _latitude = lat;
+    _longitude = lng;
+    notifyListeners();
+  }
 
   changeName(value) {
     _name = value;
@@ -58,6 +69,7 @@ class UserProvider with ChangeNotifier {
 
     //store values
     SharedPreferences userData = await SharedPreferences.getInstance();
+    print('lat is $_latitude and lng is $_longitude');
 
     if (getUserType == artisan) {
       //creates a new artisan object
@@ -71,7 +83,7 @@ class UserProvider with ChangeNotifier {
         type: _type!,
         expLevel: expLevel,
         lastSeen: timeStamp,
-        location: new GeoPoint(0, 0),
+        location: new GeoPoint(_latitude!, _longitude!),
         ratedUsers: [],
         rating:
             0.1, //0.0 rating throws an error in db because type in db is number and model type is double
@@ -93,7 +105,7 @@ class UserProvider with ChangeNotifier {
           id: _id!,
           type: _type!,
           dateJoined: _dateJoined!,
-          location: new GeoPoint(0, 0));
+          location: new GeoPoint(_latitude!, _longitude!));
 
       //put values into shared prefs
       await userData.setString("name", name);

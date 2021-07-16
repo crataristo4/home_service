@@ -7,7 +7,10 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:home_service/provider/user_provider.dart';
+import 'package:home_service/service/admob_service.dart';
+import 'package:home_service/service/location_service.dart';
 import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/views/home/home.dart';
 import 'package:home_service/ui/widgets/actions.dart';
@@ -37,18 +40,38 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
- // AdmobService _admobService = AdmobService();
+  AdmobService _admobService = AdmobService();
+
+  Position? position;
+  StreamSubscription<Position>? positionStream;
+
+  @override
+  void dispose() {
+    positionStream!.cancel();
+    positionStream = null;
+    super.dispose();
+  }
 
   @override
   void initState() {
+    _admobService.createInterstitialAd();
     super.initState();
-    // _admobService.createInterstitialAd();
+
+    positionStream = Geolocator.getPositionStream(
+            desiredAccuracy: LocationAccuracy.high,
+            distanceFilter: 10,
+            intervalDuration: Duration(seconds: 10))
+        .listen((Position position) {
+      setState(() {
+        this.position = position;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(minutes: 3), () {
-      //  _admobService.showInterstitialAd();
+    Timer(Duration(seconds: 20), () {
+      _admobService.showInterstitialAd();
     });
     final userProvider = Provider.of<UserProvider>(context);
 
@@ -66,7 +89,6 @@ class _CompleteProfileState extends State<CompleteProfile> {
           _image = File(filePicked.path);
         });
       }
-      //uploadPhoto(context, _image);
     }
 
     //get image from gallery
@@ -77,7 +99,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
         setState(() {
           _image = File(filePicked.path);
         });
-      } // uploadPhoto(context, _image);
+      }
     }
 
     createUser() async {
@@ -109,6 +131,15 @@ class _CompleteProfileState extends State<CompleteProfile> {
             //update provider
             userProvider.setPhotoUrl(imageUrl);
           }).whenComplete(() {
+            //get location coordinates
+            if (position == null) {
+              userProvider.changeLocation(
+                  GetLocationService.lat, GetLocationService.lng);
+            } else {
+              userProvider.changeLocation(
+                  position!.latitude, position!.longitude);
+            }
+
             //CHECK IF IMAGE URL IS READY
             if (imageUrl != null) {
               //CHECK USER-TYPE AND CREATE USER
