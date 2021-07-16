@@ -98,7 +98,13 @@ const book = 'Book';
 const submitNow = 'Submit Now';
 const Artwork = 'Artwork';
 const Artisanz = 'Artisans';
+const viewed = 'Who viewed you';
+const viewedDes =
+    'Artisans can see who viewed their profiles and rated their artworks ';
 const Bookingz = 'Bookings';
+const DistanceBetween = 'Distance Between';
+const DistanceDes =
+    'This app uses your location to find the distance between you and an Artisan';
 const artworkDesc =
     'Have a view of the artistic talents ,designs , works  and creativity of the artisans';
 const photoLibrary = 'Photo Library';

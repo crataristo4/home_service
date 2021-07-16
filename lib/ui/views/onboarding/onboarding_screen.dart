@@ -73,11 +73,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     imagePath: sliders[2].getImageAssetPath(),
                     title: sliders[2].getTitle(),
                     desc: sliders[2].getDesc(),
+                  ),
+                  SlideTile(
+                    imagePath: sliders[3].getImageAssetPath(),
+                    title: sliders[3].getTitle(),
+                    desc: sliders[3].getDesc(),
+                  ),
+                  SlideTile(
+                    imagePath: sliders[4].getImageAssetPath(),
+                    title: sliders[4].getTitle(),
+                    desc: sliders[4].getDesc(),
                   )
                 ],
               ),
             ),
-            bottomSheet: slideIndex != 2
+            bottomSheet: slideIndex != 4
                 ? Container(
                     margin: EdgeInsets.symmetric(vertical: 16),
                     child: Row(
@@ -85,7 +95,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       children: <Widget>[
                         TextButton(
                           onPressed: () {
-                            controller.animateToPage(2,
+                            controller.animateToPage(4,
                                 duration: Duration(milliseconds: 400),
                                 curve: Curves.linear);
                           },
@@ -102,7 +112,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Container(
                           child: Row(
                             children: [
-                              for (int i = 0; i < 3; i++)
+                              for (int i = 0; i < 5; i++)
                                 i == slideIndex
                                     ? _buildPageIndicator(true)
                                     : _buildPageIndicator(false),

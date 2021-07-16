@@ -35,9 +35,13 @@ class SliderModel {
 
 List<SliderModel> getSlides = [
   SliderModel(
-      imageAssetPath: "assets/images/a.png",
+      imageAssetPath: "assets/images/discover.jpg",
       title: discover,
       desc: discoverDes),
+  SliderModel(
+      imageAssetPath: "assets/images/distance.jpg",
+      title: DistanceBetween,
+      desc: DistanceDes),
   SliderModel(
       imageAssetPath: "assets/images/b.webp",
       title: scheduleAppointment,
@@ -46,4 +50,8 @@ List<SliderModel> getSlides = [
       imageAssetPath: "assets/images/c.webp",
       title: Artwork,
       desc: artworkDesc),
+  SliderModel(
+      imageAssetPath: "assets/images/viewed.jpg",
+      title: viewed,
+      desc: viewedDes),
 ];
