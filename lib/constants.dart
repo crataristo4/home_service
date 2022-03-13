@@ -161,9 +161,12 @@ const notifications = 'Notifications';
 const pleaseSelectAtLeastOneRating = ' Please select at least one rating';
 
 const enterPhoneToLogin = "Enter your phone number to Log in";
+const enterEmailToLogin = "Enter your Email to Log in";
 const confirmNumber = 'Confirm number';
 const sendCodeTo = 'Send verification code to ';
 const invalidPhone = 'Invalid phone number';
+const invalidPassword = 'Weak Password';
+const invalidEmail = 'Invalid  Email';
 const send = 'Send';
 const code = 'Code';
 const resend = 'Resend code';

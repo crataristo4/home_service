@@ -16,7 +16,9 @@ class UserProvider with ChangeNotifier {
       _photoUrl,
       _dateJoined,
       _type,
-      _phoneNumber;
+      _phoneNumber,
+      _email,
+      _password;
   DateFormat dateFormat = DateFormat().add_yMMMMEEEEd();
 
   get name => _name;
@@ -54,10 +56,12 @@ class UserProvider with ChangeNotifier {
     _id = FirebaseAuth.instance.currentUser!.uid;
     _dateJoined = dateFormat.format(DateTime.now());
     _type = getUserType; //from shared pref
-    _phoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber;
+    _email = FirebaseAuth.instance.currentUser!.email!;
 
     //store values
     SharedPreferences userData = await SharedPreferences.getInstance();
+
+    _phoneNumber = userData.getString("phoneNumber");//FirebaseAuth.instance.currentUser!.phoneNumber;
 
     if (getUserType == artisan) {
       //creates a new artisan object
@@ -72,15 +76,18 @@ class UserProvider with ChangeNotifier {
         expLevel: expLevel,
         lastSeen: timeStamp,
         location: new GeoPoint(0, 0),
+        email: _email,
         ratedUsers: [],
         rating:
             0.1, //0.0 rating throws an error in db because type in db is number and model type is double
       );
 
+
       await userData.setString("category", category);
       await userData.setString("name", name);
       await userData.setString("photoUrl", photoUrl);
       await userData.setString("expLevel", expLevel);
+      await userData.setString("email", _email!);
 
       //push to db
       userService.createArtisan(newArtisan, context);
@@ -88,6 +95,7 @@ class UserProvider with ChangeNotifier {
       // create new  user object
       Users newUser = Users(
           name: name,
+          email: _email,
           photoUrl: photoUrl,
           phoneNumber: _phoneNumber!,
           id: _id!,

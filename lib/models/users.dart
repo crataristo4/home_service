@@ -7,6 +7,7 @@ class Users {
   String? phoneNumber;
   String? id;
   String? type;
+  String? email;
   String? dateJoined;
   GeoPoint? location;
 
@@ -18,6 +19,7 @@ class Users {
 
   Users(
       {this.name,
+      required this.email,
       required this.photoUrl,
       required this.phoneNumber,
       required this.id,
@@ -41,6 +43,7 @@ class Users {
     return Users(
         id: data['id'],
         name: data['name'],
+        email: data['email'],
         phoneNumber: data['phoneNumber'],
         photoUrl: data['photoUrl'],
         dateJoined: data['dateJoined'],
@@ -69,6 +72,7 @@ class Users {
   Map<String, dynamic> userToMap() {
     return {
       'id': id,
+      'email': email,
       'phoneNumber': phoneNumber,
       'name': name,
       'dateJoined': dateJoined,
@@ -88,6 +92,7 @@ class Artisans {
   String? category;
   String? type;
   String? expLevel;
+  String? email;
   List? ratedUsers;
   double? rating;
   dynamic lastSeen;
@@ -106,6 +111,7 @@ class Artisans {
     this.ratedUsers,
     required this.rating,
     this.lastSeen,
+    this.email,
   });
 
   Artisans.expLevel({this.expLevel});
@@ -132,7 +138,9 @@ class Artisans {
         type: documentSnapshot['type'],
         rating: documentSnapshot['rating'],
         expLevel: documentSnapshot['expLevel'],
-        location: documentSnapshot['location']);
+        location: documentSnapshot['location'],
+      email: documentSnapshot['email'],
+    );
   }
 
   //for provider
@@ -149,7 +157,9 @@ class Artisans {
         ratedUsers: data['ratedUsers'],
         expLevel: data['expLevel'],
         lastSeen: data['lastSeen'],
-        location: data['location']);
+        location: data['location'],
+      email: data['email'],
+    );
   }
 
   Map<String, dynamic> artisanToMap() {
@@ -165,7 +175,8 @@ class Artisans {
       'photoUrl': photoUrl,
       'location': location,
       'ratedUsers': ratedUsers,
-      'lastSeen': lastSeen
+      'lastSeen': lastSeen,
+      'email': email,
     };
   }
 

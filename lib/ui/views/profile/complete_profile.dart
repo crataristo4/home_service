@@ -20,7 +20,6 @@ import '../../../constants.dart';
 
 class CompleteProfile extends StatefulWidget {
   static const routeName = '/completeProfile';
-
   const CompleteProfile({Key? key}) : super(key: key);
 
   @override

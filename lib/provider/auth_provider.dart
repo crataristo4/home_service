@@ -22,7 +22,9 @@ class AuthProvider with ChangeNotifier {
           timeout: const Duration(
             seconds: 120,
           ),
-          verificationCompleted: (AuthCredential phoneAuthCredential) {},
+          verificationCompleted: (AuthCredential phoneAuthCredential) {
+            debugPrint('phoneAuthCredential ${phoneAuthCredential.signInMethod}');
+          },
           verificationFailed: (FirebaseAuthException exception) {
             throw exception;
           });

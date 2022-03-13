@@ -268,6 +268,7 @@ class _CategoryPageState extends State<CategoryPage> {
             return GestureDetector(
               onTap: () {
                 //push to View artisans by category page
+                debugPrint('test getArtisanType[index].name ${getArtisanType[index].name}');
                 Navigator.of(context).pushNamed(
                     ViewArtisanByCategoryPage.routeName,
                     arguments: getArtisanType[index].name);

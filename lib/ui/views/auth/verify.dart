@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/constants.dart';
@@ -6,12 +7,13 @@ import 'package:home_service/ui/views/auth/appstate.dart';
 import 'package:home_service/ui/widgets/actions.dart';
 import 'package:home_service/ui/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class VerificationPage extends StatefulWidget {
-  final String phoneNumber;
+  final String phoneNumber,email,password;
   static const routeName = '/verifyPage';
 
-  VerificationPage({Key? key, required this.phoneNumber}) : super(key: key);
+  VerificationPage({Key? key, required this.phoneNumber,required this.email,required this.password}) : super(key: key);
 
   @override
   _VerificationPageState createState() => _VerificationPageState();
@@ -100,21 +102,48 @@ class _VerificationPageState extends State<VerificationPage> {
 
   //verify OTP
   verifyOTP(BuildContext context) {
+debugPrint('test  00;00');
     try {
-      Provider.of<AuthProvider>(context, listen: false)
-          .verifyOTP(_controller.text.toString())
-          .then((_) {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(AppState.routeName, (route) => false);
-      }).catchError((e) {
-        String errorMsg = cantAuthenticate;
-        if (e.toString().contains("ERROR_SESSION_EXPIRED")) {
-          errorMsg = "Session expired, please resend OTP!";
-        } else if (e.toString().contains("ERROR_INVALID_VERIFICATION_CODE")) {
-          errorMsg = "You have entered wrong OTP!";
-        }
-        _showErrorDialog(context, errorMsg);
-      });
+      // Provider.of<AuthProvider>(context, listen: false)
+      //     .verifyOTP(_controller.text.toString())
+      //     .then((_) async {
+      //   await FirebaseAuth.instance.signOut();
+        FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+            email: widget.email,
+            password: widget.password)
+            .then((value) {
+          debugPrint('value  $value');
+          if(value.user != null) {
+            debugPrint('value  in  ${widget.email}, ${widget.password}');
+            SharedPreferences.getInstance().then((value) {
+              value.setString("password", widget.password);
+              value.setString("phoneNumber", widget.phoneNumber);
+            });
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil(AppState.routeName, (route) => false,arguments: [ widget.email, widget.password]);
+          }
+        }).catchError((e) {
+          debugPrint('verifyOTP  catchError  $e');
+          String errorMsg = cantAuthenticate;
+          if (e.toString().contains("ERROR_SESSION_EXPIRED")) {
+            errorMsg = "Session expired, please resend OTP!";
+          } else if (e.toString().contains("ERROR_INVALID_VERIFICATION_CODE")) {
+            errorMsg = "You have entered wrong OTP!";
+          }
+          _showErrorDialog(context, errorMsg);
+        });
+
+
+      // }).catchError((e) {
+      //   String errorMsg = cantAuthenticate;
+      //   if (e.toString().contains("ERROR_SESSION_EXPIRED")) {
+      //     errorMsg = "Session expired, please resend OTP!";
+      //   } else if (e.toString().contains("ERROR_INVALID_VERIFICATION_CODE")) {
+      //     errorMsg = "You have entered wrong OTP!";
+      //   }
+      //   _showErrorDialog(context, errorMsg);
+      // });
     } catch (e) {
       _showErrorDialog(context, e.toString());
     }
@@ -215,9 +244,9 @@ class _VerificationPageState extends State<VerificationPage> {
                             maxLength: 6,
                             keyboardType: TextInputType.number,
                             onChanged: (code) {
-                              if (_formKey.currentState!.validate())
-                                // _onFormSubmitted();
-                                verifyOTP(context);
+                              // if (_formKey.currentState!.validate())
+                              //   // _onFormSubmitted();
+                              //   verifyOTP(context);
                             },
                             maxLengthEnforcement: MaxLengthEnforcement.enforced,
                             decoration: InputDecoration(

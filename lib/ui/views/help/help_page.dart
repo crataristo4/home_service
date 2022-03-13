@@ -87,7 +87,7 @@ class _HelpPageState extends State<HelpPage>
       ),
       body: Form(
         key: formKey,
-        autovalidate: true,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Container(
           child: Column(
             children: [

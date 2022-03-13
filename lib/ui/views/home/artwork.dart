@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/data.dart';
 import 'package:home_service/provider/artwork_provider.dart';
@@ -229,16 +228,19 @@ class _ArtworksPageState extends State<ArtworksPage> {
                                 SizedBox(height: twentyFourDp)
                               ],
                             );
-                          } else {
-                            final Container adContainer = Container(
-                              height: 50,
-                              child: AdWidget(
-                                ad: _artworkList![index] as BannerAd,
-                                key: UniqueKey(),
-                              ),
-                            );
-
-                            return adContainer;
+                          }
+                          //TODO AD
+                          else {
+                          //   final Container adContainer = Container(
+                          //     height: 50,
+                          //     child: AdWidget(
+                          //       ad: _artworkList![index] as BannerAd,
+                          //       key: UniqueKey(),
+                          //     ),
+                          //   );
+                          //
+                          //   return adContainer;
+                            return Container();
                           }
                         },
                         //todo -- to be added later

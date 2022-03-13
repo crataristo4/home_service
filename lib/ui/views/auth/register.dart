@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_service/constants.dart';
 import 'package:home_service/provider/auth_provider.dart';
+import 'package:home_service/ui/views/auth/login.dart';
 import 'package:home_service/ui/views/auth/verify.dart';
 import 'package:home_service/ui/views/bloc/Bloc.dart';
 import 'package:home_service/ui/widgets/actions.dart';
@@ -27,6 +29,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   final GlobalKey<State> _registerNumberKey = new GlobalKey<State>();
   TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
 
   void _handleRadioValueChange(int? value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -106,34 +110,55 @@ class _RegistrationPageState extends State<RegistrationPage> {
         TextButton(
           child: Text(send, style: TextStyle(color: Colors.green)),
           onPressed: () {
-            //if yes or ... then push the phone number and user type to verify number
-            //NB: The user type will enable you to switch the state between USERS and ARTISAN
-            Navigator.pop(context);
-            try {
-              Provider.of<AuthProvider>(context, listen: false)
-                  .verifyPhone(phoneNumber)
-                  .then((value) async {
-                Dialogs.showLoadingDialog(
-                    //show dialog and delay
-                    context,
-                    _registerNumberKey,
-                    sendingCode,
-                    Colors.white70);
-                await Future.delayed(const Duration(seconds: 3));
-                Navigator.of(context, rootNavigator: false).pop(true);
+            FirebaseFirestore.instance.collection("Users").get().then((value) {
+              bool exist = false;
+              debugPrint('test test    ${value.docs.length}');
+              for(var item in value.docs){
+                debugPrint('test   ${item.get('email')} , ');
 
-                Navigator.of(context).pushNamed(VerificationPage.routeName,
-                    arguments: phoneNumber);
-              }).catchError((e) {
-                String errorMsg = cantAuthenticate;
-                if (e.toString().contains(containsBlockedMsg)) {
-                  errorMsg = plsTryAgain;
+                if(item.get('phoneNumber') == phoneNumber){
+                  _showErrorDialog(context, 'Phone Number is already exist!');
+                  exist = true;
+                  break;
                 }
-                _showErrorDialog(context, errorMsg);
-              });
-            } catch (e) {
-              _showErrorDialog(context, e.toString());
-            }
+                if(item.get('email') == _emailController.text){
+                  _showErrorDialog(context, 'Email is already exist!');
+                  exist = true;
+                  break;
+                }
+              }
+
+              if(!exist){
+                //if yes or ... then push the phone number and user type to verify number
+                //NB: The user type will enable you to switch the state between USERS and ARTISAN
+                Navigator.pop(context);
+                try {
+                  Provider.of<AuthProvider>(context, listen: false)
+                      .verifyPhone(phoneNumber)
+                      .then((value) async {
+                    Dialogs.showLoadingDialog(
+                      //show dialog and delay
+                        context,
+                        _registerNumberKey,
+                        sendingCode,
+                        Colors.white70);
+                    await Future.delayed(const Duration(seconds: 3));
+                    Navigator.of(context, rootNavigator: false).pop(true);
+
+                    Navigator.of(context).pushNamed(VerificationPage.routeName,
+                        arguments: [phoneNumber, _emailController.text , _passwordController.text]);
+                  }).catchError((e) {
+                    String errorMsg = cantAuthenticate;
+                    if (e.toString().contains(containsBlockedMsg)) {
+                      errorMsg = plsTryAgain;
+                    }
+                    _showErrorDialog(context, errorMsg);
+                  });
+                } catch (e) {
+                  _showErrorDialog(context, e.toString());
+                }
+              }
+            });
           },
         ));
   }
@@ -152,160 +177,227 @@ class _RegistrationPageState extends State<RegistrationPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Stack(
-              children: [
-                Image.asset(
-                  "assets/images/d.png",
-                  height: twoHundredDp,
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.cover,
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: twoHundredDp),
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(thirtySixDp),
-                          topRight: Radius.circular(thirtySixDp)),
-                      border: Border.all(
-                          width: 0.5, color: Colors.grey.withOpacity(0.5))),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: thirtyDp,
-                      ),
-                      isLoggedIn
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: thirtySixDp, bottom: fourDp),
-                                  child: Text(
-                                      'You have selected $userInfo as an account type'),
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: thirtySixDp),
-                                  child: TextButton(
-                                      style: TextButton.styleFrom(
-                                          backgroundColor: Colors.green,
-                                          primary: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8))),
-                                      onPressed: () {
-                                        setState(() {
-                                          isLoggedIn = !isLoggedIn;
-                                        });
-                                      }, //else do nothing
-                                      child: Text(
-                                        "Reselect",
-                                        style: TextStyle(fontSize: 14),
-                                      )),
-                                )
-                              ],
-                            )
-                          : Padding(
+            Image.asset(
+              "assets/images/d.png",
+              height: twoHundredDp,
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.cover,
+            ),
+            Container(
+              // width: MediaQuery.of(context).size.width,
+              // height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(thirtySixDp),
+                      topRight: Radius.circular(thirtySixDp)),
+                  border: Border.all(
+                      width: 0.5, color: Colors.grey.withOpacity(0.5))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: thirtyDp,
+                  ),
+                  isLoggedIn
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
                               padding: EdgeInsets.only(
                                   left: thirtySixDp, bottom: fourDp),
-                              child: Text(selectAccountType),
+                              child: Text(
+                                  'You have selected $userInfo as an account type'),
                             ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [selectType(iAmUser), selectType(iAmArtisan)],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: thirtySixDp, top: thirtySixDp, bottom: tenDp),
-                        child: Text(enterPhoneToLogin),
-                      ),
-
-                      //CONTAINER FOR TEXT FORM FIELD
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: thirtySixDp),
-                        child: StreamBuilder<String>(
-                            stream: loginBloc.phoneNumberStream,
-                            builder: (context, snapshot) {
-                              return TextFormField(
-                                  // maxLength: 9,
-                                  autofocus: true,
-                                  keyboardType: TextInputType.phone,
-                                  controller: _phoneNumberController,
-                                  onChanged: loginBloc.onPhoneNumberChanged,
-                                  /*maxLengthEnforcement:
-                                        MaxLengthEnforcement.enforced,*/
-                                  decoration: InputDecoration(
-                                    hintText: '54 xxx xxxx',
-                                    errorText: snapshot.error == null
-                                        ? ""
-                                        : snapshot.error as String,
-                                    fillColor: Color(0xFFF5F5F5),
-                                    prefix: CountryCodePicker(
-                                      onChanged: _onCountryChange,
-                                      showFlag: true,
-                                      initialSelection: selectedCountryCode,
-                                      showOnlyCountryWhenClosed: false,
-                                    ),
-                                    suffix: Padding(
-                                      padding: EdgeInsets.only(right: eightDp),
-                                      child: Icon(
-                                        Icons.call,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                    filled: true,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 0, horizontal: fourDp),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Color(0xFFF5F5F5))),
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Color(0xFFF5F5F5))),
-                                  ));
-                            }),
-                      ),
-                      SizedBox(
-                        height: sixtyDp,
-                      ),
-
-                      //button to login user
-                      StreamBuilder<bool>(
-                          stream: loginBloc.submitPhoneNumber,
-                          builder: (context, snapshot) => SizedBox(
-                                height: fortyEightDp,
-                                width: MediaQuery.of(context).size.width,
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: thirtySixDp),
-                                  child: TextButton(
-                                      style: TextButton.styleFrom(
-                                          backgroundColor:
-                                              Theme.of(context).primaryColor,
-                                          primary: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8))),
-                                      onPressed: snapshot
-                                              .hasData && userInfo != null  //if the text form field has some data then proceed to verify number
-                                          ? () => verifyPhone(context)
-                                          : null, //else do nothing
-                                      child: Text(
-                                        verifyNumber,
-                                        style: TextStyle(fontSize: 14),
-                                      )),
-                                ),
-                              )),
-                    ],
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: thirtySixDp),
+                              child: TextButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                      primary: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8))),
+                                  onPressed: () {
+                                    setState(() {
+                                      isLoggedIn = !isLoggedIn;
+                                    });
+                                  }, //else do nothing
+                                  child: Text(
+                                    "Reselect",
+                                    style: TextStyle(fontSize: 14),
+                                  )),
+                            )
+                          ],
+                        )
+                      : Padding(
+                          padding: EdgeInsets.only(
+                              left: thirtySixDp, bottom: fourDp),
+                          child: Text(selectAccountType),
+                        ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [selectType(iAmUser), selectType(iAmArtisan)],
                   ),
-                )
-              ],
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: thirtySixDp, top: thirtySixDp, bottom: tenDp),
+                    child: Text(enterPhoneToLogin),
+                  ),
+
+                  //CONTAINER FOR TEXT FORM FIELD
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: thirtySixDp),
+                    child: StreamBuilder<String>(
+                        stream: loginBloc.phoneNumberStream,
+                        builder: (context, snapshot) {
+                          return TextFormField(
+                              // maxLength: 9,
+                              autofocus: true,
+                              keyboardType: TextInputType.phone,
+                              controller: _phoneNumberController,
+                              onChanged: loginBloc.onPhoneNumberChanged,
+                              /*maxLengthEnforcement:
+                                    MaxLengthEnforcement.enforced,*/
+                              decoration: InputDecoration(
+
+                                hintText: '54 xxx xxxx',
+                                errorText: snapshot.error == null
+                                    ? ""
+                                    : snapshot.error as String,
+                                fillColor: Color(0xFFF5F5F5),
+                                prefix: CountryCodePicker(
+                                  padding: EdgeInsets.only(bottom: 10),
+                                  onChanged: _onCountryChange,
+                                  showFlag: true,
+                                  initialSelection: selectedCountryCode,
+                                  showOnlyCountryWhenClosed: false,
+                                ),
+                                suffix: Padding(
+                                  padding: EdgeInsets.only(right: eightDp),
+                                  child: Icon(
+                                    Icons.call,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                filled: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 10),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFFF5F5F5))),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFFF5F5F5))),
+                              ));
+                        }),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: thirtySixDp),
+                    child: StreamBuilder<String>(
+                        stream: loginBloc.passwordStream,
+                        builder: (context, snapshot) {
+                          return TextFormField(
+                              // maxLength: 9,
+                              autofocus: true,
+                              obscureText: true,
+                              controller: _passwordController,
+                              onChanged: loginBloc.onPasswordChanged,
+                              /*maxLengthEnforcement:
+                                    MaxLengthEnforcement.enforced,*/
+                              decoration: InputDecoration(
+                                hintText: 'Password',
+                                errorText: snapshot.error == null
+                                    ? ""
+                                    : snapshot.error as String,
+                                fillColor: Color(0xFFF5F5F5),
+
+                                filled: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 10),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFFF5F5F5))),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFFF5F5F5))),
+                              ));
+                        }),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: thirtySixDp),
+                    child: StreamBuilder<String>(
+                        stream: loginBloc.emailStream,
+                        builder: (context, snapshot) {
+                          return TextFormField(
+                            // maxLength: 9,
+                              autofocus: true,
+                              keyboardType: TextInputType.emailAddress,
+                              controller: _emailController,
+                              onChanged: loginBloc.onEmailChanged,
+                              /*maxLengthEnforcement:
+                                    MaxLengthEnforcement.enforced,*/
+                              decoration: InputDecoration(
+                                hintText: 'Email',
+                                errorText: snapshot.error == null
+                                    ? ""
+                                    : snapshot.error as String,
+                                fillColor: Color(0xFFF5F5F5),
+                                filled: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 10),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFFF5F5F5))),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFFF5F5F5))),
+                              ));
+                        }),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  //button to login user
+                  StreamBuilder<bool>(
+                      stream: loginBloc.submitPhoneNumber,
+                      builder: (context, snapshot) => SizedBox(
+                            height: fortyEightDp,
+                            width: MediaQuery.of(context).size.width,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: thirtySixDp),
+                              child: TextButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                      primary: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8))),
+                                  onPressed: snapshot
+                                          .hasData && userInfo != null  //if the text form field has some data then proceed to verify number
+                                      ? () => verifyPhone(context)
+                                      : null, //else do nothing
+                                  child: Text(
+                                    verifyNumber,
+                                    style: TextStyle(fontSize: 14,color: Colors.white),
+                                  )),
+                            ),
+                          )),
+                  Center(child: TextButton(onPressed: ()=> Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage(),)), child: Text('Already have account? Log in')))
+                ],
+              ),
             )
           ],
         ),

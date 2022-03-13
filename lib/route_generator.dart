@@ -26,7 +26,8 @@ class RouteGenerator {
     switch (settings.name) {
       //user config state checker Screen
       case AppState.routeName:
-        return MaterialPageRoute(builder: (_) => AppState());
+          return MaterialPageRoute(builder: (_) => AppState());
+
 
       //shows when user newly installs the application
       case OnboardingScreen.routeName:
@@ -38,11 +39,13 @@ class RouteGenerator {
 
       //verify users phone number
       case VerificationPage.routeName:
-        final data = settings.arguments as String;
+        final data = settings.arguments as List;
 
         return MaterialPageRoute(
             builder: (_) => VerificationPage(
-                  phoneNumber: data,
+                  phoneNumber: data[0],
+                  email: data[1],
+                  password: data[2],
                 ));
 
       //account completion

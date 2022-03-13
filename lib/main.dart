@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_service/models/artwork.dart';
 import 'package:home_service/models/users.dart';
 import 'package:home_service/provider/artwork_provider.dart';
@@ -21,7 +20,8 @@ int? initScreen;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  MobileAds.instance.initialize();
+  //TODO AD
+  // MobileAds.instance.initialize();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   initScreen = prefs.getInt("initScreen");
   await prefs.setInt("initScreen", 1);
